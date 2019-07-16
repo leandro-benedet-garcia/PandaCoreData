@@ -5,8 +5,10 @@ Created on 09-07-2019
 '''
 import pytest
 
-from ..model import Model
 from .. import data_core
+from ..custom_exceptions import DuplicatedModelTypeName
+from ..model import Model
+
 
 class TestClass(object):
 	model_type_name = "model_type_name"
@@ -91,3 +93,9 @@ data:
 		instanced = model(db_file=yaml_file_path)
 		assert isinstance(instanced, model), self.instance_error
 		assert getattr(instanced, self.default_test_field_name) == self.default_test_field_content
+
+	def test_assert_model_is_unique(self, model):
+		assert model
+		with pytest.raises(DuplicatedModelTypeName):
+			class TestModel(Model, model_name=self.model_type_name):
+				name: str
