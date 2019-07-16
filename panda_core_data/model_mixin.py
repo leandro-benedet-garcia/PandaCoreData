@@ -9,7 +9,6 @@ from dataclasses import dataclass, _process_class
 from tinydb import TinyDB
 from tinydb.queries import Query
 
-
 from .yaml_db import YAMLStorage
 
 
