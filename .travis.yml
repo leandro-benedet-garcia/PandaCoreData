@@ -1,6 +1,6 @@
 dist: xenial
 language: python
-script: pytest test/
+script: pytest tests/
 python:
     - "3.7"
     - "3.7-dev"
