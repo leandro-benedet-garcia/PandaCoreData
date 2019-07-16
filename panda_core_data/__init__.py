@@ -107,8 +107,8 @@ class DataCore(object):
             return default
         return model
 
-    def get_or_create_template_group(self, name: str):
-        pass
+    #'''def get_or_create_template_group(self, name: str):
+    #   pass'''
 
 #pylint: disable=invalid-name
 data_core = DataCore()
