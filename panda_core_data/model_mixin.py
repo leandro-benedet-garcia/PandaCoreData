@@ -11,7 +11,6 @@ from tinydb.queries import Query
 
 from inspect import signature
 from dataclasses import dataclass, _process_class
-import inspect
 
 class ModelMixin(TinyDB):
 	"""
@@ -46,7 +45,8 @@ class ModelMixin(TinyDB):
 				kwargs.pop("init", None)
 				continue
 
-			if param_name != "_cls":
+			# both cls and _cls are to avoid bugs with nightly version of python.
+			if param_name not in ["_cls", "cls"]:
 				dataclass_args[param_name] = kwargs.pop(param_name, param.default)
 
 		cls = _process_class(cls, **dataclass_args)
