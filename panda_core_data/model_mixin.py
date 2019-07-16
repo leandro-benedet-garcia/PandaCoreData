@@ -65,13 +65,7 @@ class ModelMixin(TinyDB):
                              **init_kwargs)
 
                 if hasattr(self, "__post_init__"):
-                    return self.__post_init__(
-                        db_file,
-                        *init_args,
-                        storage=ModelMixin.DEFAULT_STORAGE,
-                        default_table=ModelMixin.DEFAULT_TABLE,
-                        **init_kwargs
-                    )
+                    return self.__post_init__(*init_args, **init_kwargs)
 
             cls.__init__ = custom_init
 

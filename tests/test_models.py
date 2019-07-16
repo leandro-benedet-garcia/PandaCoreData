@@ -96,8 +96,7 @@ data:
 
         instanced = model(db_file=yaml_file_path)
         assert isinstance(instanced, model), self.instance_error
-        assert getattr(
-            instanced, self.default_test_field_name) == self.default_test_field_content
+        assert getattr(instanced, self.default_test_field_name) == self.default_test_field_content
 
     def test_assert_model_is_unique(self, model):
         assert model
@@ -105,3 +104,24 @@ data:
         with pytest.raises(DuplicatedModelTypeName):  # @UndefinedVariable
             class TestModel(Model, model_name=self.model_type_name):
                 name: str
+
+    def test_post_init_with_file(self, tmpdir):
+        #pylint: disable=unused-variable
+        class TestModelWithPostInit(Model):
+            name: str
+
+            def __post_init__(self):
+                default_field = TestClass.default_test_field_name
+                assert getattr(self, default_field) == TestClass.default_test_field_content
+                self.name = "another_content"
+
+        model_class = data_core.get_model_type("TestModelWithPostInit")
+        tmp_dir = tmpdir.mkdir("raws")
+        yaml_file = tmp_dir.join("test.yaml")
+        yaml_file_path = str(yaml_file.realpath())
+
+        yaml_file.write(self.yaml_content)
+
+        instanced = model_class(db_file=yaml_file_path)
+        assert isinstance(instanced, model_class), self.instance_error
+        assert getattr(instanced, self.default_test_field_name) == "another_content"
