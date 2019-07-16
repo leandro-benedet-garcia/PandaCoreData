@@ -18,25 +18,25 @@ Code API
 
 CoreData
 ------------
-.. automodule:: core_data
+.. automodule:: panda_core_data
 	:members:
 
 ModelMixin
 -------------
-.. automodule:: core_data.model_mixin
+.. automodule:: panda_core_data.model_mixin
 	:members:
 
 Model
 -------------
-.. automodule:: core_data.model
+.. automodule:: panda_core_data.model
 	:members:
 
 ModelTemplate
 ----------------
-.. automodule:: core_data.model_template
+.. automodule:: panda_core_data.model_template
 	:members:
 
 Exceptions
 ---------------
-.. automodule:: core_data.custom_exceptions
+.. automodule:: panda_core_data.custom_exceptions
 	:members:
