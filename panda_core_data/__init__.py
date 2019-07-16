@@ -73,7 +73,7 @@ class DataCore(object):
 
         :param name: The name of the group
         :type name: str
-        :param default: Default value to be returned if model type is not found, if none, it will
+        :param default: Default value to be returned if model type is not found, if none, it will \
         raise an exception, which is the default.
         :type default: any
         :raises ModelTypeGroupNotFound: If the group doesn't exist.
@@ -92,7 +92,7 @@ class DataCore(object):
         :type name: str
         :param group: Name of the group
         :type group: str
-        :param default: Default value to be returned if model type is not found, if none, it will
+        :param default: Default value to be returned if model type is not found, if none, it will \
         raise an exception, which is the default.
         :type default: any
         :raises ModelTypeNotFound: If the model doesn't exist.
