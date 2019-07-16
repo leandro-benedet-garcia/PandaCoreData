@@ -11,6 +11,19 @@ class Model(ModelMixin):
 
     def __init_subclass__(cls, model_name=False, dependency_list=False,  # @NoSelf
                           model_group_name=DEFAULT_MODEL_GROUP):
+        """
+        Method that automatically registers class types into data_core
+
+        :param cls: class type to be added
+        :type cls: Model
+        :param model_name: The name of the model, if not supplied, the class name is used
+        :type model_name: str
+        :param dependency_list: TODO
+        :type dependency_list: list of strings
+        :param model_group_name: Name of the group that the model type will be added. If it \
+        doesn't exists, it will be created.
+        :type model_group_name: str
+        """
 
         cls.model_name = cls.__name__ if not model_name else model_name
         cls.dependencies = [] if not dependency_list else dependency_list
@@ -45,6 +58,11 @@ class Model(ModelMixin):
         return value
 
     def initialize_dependencies(self, parent_name):
+        """
+        :todo: make it work again.
+        :param parent_name: name of the template to be instanced.
+        :type parent_name: str
+        """
         current_parent = self.parents[parent_name]
         all_values = current_parent.all()
 
@@ -61,18 +79,3 @@ class Model(ModelMixin):
         self.parents[parent_name].purge()
         self.parents[parent_name].insert_multiple(formated)
         return self.parents[parent_name]
-
-    def calc_dice(self, value):
-        try:
-            if list(value.keys())[0] == "has_dice_rolls":
-                value = False
-            else:
-                value["level"] = self.core.roll_dice(value["dice"])
-                value["current_xp"] = value["level"] * value["xp_to_level"]
-                if value.get("min_level", False) and value["level"] < value["min_level"]:
-                    value["level"] = value["min_level"]
-
-        except KeyError as key_not_found:
-            raise KeyError("Key {} not found in {} while trying to roll dices for levels."
-                           .format(key_not_found, value))
-        return value

@@ -1,4 +1,6 @@
 '''
+This is the heart of Models and ModelTemplates
+
 :created: 2019-04-30
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
@@ -39,15 +41,13 @@ class ModelMixin(TinyDB):
         dataclass_args = {}
         # Let's extract the dataclass parameters from kwarg
         for param_name, param in signature(dataclass).parameters.items():
-            # If we load attrs from the file, we will never use the dataclass
-            # init
+            # If we load attrs from the file, we will never use the dataclass init
             if db_file and param_name == "init":
                 dataclass_args[param_name] = False
                 kwargs.pop("init", None)
                 continue
 
-            # both cls and _cls are to avoid bugs with nightly version of
-            # python.
+            # both cls and _cls are to avoid bugs with nightly version of python.
             if param_name not in ["_cls", "cls"]:
                 dataclass_args[param_name] = kwargs.pop(
                     param_name, param.default)
@@ -56,7 +56,8 @@ class ModelMixin(TinyDB):
         cls = _process_class(cls, **dataclass_args)
 
         if db_file:
-
+            # TODO: Find a way to not overwrite init if the uer creates one if they want to \
+            # overwrite it
             def custom_init(self, db_file, *init_args, storage=ModelMixin.DEFAULT_STORAGE,
                             default_table=ModelMixin.DEFAULT_TABLE, **init_kwargs):
 
@@ -82,9 +83,22 @@ class ModelMixin(TinyDB):
         return instanced
 
     def __getattr__(self, name):
+        """
+        This is here just to make this method back to the default that was overwritten by TinyDB
+
+        :param name: name of the attribute to get
+        :type name: str
+        """
         raise AttributeError(f"type object '{self}' has no attribute '{name}'")
 
     def __setattr__(self, attr_name, value):
+        """
+        This is here just to make this method back to the default that was overwritten by TinyDB
+
+        :param name: name of the attribute to write
+        :type name: str
+        :param value: value of the attribute.
+        """
         object.__setattr__(self, attr_name, value)
 
     @property
@@ -104,9 +118,18 @@ class ModelMixin(TinyDB):
 
     def load_db(self, db_file, *init_args, storage=DEFAULT_STORAGE, default_table=DEFAULT_TABLE,
                 **init_kwargs):
+        """
+        Method that load raw files and assign each field to an attribute.
+
+        :param db_file: Path to a raw file
+        :type db_file: str
+        :param storage: storage class to be used, it needs to inherit TinyDB.tinydb.storages.Storage
+        :type storage: TinyDB.tinydb.storages.Storage
+        :param default_table: default main field in the raw file.
+        :type default_table: str
+        """
         if not isinstance(db_file, str):
-            raise TypeError(
-                f"db_file has to be a str {type(db_file)} found instead.")
+            raise TypeError(f"db_file has to be a str {type(db_file)} found instead.")
 
         if not os.path.isfile(db_file):
             raise FileNotFoundError(f"File {db_file} don't exist")
@@ -136,12 +159,3 @@ class ModelMixin(TinyDB):
 
     def insert_multiple(self, *arg, **kwargs):
         return self._table.insert_multiple(*arg, **kwargs)
-
-    def get_single_value(self, field_name):
-        current_query = self.query[field_name]
-        condition = current_query.exists()
-        current_row = self.get(condition)
-        if current_row:
-            return current_row[field_name]
-        else:
-            raise AttributeError

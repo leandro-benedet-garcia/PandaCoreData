@@ -1,18 +1,32 @@
+"""
+Module that deals with parsing yaml files using pyyaml
+"""
+
 from tinydb.database import Document
 from tinydb.storages import Storage, MemoryStorage
 import yaml
 
 
 class YAMLStorage(MemoryStorage, Storage):
+    """
+    Parser storage class used to read yaml files
+    """
     def __init__(self, path):
+        """
+        Open file as Data Base
+
+        :param path: path pointing to a yaml file
+        :type path: str
+        """
         super().__init__()
         self.path = path
         yaml.add_representer(Document, self.represent_doc)
-        self.first_read = True
 
     def read(self):
+        """
+        Method used by TinyDB to read the file
+        """
         if not self.memory:
-            self.first_read = False
             with open(self.path) as handle:
                 data = yaml.safe_load(handle.read())
                 if data:
@@ -29,4 +43,10 @@ class YAMLStorage(MemoryStorage, Storage):
 
     @staticmethod
     def represent_doc(dumper, data):
+        """
+        Method used to transform a dict to a yaml repreentation
+
+        :param dumper: yaml dumper
+        :param data: data to be parsed
+        """
         return dumper.represent_data(dict(data))

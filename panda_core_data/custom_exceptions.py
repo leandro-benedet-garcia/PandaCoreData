@@ -1,4 +1,6 @@
 '''
+Module containing all cusstom exceptions used by the package
+
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 
