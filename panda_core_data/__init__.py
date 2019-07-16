@@ -80,7 +80,7 @@ class DataCore(object):
         """
         group = self.all_model_types.get(name, default)
         if not group and default is None:
-            raise ModelTypeGroupNotFound(f"Group {name} wasn't found.")
+            raise ModelTypeGroupNotFound(f"Group '{name}' wasn't found.")
 
         return group
 

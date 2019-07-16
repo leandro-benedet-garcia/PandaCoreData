@@ -10,7 +10,7 @@ from . import data_core, DEFAULT_MODEL_GROUP
 class Model(ModelMixin):
 
     def __init_subclass__(cls, model_name=False, dependency_list=False,  # @NoSelf
-                          model_group_name=DEFAULT_MODEL_GROUP):
+                        model_group_name=DEFAULT_MODEL_GROUP, auto_create_group=True):
         """
         Method that automatically registers class types into data_core
 
@@ -29,7 +29,7 @@ class Model(ModelMixin):
         cls.dependencies = [] if not dependency_list else dependency_list
         cls.model_group = model_group_name
 
-        data_core.add_model_type_to_group(model_group_name, cls)
+        data_core.add_model_type_to_group(model_group_name, cls, auto_create_group)
 
     def setup_values(self, value, default_value, default_min, default_max):
         try:

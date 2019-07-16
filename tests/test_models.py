@@ -6,7 +6,7 @@
 import pytest
 
 from panda_core_data import data_core
-from panda_core_data.custom_exceptions import DuplicatedModelTypeName
+from panda_core_data.custom_exceptions import DuplicatedModelTypeName, ModelTypeGroupNotFound
 from panda_core_data.model import Model
 
 
@@ -125,3 +125,15 @@ data:
         instanced = model_class(db_file=yaml_file_path)
         assert isinstance(instanced, model_class), self.instance_error
         assert getattr(instanced, self.default_test_field_name) == "another_content"
+
+    def test_assert_group_is_unique(self):
+        #pylint: disable=unused-variable
+        with pytest.raises(ModelTypeGroupNotFound):  # @UndefinedVariable
+            #pylint: disable=unused-variable
+            class GroupTesting(Model, model_group_name="invalid", auto_create_group=False):
+                name: str
+
+                def __post_init__(self):
+                    default_field = TestClass.default_test_field_name
+                    assert getattr(self, default_field) == TestClass.default_test_field_content
+                    self.name = "another_content"
