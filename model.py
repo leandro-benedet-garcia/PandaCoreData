@@ -1,22 +1,17 @@
 '''
 Created on 2019-04-30
 
-@author: Leandro (Cerberus1746) Benedet Garcia
+:author: Leandro (Cerberus1746) Benedet Garcia
 '''
 
-from core_data.model_mixin import ModelMixin
-from dataclasses import dataclass
+from .model_mixin import ModelMixin
 from . import data_core, DEFAULT_MODEL_GROUP
-
 class Model(ModelMixin):
 
-	def __init_subclass__(cls, model_name, dependency_list=[], # @NoSelf
+	def __init_subclass__(cls, model_name=False, dependency_list=[],  # @NoSelf
 			model_group_name=DEFAULT_MODEL_GROUP, **kwargs):
-		super().__init_subclass__(kwargs)
 
-		cls = dataclass(cls)
-
-		cls.model_name = model_name
+		cls.model_name = cls.__name__ if not model_name else model_name
 		cls.dependencies = dependency_list
 		cls.model_group = model_group_name
 

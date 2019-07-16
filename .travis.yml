@@ -1,0 +1,13 @@
+dist: xenial
+language: python
+script: pytest test/
+python:
+    - "3.7"
+    - "3.7-dev"
+    - "3.8-dev"
+    - "nightly"
+
+    - "pypy3.7"
+
+install:
+    - pip3 install -r requirements.txt

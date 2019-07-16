@@ -4,16 +4,16 @@ import yaml
 
 
 class YAMLStorage(MemoryStorage, Storage):
-	def __init__(self, filename):
+	def __init__(self, path):
 		super().__init__()
-		self.filename = filename
+		self.path = path
 		yaml.add_representer(Document, self.represent_doc)
 		self.first_read = True
 
 	def read(self):
 		if not self.memory:
 			self.first_read = False
-			with open(self.filename) as handle:
+			with open(self.path) as handle:
 				data = yaml.safe_load(handle.read())
 				if data:
 					desired_data = {}
