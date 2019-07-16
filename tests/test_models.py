@@ -3,10 +3,7 @@ Created on 09-07-2019
 
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
-import sys, os, pytest
-
-os.chdir("../..")
-sys.path.insert(0, os.getcwd())
+import pytest
 
 from panda_core_data.model import Model
 from panda_core_data import data_core
