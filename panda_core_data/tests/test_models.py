@@ -5,8 +5,8 @@ Created on 09-07-2019
 '''
 import pytest
 
-from panda_core_data.model import Model
-from panda_core_data import data_core
+from ..model import Model
+from .. import data_core
 
 class TestClass(object):
 	model_type_name = "model_type_name"
