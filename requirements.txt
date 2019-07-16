@@ -1,4 +1,6 @@
 pytest
+pytest-pylint
+pytest-runner
 tinydb
 pyyaml
 pylint
