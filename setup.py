@@ -6,7 +6,6 @@ with open("README.md", "r") as fh:
 setuptools.setup(
 	name='panda_core_data-cerberus1746',
 	version='0.0.1.dev1',
-	scripts=['panda_core_data',] ,
 	author="Leandro (Cerberus1746) Benedet Garcia",
 	author_email="leandro.benedet.garcia@gmail.com",
 	description="Data management system with modding and Panda3D engine in mind.",
