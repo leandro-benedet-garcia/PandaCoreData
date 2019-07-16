@@ -4,4 +4,5 @@ pytest-runner
 tinydb
 pyyaml
 pylint
+python-coveralls
 sphinx_rtd_theme

@@ -24,6 +24,7 @@ setuptools.setup(
         'pytest',
         'pylint',
         'pytest-pylint',
+        'python-coveralls',
     ],
     install_requires=[
         "tinydb",
