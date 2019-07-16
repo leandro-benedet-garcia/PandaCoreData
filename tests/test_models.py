@@ -6,7 +6,8 @@
 import pytest
 
 from panda_core_data import data_core
-from panda_core_data.custom_exceptions import DuplicatedModelTypeName, ModelTypeGroupNotFound
+from panda_core_data.custom_exceptions import DuplicatedModelTypeName, ModelTypeGroupNotFound,\
+    ModelTypeNotFound
 from panda_core_data.model import Model
 
 
@@ -137,3 +138,9 @@ data:
                     default_field = TestClass.default_test_field_name
                     assert getattr(self, default_field) == TestClass.default_test_field_content
                     self.name = "another_content"
+
+    @staticmethod
+    def test_exceptions():
+        #pylint: disable=unused-variable
+        with pytest.raises(ModelTypeNotFound):  # @UndefinedVariable
+            data_core.get_model_type("invalid")

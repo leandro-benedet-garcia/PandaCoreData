@@ -19,16 +19,16 @@ class DataCore(object):
     all_template_types = {}
     raw_folders = []
 
-    def add_raw_folder(self, folder: str):
-        """
-        Add folder to the raws search path.
-
-        :param folder: folder to be added.
-        :type folder: str
-        """
-        if not isdir(folder):
-            raise FolderNotFound(f"The folder {folder} doesn't exist.")
-        self.raw_folders.append(folder)
+    #def add_raw_folder(self, folder: str):
+    #    """
+    #    Add folder to the raws search path.
+    #
+    #    :param folder: folder to be added.
+    #    :type folder: str
+    #    """
+    #    if not isdir(folder):
+    #        raise FolderNotFound(f"The folder {folder} doesn't exist.")
+    #    self.raw_folders.append(folder)
 
     def get_or_create_model_type_group(self, name: str):
         """
@@ -84,7 +84,8 @@ class DataCore(object):
 
         return group
 
-    def get_model_type(self, name: str, group_name: str = DEFAULT_MODEL_GROUP, default=None):
+    def get_model_type(self, name: str, group_name: str = DEFAULT_MODEL_GROUP, default=None,
+                       group_default=False):
         """
         Get model type from the group
 
@@ -97,7 +98,7 @@ class DataCore(object):
         :type default: any
         :raises ModelTypeNotFound: If the model doesn't exist.
         """
-        group = self.get_model_type_group(group_name, default=False)
+        group = self.get_model_type_group(group_name, default=group_default)
         if group:
             model = group.get(name, default)
             if not model and default is None:
