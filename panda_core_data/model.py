@@ -10,7 +10,7 @@ from . import data_core, DEFAULT_MODEL_GROUP
 class Model(ModelMixin):
 
     def __init_subclass__(cls, model_name=False, dependency_list=False,  # @NoSelf
-                        model_group_name=DEFAULT_MODEL_GROUP, auto_create_group=True):
+                          model_group_name=DEFAULT_MODEL_GROUP, auto_create_group=True):
         """
         Method that automatically registers class types into data_core
 
