@@ -2,6 +2,7 @@ PandaDataCore
 ===============
 
 [![Build Status](https://travis-ci.org/Cerberus1746/PandaCoreData.svg?branch=master)](https://travis-ci.org/Cerberus1746/PandaCoreData) [![Documentation Status](https://readthedocs.org/projects/pandacoredata/badge/?version=latest)](https://pandacoredata.readthedocs.io/en/latest/?badge=latest)
+
 Thanks for your interest in our package! But for now our things are still a bit of a todo. But, you
 can check a basic api documentation here: https://pandacoredata.readthedocs.io/
 

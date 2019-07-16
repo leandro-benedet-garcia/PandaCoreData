@@ -14,6 +14,14 @@ setuptools.setup(
 	long_description_content_type="text/markdown",
 	url="https://github.com/Cerberus1746/PandaCoreData",
 	packages=setuptools.find_packages(),
+	setup_requires=[
+        'pytest-runner'
+    ],
+    tests_require=[
+        'pytest',
+        'pylint',
+        'pytest-pylint',
+    ],
 	install_requires=[
 		"tinydb",
 		"pyyaml",
