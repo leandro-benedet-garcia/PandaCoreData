@@ -1,6 +1,6 @@
 dist: xenial
 language: python
-script: pytest tests/
+script: pytest panda_core_data/tests/
 python:
     - "3.7"
     - "3.7-dev"
