@@ -1,3 +1,5 @@
+name = "panda_core_data"
+
 DEFAULT_MODEL_GROUP = "DEFAULT_MODEL_GROUP"
 '''Default model group name, used for types and instances.'''
 

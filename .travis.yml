@@ -1,6 +1,6 @@
 dist: xenial
 language: python
-script: pytest panda_core_data/tests/
+script: pytest tests/
 python:
     - "3.7"
     - "3.7-dev"
@@ -8,4 +8,4 @@ python:
     - "nightly"
 
 install:
-    - pip3 install -r requirements.txt
+    - python setup.py install

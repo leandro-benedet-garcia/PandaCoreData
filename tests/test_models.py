@@ -5,9 +5,9 @@ Created on 09-07-2019
 '''
 import pytest
 
-from .. import data_core
-from ..custom_exceptions import DuplicatedModelTypeName
-from ..model import Model
+from panda_core_data import data_core
+from panda_core_data.custom_exceptions import DuplicatedModelTypeName
+from panda_core_data.model import Model
 
 
 class TestClass(object):
