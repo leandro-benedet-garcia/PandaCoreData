@@ -95,10 +95,10 @@ class ModelMixin(TinyDB):
         """
         object.__setattr__(self, attr_name, value)
 
-    @property
-    def has_dependencies(self):
-        """If the model has any dependencies"""
-        return len(self.dependencies) > 0
+    #@property
+    #def has_dependencies(self):
+    #    """If the model has any dependencies"""
+    #    return len(self.dependencies) > 0
 
     #@staticmethod
     #def load_inner_dependencies(dependency):
@@ -122,25 +122,14 @@ class ModelMixin(TinyDB):
         :param default_table: default main field in the raw file.
         :type default_table: str
         """
-        if not isinstance(db_file, str):
-            raise TypeError(f"db_file has to be a str {type(db_file)} found instead.")
-
         if not os.path.isfile(db_file):
             raise FileNotFoundError(f"File {db_file} don't exist")
-        try:
-            TinyDB.__init__(self, db_file, *init_args, storage=storage,
-                            default_table=default_table, **init_kwargs)
 
-            for current_field in self.all():
-                setattr(self, list(current_field.keys())[
-                    0], list(current_field.values())[0])
+        TinyDB.__init__(self, db_file, *init_args, storage=storage,
+                        default_table=default_table, **init_kwargs)
 
-        except ValueError as ex:
-            additional_info = f"Error in file {db_file}\n"
-            additional_info = '{}: {}'.format(additional_info,
-                                              ex.args[0]) if ex.args else str(db_file)
-            ex.args = (additional_info,) + ex.args[1:]
-            raise
+        for current_field in self.all():
+            setattr(self, list(current_field.keys())[0], list(current_field.values())[0])
 
     #def get(self, *arg, **kwargs):
     #    return self._table.get(*arg, **kwargs)
