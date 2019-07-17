@@ -1,17 +1,27 @@
 dist: xenial
 language: python
-python:
-    - "3.7"
-    - "3.7-dev"
-    - "3.8-dev"
-    - "nightly"
-
-script:
-  - coverage run --source=panda_core_data setup.py test
-
-after_success:
-  - coveralls
+before_install:
+    - pip install python-coveralls
 
 install:
-    - pip install python-coveralls
     - python setup.py install
+after_success:
+    - coveralls
+
+matrix:
+    include:
+        - name: "Python 3.7"
+          dist: xenial
+          python:
+            - "3.7"
+            - "3.7-dev"
+          script:
+            - coverage run --source=panda_core_data setup.py pytest --addopts --pylint
+
+        - name: "Python >= 3.8"
+          dist: xenial
+          python:
+            - "3.8-dev"
+            - "nightly"
+          script:
+            - coverage run --source=panda_core_data setup.py pytest
