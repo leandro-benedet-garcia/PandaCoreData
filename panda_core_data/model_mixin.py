@@ -100,15 +100,15 @@ class ModelMixin(TinyDB):
         """If the model has any dependencies"""
         return len(self.dependencies) > 0
 
-    @staticmethod
-    def load_inner_dependencies(dependency):
-        tmp_dependencies = {dependency.model_name: dependency}
+    #@staticmethod
+    #def load_inner_dependencies(dependency):
+    #    tmp_dependencies = {dependency.model_name: dependency}
 
-        for current_data in dependency.parents.values():
-            tmp_dependencies.update(
-                ModelMixin.load_inner_dependencies(current_data))
+    #    for current_data in dependency.parents.values():
+    #        tmp_dependencies.update(
+    #            ModelMixin.load_inner_dependencies(current_data))
 
-        return tmp_dependencies
+    #    return tmp_dependencies
 
     def load_db(self, db_file, *init_args, storage=DEFAULT_STORAGE, default_table=DEFAULT_TABLE,
                 **init_kwargs):
@@ -142,14 +142,14 @@ class ModelMixin(TinyDB):
             ex.args = (additional_info,) + ex.args[1:]
             raise
 
-    def get(self, *arg, **kwargs):
-        return self._table.get(*arg, **kwargs)
+    #def get(self, *arg, **kwargs):
+    #    return self._table.get(*arg, **kwargs)
 
     def all(self, *arg, **kwargs):
         return self._table.all(*arg, **kwargs)
 
-    def purge(self, *arg, **kwargs):
-        return self._table.purge(*arg, **kwargs)
+    #def purge(self, *arg, **kwargs):
+    #    return self._table.purge(*arg, **kwargs)
 
-    def insert_multiple(self, *arg, **kwargs):
-        return self._table.insert_multiple(*arg, **kwargs)
+    #def insert_multiple(self, *arg, **kwargs):
+    #    return self._table.insert_multiple(*arg, **kwargs)

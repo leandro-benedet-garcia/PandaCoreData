@@ -29,15 +29,12 @@ class YAMLStorage(MemoryStorage, Storage):
         if not self.memory:
             with open(self.path) as handle:
                 data = yaml.safe_load(handle.read())
-                if data:
-                    desired_data = {}
-                    for table, table_items in data.items():
-                        desired_data[table] = {}
-                        for item_index, current_item in enumerate(table_items):
-                            desired_data[table][item_index] = current_item
-                    self.memory = desired_data
-                else:
-                    self.memory = None
+                desired_data = {}
+                for table, table_items in data.items():
+                    desired_data[table] = {}
+                    for item_index, current_item in enumerate(table_items):
+                        desired_data[table][item_index] = current_item
+                self.memory = desired_data
 
         return self.memory
 
