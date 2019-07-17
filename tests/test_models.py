@@ -99,12 +99,6 @@ data:
         assert isinstance(instanced, model), self.instance_error
         assert getattr(instanced, self.default_test_field_name) == self.default_test_field_content
 
-    def test_assert_model_is_unique(self, model):
-        assert model
-        #pylint: disable=unused-variable
-        with pytest.raises(DuplicatedModelTypeName):  # @UndefinedVariable
-            class TestModel(Model, model_name=self.model_type_name):
-                name: str
 
     def test_post_init_with_file(self, tmpdir):
         #pylint: disable=unused-variable
@@ -127,20 +121,23 @@ data:
         assert isinstance(instanced, model_class), self.instance_error
         assert getattr(instanced, self.default_test_field_name) == "another_content"
 
-    def test_assert_group_is_unique(self):
+
+    def test_exceptions(self, model):
         #pylint: disable=unused-variable
         with pytest.raises(ModelTypeGroupNotFound):  # @UndefinedVariable
             #pylint: disable=unused-variable
             class GroupTesting(Model, model_group_name="invalid", auto_create_group=False):
                 name: str
 
-                def __post_init__(self):
-                    default_field = TestClass.default_test_field_name
-                    assert getattr(self, default_field) == TestClass.default_test_field_content
-                    self.name = "another_content"
-
-    @staticmethod
-    def test_exceptions():
         #pylint: disable=unused-variable
         with pytest.raises(ModelTypeNotFound):  # @UndefinedVariable
             data_core.get_model_type("invalid")
+
+        #pylint: disable=unused-variable
+        with pytest.raises(FileNotFoundError):  # @UndefinedVariable
+            model(db_file="invalid")
+
+        #pylint: disable=unused-variable
+        with pytest.raises(DuplicatedModelTypeName):  # @UndefinedVariable
+            class TestModel(Model, model_name=self.model_type_name):
+                name: str

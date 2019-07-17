@@ -30,18 +30,66 @@ class DataCore(object):
     #        raise FolderNotFound(f"The folder {folder} doesn't exist.")
     #    self.raw_folders.append(folder)
 
-    def get_or_create_model_type_group(self, name: str):
+    @staticmethod
+    def _wrapper_get_model_group(name: str, the_dict: dict, default=None):
+        group = the_dict.get(name, default)
+        if not group and default is None:
+            raise ModelTypeGroupNotFound(f"Group '{name}' wasn't found.")
+
+        return group
+
+    @staticmethod
+    def _wrapper_get_or_create_group(name: str, the_dict: dict):
+        return the_dict.setdefault(name, {})
+
+    def _wrapper_add_to_group(self, group_name: str, model, the_dict: dict,
+                              auto_create_group=True):
+        if auto_create_group:
+            group = self._wrapper_get_or_create_group(group_name, the_dict)
+        else:
+            group = self._wrapper_get_model_group(group_name, the_dict)
+
+        model_name = model.model_name
+
+        if model_name in group:
+            raise DuplicatedModelTypeName(f"There's already a model type with "
+                                          f"the name {model_name} inside the group {group_name}")
+        else:
+            group[model_name] = model
+
+    def _wrapper_get_model_type(self, name: str, the_dict: dict,
+                                group_name: str = DEFAULT_MODEL_GROUP, default=None,
+                                group_default=False):
+        group = self._wrapper_get_model_group(group_name, the_dict, default=group_default)
+        if group:
+            model = group.get(name, default)
+            if not model and default is None:
+                raise ModelTypeNotFound(f"Model type {name} could not be found inside "
+                                        f"the group {group_name}")
+            return model
+        return default
+
+    def get_or_create_model_group(self, name: str):
         """
-        Get a group of model types, if it doesn't exist, the group is created.
+        Get a group of ~Model types, if it doesn't exist, the group is created.
 
         :param name: name of the group
         :type name: string
         """
-        return self.all_model_types.setdefault(name, {})
+        return self._wrapper_get_or_create_group(name, self.all_model_types)
 
-    def add_model_type_to_group(self, group_name: str, model, auto_create_group=True):
+    def get_or_create_template_group(self, name: str):
         """
-        Add a model type to a group.
+        Get a group of ~ModelTemplate types, if it doesn't exist, the group is created.
+
+        :param name: name of the group
+        :type name: string
+        """
+        return self._wrapper_get_or_create_group(name, self.all_template_types)
+
+    def add_model_to_group(self, group_name: str, model, auto_create_group=True):
+        """
+        Add a ~Model type to a group.
 
         If auto_create_group is true and the group doesn't exist it will be created.
         If false an exception will be raised.
@@ -54,18 +102,8 @@ class DataCore(object):
         :type auto_create_group: bool
         :raises DuplicatedModelTypeName: If there's a model with the supplied name inside the group
         """
-        if auto_create_group:
-            group = self.get_or_create_model_type_group(group_name)
-        else:
-            group = self.get_model_type_group(group_name)
+        self._wrapper_add_to_group(group_name, model, self.all_model_types, auto_create_group)
 
-        model_name = model.model_name
-
-        if model_name in group:
-            raise DuplicatedModelTypeName(f"There's already a model type with "
-                                          f"the name {model_name} inside the group {group_name}")
-        else:
-            group[model_name] = model
 
     def get_model_type_group(self, name: str, default=None):
         """
@@ -78,11 +116,7 @@ class DataCore(object):
         :type default: any
         :raises ModelTypeGroupNotFound: If the group doesn't exist.
         """
-        group = self.all_model_types.get(name, default)
-        if not group and default is None:
-            raise ModelTypeGroupNotFound(f"Group '{name}' wasn't found.")
-
-        return group
+        return self._wrapper_get_model_group(name, self.all_model_types, default)
 
     def get_model_type(self, name: str, group_name: str = DEFAULT_MODEL_GROUP, default=None,
                        group_default=False):
@@ -98,18 +132,11 @@ class DataCore(object):
         :type default: any
         :raises ModelTypeNotFound: If the model doesn't exist.
         """
-        group = self.get_model_type_group(group_name, default=group_default)
-        if group:
-            model = group.get(name, default)
-            if not model and default is None:
-                raise ModelTypeNotFound(f"Model type {name} could not be found inside "
-                                        f"the group {group_name}")
-        else:
-            return default
-        return model
+        return self._wrapper_get_model_type(name, self.all_model_types, group_name, default,
+                                            group_default)
 
-    #'''def get_or_create_template_group(self, name: str):
-    #   pass'''
+    #def get_or_create_template_group(self, name: str):
+    #    pass
 
 #pylint: disable=invalid-name
 data_core = DataCore()

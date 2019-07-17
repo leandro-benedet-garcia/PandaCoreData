@@ -29,7 +29,7 @@ class Model(ModelMixin):
         cls.dependencies = [] if not dependency_list else dependency_list
         cls.model_group = model_group_name
 
-        data_core.add_model_type_to_group(model_group_name, cls, auto_create_group)
+        data_core.add_model_to_group(model_group_name, cls, auto_create_group)
 
     #def setup_values(self, value, default_value, default_min, default_max):
     #    try:

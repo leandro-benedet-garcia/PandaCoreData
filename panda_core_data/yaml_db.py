@@ -41,7 +41,7 @@ class YAMLStorage(MemoryStorage, Storage):
     @staticmethod
     def represent_doc(dumper, data):
         """
-        Method used to transform a dict to a yaml repreentation
+        Method used to transform a dict to a yaml representation
 
         :param dumper: yaml dumper
         :param data: data to be parsed
