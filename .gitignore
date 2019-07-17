@@ -9,3 +9,5 @@
 /.eggs/
 /Pipfile
 /Pipfile.lock
+/panda_core_data.egg-info/
+/.coverage

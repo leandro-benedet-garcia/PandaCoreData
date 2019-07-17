@@ -34,7 +34,7 @@ class ModelMixin(TinyDB):
 
         :param cls: the type to be instanced
         :type cls: class that inherits from Model or ModelTemplate.
-        :param path: path to the raw file to be loaded, if False, the class will be instanced
+        :param path: path to the raw file to be loaded, if False, the class will be instanced \
         like a normal dataclass
         :type path: str
         """
@@ -56,7 +56,7 @@ class ModelMixin(TinyDB):
         cls = _process_class(cls, **dataclass_args)
 
         if db_file:
-            # TODO: Find a way to not overwrite init if the uer creates one if they want to \
+            # TODO: Find a way to not overwrite init if the user creates one if they want to \
             # overwrite it
             def custom_init(self, db_file, *init_args, storage=ModelMixin.DEFAULT_STORAGE,
                             default_table=ModelMixin.DEFAULT_TABLE, **init_kwargs):

@@ -3,8 +3,8 @@ language: python
 python:
     - "3.7"
     - "3.7-dev"
-#    - "3.8-dev"
-#    - "nightly"
+    - "3.8-dev"
+    - "nightly"
 
 script:
   - coverage run --source=panda_core_data setup.py test

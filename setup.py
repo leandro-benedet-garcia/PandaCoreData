@@ -8,7 +8,7 @@ with open("README.md", "r") as fh:
     LONG_DESCRIPTION = fh.read()
 
 setuptools.setup(
-    name='panda_core_data-cerberus1746',
+    name='panda_core_data',
     version='0.0.1.dev1',
     author="Leandro (Cerberus1746) Benedet Garcia",
     author_email="leandro.benedet.garcia@gmail.com",
