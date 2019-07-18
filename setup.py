@@ -16,7 +16,7 @@ setuptools.setup(
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
     url="https://github.com/Cerberus1746/PandaCoreData",
-    packages=setuptools.find_packages(),
+    packages=["panda_core_data",],
     setup_requires=[
         'pytest-runner'
     ],

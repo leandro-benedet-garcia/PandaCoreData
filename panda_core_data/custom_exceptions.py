@@ -5,25 +5,31 @@ Module containing all cusstom exceptions used by the package
 '''
 
 
-class ModelTypeGroupNotFound(Exception):
+class DataTypeGroupNotFound(Exception):
     """
-    Exception raised if the Model Type Group is not found.
-    """
-
-
-class ModelTypeNotFound(Exception):
-    """
-    Exception raised if the Model Group is not found.
+    Exception raised if the ~Model or ~Template Group is not found.
     """
 
 
-class DuplicatedModelTypeName(Exception):
+class DataTypeNotFound(Exception):
     """
-    Exception raised if a Model Type already exists with the same name inside the group.
+    Exception raised if the ~Model or ~Template Group is not found.
+    """
+
+
+class DuplicatedDataTypeName(Exception):
+    """
+    Exception raised if a ~Model or ~Template Type already exists with the same name inside the
+    group.
     """
 
 
 class FolderNotFound(Exception):
     """
     Exception raised if the folder is invalid.
+    """
+
+class CannotInstanceTemplateDirectly(Exception):
+    """
+    Exception raised if the user attempts to instance a ~Template directly.
     """

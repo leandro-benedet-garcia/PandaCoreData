@@ -25,7 +25,7 @@ class Model(ModelMixin):
         :type model_group_name: str
         """
 
-        cls.model_name = cls.__name__ if not model_name else model_name
+        cls.data_name = cls.__name__ if not model_name else model_name
         cls.dependencies = [] if not dependency_list else dependency_list
         cls.model_group = model_group_name
 

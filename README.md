@@ -68,7 +68,7 @@ or, to just install globally in your computer (which I don't recomend)
 ```
 pip install -r requirements.txt
 ```
-Using intalled packages
+Using installed packages
 =========================
 All the following commands assumes you have your virtualenv active. Either with pipenv or
 normal virtualenv
