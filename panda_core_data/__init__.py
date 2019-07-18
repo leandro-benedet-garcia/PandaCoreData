@@ -89,15 +89,6 @@ class DataCore(object):
             return model
         return default
 
-    def get_or_create_template_group(self, name: str):
-        """
-        Get a group of ~ModelTemplate types, if it doesn't exist, the group is created.
-
-        :param name: name of the group
-        :type name: string
-        """
-        return self._wrapper_get_or_create_group(name, self._all_template_groups)
-
     def get_template_type(self, name: str, group_name: str = DEFAULT_MODEL_GROUP, default=None,
                           group_default=False):
         """
@@ -133,14 +124,6 @@ class DataCore(object):
         self._wrapper_add_to_group(group_name, model, self._all_template_groups,
                                    self._all_templates, auto_create_group)
 
-    def get_or_create_model_group(self, name: str):
-        """
-        Get a group of ~Model types, if it doesn't exist, the group is created.
-
-        :param name: name of the group
-        :type name: string
-        """
-        return self._wrapper_get_or_create_group(name, self._all_model_groups)
 
     def add_model_to_group(self, group_name: str, model, auto_create_group=True):
         """
