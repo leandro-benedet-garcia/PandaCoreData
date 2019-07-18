@@ -143,20 +143,6 @@ class DataCore(object):
         self._wrapper_add_to_group(group_name, model, self._all_model_groups, self._all_models,
                                    auto_create_group)
 
-
-    def get_model_type_group(self, name: str, default=None):
-        """
-        Get model. It will raise an exception if the group doesn't exist.
-
-        :param name: The name of the group
-        :type name: str
-        :param default: Default value to be returned if model type is not found, if none, it will \
-        raise an exception, which is the default.
-        :type default: any
-        :raises DataTypeGroupNotFound: If the group doesn't exist.
-        """
-        return self._wrapper_get_model_group(name, self._all_model_groups, default)
-
     def get_model_type(self, name: str, group_name: str = DEFAULT_MODEL_GROUP, default=None,
                        group_default=False):
         """

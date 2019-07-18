@@ -11,44 +11,9 @@ from panda_core_data.custom_exceptions import DuplicatedDataTypeName, DataTypeGr
 from panda_core_data.model import Model
 
 from . import (DEFAULT_TEST_FIELD_CONTENT, DEFAULT_TEST_FIELD_NAME, INSTANCE_ERROR, MODEL_TYPE_NAME,
-               MODEL_WITH_INIT_NAME, SECOND_MODEL_TYPE_NAME, YAML_CONTENT)
+               MODEL_WITH_INIT_NAME, YAML_CONTENT)
 
 class TestModels(object):
-    @staticmethod
-    def create_test_model(model_name):
-        test_model = data_core.get_model_type(model_name, default=False)
-        if not test_model:
-            class TestModel(Model, model_name=model_name):
-                name: str
-
-            test_model = TestModel
-
-        return test_model
-
-    @pytest.fixture
-    def model(self):
-        return self.create_test_model(MODEL_TYPE_NAME)
-
-    @pytest.fixture
-    def model_with_init(self):
-        test_model = data_core.get_model_type(
-            MODEL_WITH_INIT_NAME, default=False)
-        if not test_model:
-            class TestModelWithInit(Model, model_name=MODEL_WITH_INIT_NAME):
-                name: str
-
-                #pylint: disable=super-init-not-called
-                def __init__(self):
-                    self.name = DEFAULT_TEST_FIELD_CONTENT
-
-            test_model = TestModelWithInit
-
-        return test_model
-
-    @pytest.fixture
-    def second_model(self):
-        return self.create_test_model(SECOND_MODEL_TYPE_NAME)
-
     @staticmethod
     def test_check_if_created(model, second_model):
         assert model in data_core.all_models
