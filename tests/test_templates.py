@@ -33,8 +33,9 @@ class TestTemplates(object):
         return self.create_test_template(SECOND_MODEL_TYPE_NAME)
 
     @staticmethod
-    def test_check_if_equal(template):
-        assert data_core.get_template_type(MODEL_TYPE_NAME) == template
+    def test_check_if_created(template, second_template):
+        assert template in data_core.all_templates
+        assert second_template in data_core.all_templates
 
     @staticmethod
     def test_check_if_unequal(template, second_template):
@@ -54,7 +55,7 @@ class TestTemplates(object):
 
         #pylint: disable=unused-variable
         with pytest.raises(DuplicatedDataTypeName):  # @UndefinedVariable
-            class TestModel(Template, template_name=MODEL_TYPE_NAME):
+            class TestTemplate(Template, template_name=MODEL_TYPE_NAME):
                 name: str
 
         #pylint: disable=unused-variable

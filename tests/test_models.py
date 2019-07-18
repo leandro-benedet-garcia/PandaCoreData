@@ -50,8 +50,9 @@ class TestModels(object):
         return self.create_test_model(SECOND_MODEL_TYPE_NAME)
 
     @staticmethod
-    def test_check_if_equal(model):
-        assert data_core.get_model_type(MODEL_TYPE_NAME) == model
+    def test_check_if_created(model, second_model):
+        assert model in data_core.all_models
+        assert second_model in data_core.all_models
 
     @staticmethod
     def test_check_if_unequal(model, second_model, model_with_init):
