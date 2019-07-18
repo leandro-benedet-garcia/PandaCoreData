@@ -46,11 +46,16 @@ class DataCore(object):
     def all_templates(self):
         return list(self._all_templates.values())
 
-    @staticmethod
-    def _wrapper_get_model_group(name: str, group_dict, default):
+    def _wrapper_get_group(self, name: str, group_dict, default):
         group = group_dict.get(name, default)
         if not group and default is None:
             raise DataTypeGroupNotFound(f"Group '{name}' wasn't found.")
+
+        if isinstance(group, Group) and group.group_name not in group_dict:
+            group_dict[group.name] = group
+
+        elif isinstance(group, str):
+            self._wrapper_get_group(group, group_dict, None)
 
         return group
 
@@ -65,7 +70,7 @@ class DataCore(object):
         if auto_create_group:
             group = self._wrapper_get_or_create_group(group_name, group_dict)
         else:
-            group = self._wrapper_get_model_group(group_name, group_dict, None)
+            group = self._wrapper_get_group(group_name, group_dict, None)
 
         if name not in data_type_dict:
             data_type_dict[name] = model
@@ -80,7 +85,7 @@ class DataCore(object):
 
     def _wrapper_get_model_type(self, name: str, group_dict, group_name: str, default,
                                 group_default):
-        group = self._wrapper_get_model_group(group_name, group_dict, default=group_default)
+        group = self._wrapper_get_group(group_name, group_dict, default=group_default)
         if group:
             model = group.get(name, default)
             if not model and default is None:
@@ -89,34 +94,34 @@ class DataCore(object):
             return model
         return default
 
-    def get_template_type(self, name: str, group_name: str = DEFAULT_MODEL_GROUP, default=None,
-                          group_default=False):
+    def get_template_type(self, name: str, group_name: str = DEFAULT_MODEL_GROUP, default=None):
         """
-        Get model type from the group
+        Get :class:`panda_core_data.template.Template` type from the group
 
-        :param name: Name of the model type to get
+        :param name: Name of the :class:`panda_core_data.template.Template` type to get
         :type name: str
         :param group: Name of the group
         :type group: str
         :param default: Default value to be returned if model type is not found, if none, it will \
         raise an exception, which is the default.
         :type default: any
+        :returns: The :class:`panda_core_data.template.Template` type
         :raises DataTypeNotFound: If the model doesn't exist.
         """
         return self._wrapper_get_model_type(name, self._all_template_groups, group_name, default,
-                                            group_default)
+                                            False)
 
-    def add_template_to_group(self, group_name: str, model, auto_create_group=True):
+    def add_template_to_group(self, group_name: str, model, auto_create_group: bool = True):
         """
-        Add a ~Template type to a group.
+        Add a :class:`panda_core_data.template.Template` type to a group.
 
         If auto_create_group is true and the group doesn't exist it will be created.
         If false an exception will be raised.
 
         :param group_name: Name of the group
         :type group_name: str
-        :param model: Model to be added
-        :type model: Model
+        :param model: :class:`Template` to be added
+        :type model: Template
         :param auto_create_group: If the group should be created if it doesn't exist
         :type auto_create_group: bool
         :raises DuplicatedDataTypeName: If there's a model with the supplied name inside the group
@@ -127,14 +132,14 @@ class DataCore(object):
 
     def add_model_to_group(self, group_name: str, model, auto_create_group=True):
         """
-        Add a ~Model type to a group.
+        Add a :class:`panda_core_data.template.Model` type to a group.
 
         If auto_create_group is true and the group doesn't exist it will be created.
         If false an exception will be raised.
 
         :param group_name: Name of the group
         :type group_name: str
-        :param model: Model to be added
+        :param model: :class:`panda_core_data.template.Model` to be added
         :type model: Model
         :param auto_create_group: If the group should be created if it doesn't exist
         :type auto_create_group: bool
@@ -143,10 +148,9 @@ class DataCore(object):
         self._wrapper_add_to_group(group_name, model, self._all_model_groups, self._all_models,
                                    auto_create_group)
 
-    def get_model_type(self, name: str, group_name: str = DEFAULT_MODEL_GROUP, default=None,
-                       group_default=False):
+    def get_model_type(self, name: str, group_name: str = DEFAULT_MODEL_GROUP, default=None):
         """
-        Get model type from the group
+        Get :class:`panda_core_data.template.Model` type from the group
 
         :param name: Name of the model type to get
         :type name: str
@@ -155,10 +159,11 @@ class DataCore(object):
         :param default: Default value to be returned if model type is not found, if none, it will \
         raise an exception, which is the default.
         :type default: any
+        :returns: The :class:`panda_core_data.template.Model` type.
         :raises DataTypeNotFound: If the model doesn't exist.
         """
         return self._wrapper_get_model_type(name, self._all_model_groups, group_name, default,
-                                            group_default)
+                                            False)
 
     #def get_or_create_template_group(self, name: str):
     #    pass
