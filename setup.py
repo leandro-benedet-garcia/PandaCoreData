@@ -1,10 +1,16 @@
 '''
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
-from sphinx.setup_command import BuildDoc
+try:
+    from sphinx.setup_command import BuildDoc
+    SPHINX_LOADED = True
+except ModuleNotFoundError:
+    SPHINX_LOADED = False
+
 import setuptools
 
-CMDCLASS = {'build_sphinx': BuildDoc}
+if SPHINX_LOADED:
+    CMDCLASS = {'build_sphinx': BuildDoc}
 
 NAME = 'panda_core_data'
 VERSION = '0.0.1.dev1'
@@ -62,5 +68,5 @@ setuptools.setup(
             'source_dir': ('setup.py', 'docs/source'),
             'build_dir': ('setup.py', 'docs/build'),
         }
-    },
+    } if SPHINX_LOADED else {},
 )
