@@ -46,16 +46,11 @@ class DataCore(object):
     def all_templates(self):
         return list(self._all_templates.values())
 
-    def _wrapper_get_group(self, name: str, group_dict, default):
+    @staticmethod
+    def _wrapper_get_group(name: str, group_dict, default):
         group = group_dict.get(name, default)
         if not group and default is None:
             raise DataTypeGroupNotFound(f"Group '{name}' wasn't found.")
-
-        if isinstance(group, Group) and group.group_name not in group_dict:
-            group_dict[group.name] = group
-
-        elif isinstance(group, str):
-            self._wrapper_get_group(group, group_dict, None)
 
         return group
 
