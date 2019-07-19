@@ -4,7 +4,7 @@
 try:
     from sphinx.setup_command import BuildDoc
     SPHINX_LOADED = True
-except ModuleNotFoundError:
+except(ModuleNotFoundError, ImportError):
     SPHINX_LOADED = False
 
 import setuptools
