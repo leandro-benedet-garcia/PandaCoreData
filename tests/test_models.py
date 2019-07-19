@@ -6,8 +6,8 @@
 import pytest
 
 from panda_core_data import data_core
-from panda_core_data.custom_exceptions import DuplicatedDataTypeName, DataTypeGroupNotFound,\
-    DataTypeNotFound
+from panda_core_data.custom_exceptions import PCDDuplicatedTypeName, PCDTypeGroupNotFound,\
+    PCDTypeNotFound
 from panda_core_data.model import Model
 
 from . import (DEFAULT_TEST_FIELD_CONTENT, DEFAULT_TEST_FIELD_NAME, INSTANCE_ERROR, MODEL_TYPE_NAME,
@@ -81,13 +81,13 @@ class TestModels(object):
     @staticmethod
     def test_exceptions(model):
         #pylint: disable=unused-variable
-        with pytest.raises(DataTypeGroupNotFound):  # @UndefinedVariable
+        with pytest.raises(PCDTypeGroupNotFound):  # @UndefinedVariable
             #pylint: disable=unused-variable
             class GroupTesting(Model, model_group_name="invalid", auto_create_group=False):
                 name: str
 
         #pylint: disable=unused-variable
-        with pytest.raises(DataTypeNotFound):  # @UndefinedVariable
+        with pytest.raises(PCDTypeNotFound):  # @UndefinedVariable
             data_core.get_model_type("invalid")
 
         #pylint: disable=unused-variable
@@ -95,6 +95,6 @@ class TestModels(object):
             model(db_file="invalid")
 
         #pylint: disable=unused-variable
-        with pytest.raises(DuplicatedDataTypeName):  # @UndefinedVariable
+        with pytest.raises(PCDDuplicatedTypeName):  # @UndefinedVariable
             class TestModel(Model, model_name=MODEL_TYPE_NAME):
                 name: str

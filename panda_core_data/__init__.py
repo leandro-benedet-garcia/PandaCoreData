@@ -2,7 +2,11 @@
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 from dataclasses import dataclass
-from os.path import isdir
+
+from os import walk
+from os.path import isdir, join
+
+from pathlib import Path
 from .custom_exceptions import *
 
 DEFAULT_MODEL_GROUP = "DEFAULT_MODEL_GROUP"
@@ -27,30 +31,36 @@ class DataCore(object):
 
     raw_folders = []
 
-    #def add_raw_folder(self, folder: str):
-    #    """
-    #    Add folder to the raws search path.
-    #
-    #    :param folder: folder to be added.
-    #    :type folder: str
-    #    """
-    #    if not isdir(folder):
-    #        raise FolderNotFound(f"The folder {folder} doesn't exist.")
-    #    self.raw_folders.append(folder)
+    def __call__(self, mods_path, core_mod_folder="core", raws_folder_name="raws",
+                 models_folder_name="models", templates_folder_name="templates"):
+        if not isdir(mods_path):
+            raise PCDFolderNotFound(f"The folder {mods_path} doesn't exist.")
 
-    @property
-    def all_models(self):
-        return list(self._all_models.values())
+        core_folder = join(mods_path, core_mod_folder)
+        if not isdir(core_folder):
+            raise PCDFolderNotFound(f"The folder {core_folder} doesn't exist. Make sure you set "
+                                    "your 'core_mod_folder' parameter correctly")
 
-    @property
-    def all_templates(self):
-        return list(self._all_templates.values())
+        # Just setting the key names as the parameters so they can be shown in the exception inside
+        # the for loop.
+        folders = {
+            "raws_folder_name": join(core_folder, raws_folder_name),
+            "models_folder_name": join(core_folder, models_folder_name),
+            "templates_folder_name": join(core_folder, templates_folder_name),
+        }
+
+        for param_name, path in folders.items():
+            if not isdir(path):
+                raise PCDFolderNotFound(f"The folder '{path}' doesn't exist. Make sure you set "
+                                        f"your '{param_name}' parameter correctly. It must be "
+                                        "relative from the core mod path which is set to "
+                                        f"'{core_folder}'.")
 
     @staticmethod
     def _wrapper_get_group(name: str, group_dict, default):
         group = group_dict.get(name, default)
         if not group and default is None:
-            raise DataTypeGroupNotFound(f"Group '{name}' wasn't found.")
+            raise PCDTypeGroupNotFound(f"Group '{name}' wasn't found.")
 
         return group
 
@@ -71,8 +81,8 @@ class DataCore(object):
             data_type_dict[name] = model
 
         if name in group:
-            raise DuplicatedDataTypeName(f"There's already a {type(model)} with the name {name} "
-                                         f"inside the group {group_name}.")
+            raise PCDDuplicatedTypeName(f"There's already a {type(model)} with the name {name} "
+                                        f"inside the group {group_name}.")
 
         model.data_group = group
         group[name] = model
@@ -84,10 +94,18 @@ class DataCore(object):
         if group:
             model = group.get(name, default)
             if not model and default is None:
-                raise DataTypeNotFound(f"Model type {name} could not be found inside "
-                                       f"the group {group_name}")
+                raise PCDTypeNotFound(f"Model type {name} could not be found inside "
+                                      f"the group {group_name}")
             return model
         return default
+
+    @property
+    def all_models(self):
+        return list(self._all_models.values())
+
+    @property
+    def all_templates(self):
+        return list(self._all_templates.values())
 
     def get_template_type(self, name: str, group_name: str = DEFAULT_MODEL_GROUP, default=None):
         """
@@ -101,7 +119,7 @@ class DataCore(object):
         raise an exception, which is the default.
         :type default: any
         :returns: The :class:`panda_core_data.template.Template` type
-        :raises DataTypeNotFound: If the model doesn't exist.
+        :raises PCDTypeNotFound: If the model doesn't exist.
         """
         return self._wrapper_get_model_type(name, self._all_template_groups, group_name, default,
                                             False)
@@ -119,7 +137,7 @@ class DataCore(object):
         :type model: Template
         :param auto_create_group: If the group should be created if it doesn't exist
         :type auto_create_group: bool
-        :raises DuplicatedDataTypeName: If there's a model with the supplied name inside the group
+        :raises PCDDuplicatedTypeName: If there's a model with the supplied name inside the group
         """
         self._wrapper_add_to_group(group_name, model, self._all_template_groups,
                                    self._all_templates, auto_create_group)
@@ -138,7 +156,7 @@ class DataCore(object):
         :type model: Model
         :param auto_create_group: If the group should be created if it doesn't exist
         :type auto_create_group: bool
-        :raises DuplicatedDataTypeName: If there's a model with the supplied name inside the group
+        :raises PCDDuplicatedTypeName: If there's a model with the supplied name inside the group
         """
         self._wrapper_add_to_group(group_name, model, self._all_model_groups, self._all_models,
                                    auto_create_group)
@@ -155,7 +173,7 @@ class DataCore(object):
         raise an exception, which is the default.
         :type default: any
         :returns: The :class:`panda_core_data.template.Model` type.
-        :raises DataTypeNotFound: If the model doesn't exist.
+        :raises PCDTypeNotFound: If the model doesn't exist.
         """
         return self._wrapper_get_model_type(name, self._all_model_groups, group_name, default,
                                             False)
