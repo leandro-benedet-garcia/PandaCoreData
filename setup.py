@@ -21,7 +21,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name=NAME,
     version=VERSION,
-    cmdclass=CMDCLASS,
+    cmdclass=CMDCLASS if SPHINX_LOADED else {},
     author="Leandro (Cerberus1746) Benedet Garcia",
     author_email="leandro.benedet.garcia@gmail.com",
     description="Data management system with modding and Panda3D engine in mind.",
