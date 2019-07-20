@@ -80,18 +80,15 @@ class TestModels(object):
 
     @staticmethod
     def test_exceptions(model):
-        #pylint: disable=unused-variable
-        with pytest.raises(PCDTypeGroupNotFound):  # @UndefinedVariable
+        with pytest.raises(PCDTypeGroupNotFound):
             #pylint: disable=unused-variable
             class GroupTesting(Model, model_group_name="invalid", auto_create_group=False):
                 name: str
 
-        #pylint: disable=unused-variable
-        with pytest.raises(PCDTypeNotFound):  # @UndefinedVariable
+        with pytest.raises(PCDTypeNotFound):
             data_core.get_model_type("invalid")
 
-        #pylint: disable=unused-variable
-        with pytest.raises(FileNotFoundError):  # @UndefinedVariable
+        with pytest.raises(FileNotFoundError):
             model(db_file="invalid")
 
         #pylint: disable=unused-variable

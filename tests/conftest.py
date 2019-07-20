@@ -6,7 +6,7 @@ from . import (MODEL_TYPE_NAME, MODEL_WITH_INIT_NAME, DEFAULT_TEST_FIELD_CONTENT
                SECOND_MODEL_TYPE_NAME)
 
 def create_test_model(model_name):
-    test_model = data_core.get_model_type(model_name, default=False)
+    test_model = data_core.get_model_type(model_name, default=False, group_default=False)
     if not test_model:
         class TestModel(Model, model_name=model_name):
             name: str
@@ -39,7 +39,7 @@ def second_model():
     return create_test_model(SECOND_MODEL_TYPE_NAME)
 
 def create_test_template(template_name):
-    test_template = data_core.get_template_type(template_name, default=False)
+    test_template = data_core.get_template_type(template_name, default=False, group_default=False)
     if not test_template:
         class TestModel(Template, template_name=template_name):
             name: str

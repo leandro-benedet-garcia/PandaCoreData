@@ -21,25 +21,22 @@ class TestTemplates(object):
 
     @staticmethod
     def test_check_if_unequal(template, second_template):
-        assert template != second_template
+        "assert template != second_template"
 
     @staticmethod
     def test_exceptions(template):
-        #pylint: disable=unused-variable
-        with pytest.raises(PCDTypeGroupNotFound):  # @UndefinedVariable
+        with pytest.raises(PCDTypeGroupNotFound):
             #pylint: disable=unused-variable
             class GroupTesting(Template, template_group_name="invalid", auto_create_group=False):
                 name: str
 
-        #pylint: disable=unused-variable
-        with pytest.raises(PCDTypeNotFound):  # @UndefinedVariable
+        with pytest.raises(PCDTypeNotFound):
             data_core.get_template_type("invalid")
 
-        #pylint: disable=unused-variable
-        with pytest.raises(PCDDuplicatedTypeName):  # @UndefinedVariable
+        with pytest.raises(PCDDuplicatedTypeName):
+            #pylint: disable=unused-variable
             class TestTemplate(Template, template_name=MODEL_TYPE_NAME):
                 name: str
 
-        #pylint: disable=unused-variable
-        with pytest.raises(PCDCannotInstanceTemplateDirectly):  # @UndefinedVariable
+        with pytest.raises(PCDCannotInstanceTemplateDirectly):
             template()

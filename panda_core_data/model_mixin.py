@@ -12,6 +12,7 @@ from tinydb import TinyDB
 from tinydb.queries import Query
 
 from .yaml_db import YAMLStorage
+from . import data_core
 
 
 class ModelMixin(TinyDB):
@@ -25,6 +26,16 @@ class ModelMixin(TinyDB):
     DEFAULT_STORAGE = YAMLStorage
     parents = {}
     query = Query()
+
+    @staticmethod
+    def _add_into(data_type, model_name, model_group_name, dependencies, group_dict, data_type_dict,
+                  auto_create_group):
+        data_type.data_name = data_type.__name__ if not model_name else model_name
+        data_type.dependencies = [] if not dependencies else dependencies
+        data_type.data_group = model_group_name
+
+        data_core.wrapper_add_to_group(model_group_name, data_type, group_dict, data_type_dict,
+                                       auto_create_group)
 
     def __new__(cls, *_, db_file=False, **kwargs):
         """
@@ -95,20 +106,20 @@ class ModelMixin(TinyDB):
         """
         object.__setattr__(self, attr_name, value)
 
-    #@property
-    #def has_dependencies(self):
-    #    """If the model has any dependencies"""
-    #    return len(self.dependencies) > 0
+    @property
+    def has_dependencies(self):
+        """If the model has any dependencies"""
+        return len(self.dependencies) > 0
 
-    #@staticmethod
-    #def load_inner_dependencies(dependency):
-    #    tmp_dependencies = {dependency.model_name: dependency}
+    @staticmethod
+    def load_inner_dependencies(dependency):
+        tmp_dependencies = {dependency.model_name: dependency}
 
-    #    for current_data in dependency.parents.values():
-    #        tmp_dependencies.update(
-    #            ModelMixin.load_inner_dependencies(current_data))
+        for current_data in dependency.parents.values():
+            tmp_dependencies.update(
+                ModelMixin.load_inner_dependencies(current_data))
 
-    #    return tmp_dependencies
+        return tmp_dependencies
 
     def load_db(self, db_file, *init_args, storage=DEFAULT_STORAGE, default_table=DEFAULT_TABLE,
                 **init_kwargs):
@@ -131,14 +142,23 @@ class ModelMixin(TinyDB):
         for current_field in self.all():
             setattr(self, list(current_field.keys())[0], list(current_field.values())[0])
 
-    #def get(self, *arg, **kwargs):
-    #    return self._table.get(*arg, **kwargs)
+    def get(self, *arg, **kwargs):
+        return self._table.get(*arg, **kwargs)
 
     def all(self, *arg, **kwargs):
         return self._table.all(*arg, **kwargs)
 
-    #def purge(self, *arg, **kwargs):
-    #    return self._table.purge(*arg, **kwargs)
+    def purge(self, *arg, **kwargs):
+        return self._table.purge(*arg, **kwargs)
 
-    #def insert_multiple(self, *arg, **kwargs):
-    #    return self._table.insert_multiple(*arg, **kwargs)
+    def insert_multiple(self, *arg, **kwargs):
+        return self._table.insert_multiple(*arg, **kwargs)
+
+    def add_dependencies(self):
+        """Add a dependency to the model"""
+        for current_dependency in self.dependencies:
+            dependency = self.data_core.get_template_type(current_dependency)
+            if dependency.has_dependencies:
+                self.parents.update(self.load_inner_dependencies(dependency))
+
+            self.parents[current_dependency] = dependency
