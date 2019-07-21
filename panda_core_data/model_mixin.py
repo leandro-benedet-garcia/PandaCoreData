@@ -12,7 +12,7 @@ from tinydb import TinyDB
 from tinydb.queries import Query
 
 from .yaml_db import YAMLStorage
-from . import data_core
+from . import data_core, DEFAULT_MODEL_GROUP
 
 
 class ModelMixin(TinyDB):
@@ -26,16 +26,6 @@ class ModelMixin(TinyDB):
     DEFAULT_STORAGE = YAMLStorage
     parents = {}
     query = Query()
-
-    @staticmethod
-    def _add_into(data_type, model_name, model_group_name, dependencies, group_dict, data_type_dict,
-                  auto_create_group):
-        data_type.data_name = data_type.__name__ if not model_name else model_name
-        data_type.dependencies = [] if not dependencies else dependencies
-        data_type.data_group = model_group_name
-
-        data_core.wrapper_add_to_group(model_group_name, data_type, group_dict, data_type_dict,
-                                       auto_create_group)
 
     def __new__(cls, *_, db_file=False, **kwargs):
         """
@@ -58,10 +48,13 @@ class ModelMixin(TinyDB):
                 kwargs.pop("init", None)
                 continue
 
+            # We use a custom repr
+            elif param == "repr":
+                dataclass_args[param_name] = False
+
             # both cls and _cls are to avoid bugs with nightly version of python.
-            if param_name not in ["_cls", "cls"]:
-                dataclass_args[param_name] = kwargs.pop(
-                    param_name, param.default)
+            elif param_name not in ["_cls", "cls"]:
+                dataclass_args[param_name] = kwargs.pop(param_name, param.default)
 
         # pylint: disable=self-cls-assignment
         cls = _process_class(cls, **dataclass_args)
@@ -105,6 +98,34 @@ class ModelMixin(TinyDB):
         :param value: value of the attribute.
         """
         object.__setattr__(self, attr_name, value)
+
+    def __str__(self):
+        return self.__repr__()
+
+    def __repr__(self):
+        return self.__class__.__qualname__ + ', '.join([f"{f.name}={{self.{f.name}!r}}"
+                                                        for f in self.__dataclass_fields__])
+
+    @staticmethod
+    def _add_into(data_type, group_dict, data_type_dict, **kwargs):
+        auto_create_group = kwargs.pop("auto_create_group", True)
+        group_name = kwargs.pop("group_name", DEFAULT_MODEL_GROUP)
+        replace = kwargs.pop("replace", False)
+        data_name = kwargs.pop("data_name", data_type.__name__)
+
+        data_type.data_name = data_name
+        data_type.dependencies = kwargs.pop("dependencies", [])
+        data_type.data_group = group_name
+        data_type.data_core = data_core
+
+        if any(kwargs):
+            raise TypeError(f"Invalid attributes supplied: {list(kwargs.keys())}")
+
+        if data_name not in data_type_dict or replace:
+            data_type_dict[data_name] = data_type
+
+        data_core.wrapper_add_to_group(group_name, data_type, group_dict,
+                                       auto_create_group, replace)
 
     @property
     def has_dependencies(self):

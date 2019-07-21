@@ -2,23 +2,16 @@
 :created: 2019-04-26
 :author: Leandro (Cerberu1746) Benedet Garcia
 '''
-from . import DEFAULT_MODEL_GROUP, data_core
+from . import data_core
 from .model_mixin import ModelMixin
-from .custom_exceptions import PCDCannotInstanceTemplateDirectly
 
 
 class Template(ModelMixin):
     """
     Class that will be used to make ModelTemplates
     """
-    def __new__(cls, *_, **__):
-        raise PCDCannotInstanceTemplateDirectly("You can't instantiate a template. They are made "
-                                                "to be used just as a dependency for models.")
 
-
-    def __init_subclass__(cls, template_name=False, # @NoSelf
-                          template_group_name=DEFAULT_MODEL_GROUP,
-                          dependencies=False, auto_create_group=True):
+    def __init_subclass__(cls, **kwargs):  # @NoSelf
         """
         Method that automatically registers class types into data_core
 
@@ -33,6 +26,5 @@ class Template(ModelMixin):
         :type template_group_name: str
         """
 
-        cls._add_into(cls, template_name, template_group_name, dependencies,
-                      data_core.all_template_groups, data_core.all_key_value_templates,
-                      auto_create_group)
+        cls._add_into(cls, data_core.all_template_groups, data_core.all_key_value_templates,
+                      **kwargs)

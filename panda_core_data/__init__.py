@@ -30,6 +30,8 @@ class DataCore(object):
     """
     Class where everything is kept.
     """
+    _instance = None
+
     all_model_groups = Group("all_model_groups")
     all_template_groups = Group("all_template_groups")
 
@@ -39,7 +41,18 @@ class DataCore(object):
     model_modules = []
     template_modules = []
 
-    raw_folders = []
+    raw_models = []
+    raw_templates = []
+
+    raw_model_folders = []
+    raw_template_folders = []
+
+    def __new__(cls):
+        if DataCore._instance is None:
+            DataCore._instance = object.__new__(cls)
+            return DataCore._instance
+
+        raise PCDDataCoreIsNotUnique("Data core instance must be unique.")
 
     def __call__(self, mods_path, **kwargs):
         """
@@ -113,10 +126,24 @@ class DataCore(object):
                         import_module(module_name)
                     )
 
-        for model_type in self.all_models:
-            model_type.data_core = self
-            if model_type.has_dependencies:
-                model_type.add_dependencies(model_type)
+            elif param_name in ["raw_models_folder", "raw_templates_folder"]:
+                getattr(self, param_name.replace("s_folder", "_folders")).append(path)
+
+                for raw_file in iglob(join(path, '*.yaml')):
+                    raw = Path(raw_file).stem
+                    if param_name == "raw_models_folder":
+                        print(self.get_model_type(raw)(db_file=raw_file))
+                    #===============================================================================
+                    # elif param_name == "raw_templates_folder":
+                    #     print(self.get_template_type(raw)(db_file=raw_file))
+                    #===============================================================================
+
+
+        #===========================================================================================
+        # for model_type in self.all_models:
+        #     if model_type.has_dependencies:
+        #         model_type.add_dependencies(model_type)
+        #===========================================================================================
 
     @staticmethod
     def _wrapper_get_group(name: str, group_dict, default):
@@ -129,26 +156,6 @@ class DataCore(object):
     @staticmethod
     def _wrapper_get_or_create_group(name: str, group_dict):
         return group_dict.setdefault(name, Group(name))
-
-    def wrapper_add_to_group(self, group_name: str, model, group_dict, data_type_dict,
-                             auto_create_group):
-        name = model.data_name
-
-        if auto_create_group:
-            group = self._wrapper_get_or_create_group(group_name, group_dict)
-        else:
-            group = self._wrapper_get_group(group_name, group_dict, None)
-
-        if name not in data_type_dict:
-            data_type_dict[name] = model
-
-        if name in group:
-            raise PCDDuplicatedTypeName(f"There's already a {type(model)} with the name {name} "
-                                        f"inside the group {group_name}.")
-
-        model.data_group = group
-        group[name] = model
-        return group
 
     def _wrapper_get_model_type(self, name: str, group_dict, group_name: str, default,
                                 group_default):
@@ -168,6 +175,21 @@ class DataCore(object):
     @property
     def all_templates(self):
         return list(self.all_key_value_templates.values())
+
+    def wrapper_add_to_group(self, group_name: str, model, group_dict, auto_create_group, replace):
+        name = model.data_name
+        if auto_create_group:
+            group = self._wrapper_get_or_create_group(group_name, group_dict)
+        else:
+            group = self._wrapper_get_group(group_name, group_dict, None)
+
+        if not replace and name in group:
+            raise PCDDuplicatedTypeName(f"There's already a {type(model)} with the name {name} "
+                                        f"inside the group {group_name}.")
+
+        model.data_group = group
+        group[name] = model
+        return group
 
     def get_template_type(self, name: str, group_name: str = DEFAULT_MODEL_GROUP, default=None,
                           group_default=None):
@@ -202,8 +224,8 @@ class DataCore(object):
         :type auto_create_group: bool
         :raises PCDDuplicatedTypeName: If there's a model with the supplied name inside the group
         """
-        self.wrapper_add_to_group(group_name, model, self.all_template_groups,
-                                  self.all_key_value_templates, auto_create_group)
+        self.wrapper_add_to_group(group_name, model, self.all_template_groups, auto_create_group,
+                                  False)
 
 
     def add_model_to_group(self, group_name: str, model, auto_create_group=True):
@@ -222,7 +244,7 @@ class DataCore(object):
         :raises PCDDuplicatedTypeName: If there's a model with the supplied name inside the group
         """
         self.wrapper_add_to_group(group_name, model, self.all_model_groups,
-                                  self.all_key_value_models, auto_create_group)
+                                  auto_create_group, False)
 
     def get_model_type(self, name: str, group_name: str = DEFAULT_MODEL_GROUP, default=None,
                        group_default=None):

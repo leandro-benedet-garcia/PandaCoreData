@@ -34,7 +34,8 @@ class PCDFolderNotFound(Exception):
     Exception raised if the folder is invalid.
     """
 
-class PCDCannotInstanceTemplateDirectly(Exception):
+
+class PCDDataCoreIsNotUnique(Exception):
     """
-    Exception raised if the user attempts to instance a ~Template directly.
+    Exception raised if the data core is not unique.
     """

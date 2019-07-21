@@ -6,8 +6,8 @@
 import pytest
 
 from panda_core_data import data_core
-from panda_core_data.custom_exceptions import (PCDDuplicatedTypeName, PCDTypeGroupNotFound,
-                                               PCDTypeNotFound, PCDCannotInstanceTemplateDirectly)
+from panda_core_data.custom_exceptions import (PCDTypeNotFound, PCDTypeGroupNotFound,
+                                               PCDDuplicatedTypeName)
 from panda_core_data.template import Template
 
 #pylint: disable=unused-import
@@ -21,13 +21,14 @@ class TestTemplates(object):
 
     @staticmethod
     def test_check_if_unequal(template, second_template):
-        "assert template != second_template"
+        assert template != second_template
 
     @staticmethod
     def test_exceptions(template):
+        assert template
         with pytest.raises(PCDTypeGroupNotFound):
             #pylint: disable=unused-variable
-            class GroupTesting(Template, template_group_name="invalid", auto_create_group=False):
+            class GroupTesting(Template, group_name="invalid", auto_create_group=False):
                 name: str
 
         with pytest.raises(PCDTypeNotFound):
@@ -35,8 +36,5 @@ class TestTemplates(object):
 
         with pytest.raises(PCDDuplicatedTypeName):
             #pylint: disable=unused-variable
-            class TestTemplate(Template, template_name=MODEL_TYPE_NAME):
+            class TestTemplate(Template, data_name=MODEL_TYPE_NAME):
                 name: str
-
-        with pytest.raises(PCDCannotInstanceTemplateDirectly):
-            template()

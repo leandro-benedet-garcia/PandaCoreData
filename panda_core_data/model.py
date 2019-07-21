@@ -4,13 +4,12 @@
 '''
 
 from .model_mixin import ModelMixin
-from . import data_core, DEFAULT_MODEL_GROUP
+from . import data_core
 
 
 class Model(ModelMixin):
 
-    def __init_subclass__(cls, model_name=False, dependencies=False,  # @NoSelf
-                          model_group_name=DEFAULT_MODEL_GROUP, auto_create_group=True):
+    def __init_subclass__(cls, **kwargs):  # @NoSelf
         """
         Method that automatically registers class types into data_core
 
@@ -25,8 +24,7 @@ class Model(ModelMixin):
         :type model_group_name: str
         """
 
-        cls._add_into(cls, model_name, model_group_name, dependencies, data_core.all_model_groups,
-                      data_core.all_key_value_models, auto_create_group)
+        cls._add_into(cls, data_core.all_model_groups, data_core.all_key_value_models, **kwargs)
 
     def setup_values(self, value, default_value, default_min, default_max):
         try:

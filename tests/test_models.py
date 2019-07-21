@@ -29,8 +29,7 @@ class TestModels(object):
         instanced = model_type(DEFAULT_TEST_FIELD_CONTENT)
 
         assert isinstance(instanced, model), INSTANCE_ERROR
-        assert getattr(
-            instanced, DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
+        assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
 
         instanced = model_type(name=DEFAULT_TEST_FIELD_CONTENT)
         assert instanced.name == DEFAULT_TEST_FIELD_CONTENT
@@ -82,7 +81,7 @@ class TestModels(object):
     def test_exceptions(model):
         with pytest.raises(PCDTypeGroupNotFound):
             #pylint: disable=unused-variable
-            class GroupTesting(Model, model_group_name="invalid", auto_create_group=False):
+            class GroupTesting(Model, group_name="invalid", auto_create_group=False):
                 name: str
 
         with pytest.raises(PCDTypeNotFound):
@@ -93,5 +92,5 @@ class TestModels(object):
 
         #pylint: disable=unused-variable
         with pytest.raises(PCDDuplicatedTypeName):  # @UndefinedVariable
-            class TestModel(Model, model_name=MODEL_TYPE_NAME):
+            class TestModel(Model, data_name=MODEL_TYPE_NAME):
                 name: str
