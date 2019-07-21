@@ -11,4 +11,18 @@ data:
     - {DEFAULT_TEST_FIELD_NAME}: {DEFAULT_TEST_FIELD_CONTENT}
 """.strip()
 
+MODEL_FILE = f"""
+from panda_core_data.model import Model
+
+class TestModel(Model, data_name = "{MODEL_TYPE_NAME}", dependencies = ["{MODEL_TYPE_NAME}",]):
+    name: str
+    """.strip()
+
+TEMPLATE_FILE = f"""
+from panda_core_data.template import Template
+
+class TestTemplate(Template, data_name = "{MODEL_TYPE_NAME}"):
+    name: str
+""".strip()
+
 INSTANCE_ERROR = "The class wansn't instanced correctly, check __new__ in ModelMixin class"
