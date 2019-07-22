@@ -158,71 +158,62 @@
             
   <div class="section" id="module-panda_core_data.custom_exceptions">
 <span id="exceptions"></span><h1>Exceptions<a class="headerlink" href="#module-panda_core_data.custom_exceptions" title="Permalink to this headline">¶</a></h1>
-<p>Module containing all cusstom exceptions used by the package</p>
+<p>Module containing all cusstom exceptions used by the package. All exceptions related to this package
+has the PCD prefix.</p>
+<p>Please, if you used one of our methods and it raised an exception that doesn’t have our PCD prefix
+<strong>and</strong> it came from inside our files send us a ticket in this link:
+<a class="reference external" href="https://github.com/Cerberus1746/PandaCoreData/issues">https://github.com/Cerberus1746/PandaCoreData/issues</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">author</dt>
 <dd class="field-odd"><p>Leandro (Cerberus1746) Benedet Garcia</p>
 </dd>
 </dl>
 <dl class="exception">
-<dt id="panda_core_data.custom_exceptions.CannotInstanceTemplateDirectly">
-<em class="property">exception </em><code class="sig-prename descclassname">panda_core_data.custom_exceptions.</code><code class="sig-name descname">CannotInstanceTemplateDirectly</code><a class="headerlink" href="#panda_core_data.custom_exceptions.CannotInstanceTemplateDirectly" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exception raised if the user attempts to instance a ~Template directly.</p>
-<dl class="attribute">
-<dt id="panda_core_data.custom_exceptions.CannotInstanceTemplateDirectly.__weakref__">
-<code class="sig-name descname">__weakref__</code><a class="headerlink" href="#panda_core_data.custom_exceptions.CannotInstanceTemplateDirectly.__weakref__" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
-</dd></dl>
-
+<dt id="panda_core_data.custom_exceptions.PCDDataCoreIsNotUnique">
+<em class="property">exception </em><code class="sig-prename descclassname">panda_core_data.custom_exceptions.</code><code class="sig-name descname">PCDDataCoreIsNotUnique</code><a class="headerlink" href="#panda_core_data.custom_exceptions.PCDDataCoreIsNotUnique" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised if the data core is not unique.</p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="panda_core_data.custom_exceptions.DataTypeGroupNotFound">
-<em class="property">exception </em><code class="sig-prename descclassname">panda_core_data.custom_exceptions.</code><code class="sig-name descname">DataTypeGroupNotFound</code><a class="headerlink" href="#panda_core_data.custom_exceptions.DataTypeGroupNotFound" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exception raised if the ~Model or ~Template Group is not found.</p>
-<dl class="attribute">
-<dt id="panda_core_data.custom_exceptions.DataTypeGroupNotFound.__weakref__">
-<code class="sig-name descname">__weakref__</code><a class="headerlink" href="#panda_core_data.custom_exceptions.DataTypeGroupNotFound.__weakref__" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="exception">
-<dt id="panda_core_data.custom_exceptions.DataTypeNotFound">
-<em class="property">exception </em><code class="sig-prename descclassname">panda_core_data.custom_exceptions.</code><code class="sig-name descname">DataTypeNotFound</code><a class="headerlink" href="#panda_core_data.custom_exceptions.DataTypeNotFound" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exception raised if the ~Model or ~Template Group is not found.</p>
-<dl class="attribute">
-<dt id="panda_core_data.custom_exceptions.DataTypeNotFound.__weakref__">
-<code class="sig-name descname">__weakref__</code><a class="headerlink" href="#panda_core_data.custom_exceptions.DataTypeNotFound.__weakref__" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="exception">
-<dt id="panda_core_data.custom_exceptions.DuplicatedDataTypeName">
-<em class="property">exception </em><code class="sig-prename descclassname">panda_core_data.custom_exceptions.</code><code class="sig-name descname">DuplicatedDataTypeName</code><a class="headerlink" href="#panda_core_data.custom_exceptions.DuplicatedDataTypeName" title="Permalink to this definition">¶</a></dt>
+<dt id="panda_core_data.custom_exceptions.PCDDuplicatedTypeName">
+<em class="property">exception </em><code class="sig-prename descclassname">panda_core_data.custom_exceptions.</code><code class="sig-name descname">PCDDuplicatedTypeName</code><a class="headerlink" href="#panda_core_data.custom_exceptions.PCDDuplicatedTypeName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exception raised if a ~Model or ~Template Type already exists with the same name inside the
 group.</p>
-<dl class="attribute">
-<dt id="panda_core_data.custom_exceptions.DuplicatedDataTypeName.__weakref__">
-<code class="sig-name descname">__weakref__</code><a class="headerlink" href="#panda_core_data.custom_exceptions.DuplicatedDataTypeName.__weakref__" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="exception">
-<dt id="panda_core_data.custom_exceptions.FolderNotFound">
-<em class="property">exception </em><code class="sig-prename descclassname">panda_core_data.custom_exceptions.</code><code class="sig-name descname">FolderNotFound</code><a class="headerlink" href="#panda_core_data.custom_exceptions.FolderNotFound" title="Permalink to this definition">¶</a></dt>
+<dt id="panda_core_data.custom_exceptions.PCDFolderNotFound">
+<em class="property">exception </em><code class="sig-prename descclassname">panda_core_data.custom_exceptions.</code><code class="sig-name descname">PCDFolderNotFound</code><a class="headerlink" href="#panda_core_data.custom_exceptions.PCDFolderNotFound" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exception raised if the folder is invalid.</p>
-<dl class="attribute">
-<dt id="panda_core_data.custom_exceptions.FolderNotFound.__weakref__">
-<code class="sig-name descname">__weakref__</code><a class="headerlink" href="#panda_core_data.custom_exceptions.FolderNotFound.__weakref__" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
 </dd></dl>
 
+<dl class="exception">
+<dt id="panda_core_data.custom_exceptions.PCDInvalidBaseData">
+<em class="property">exception </em><code class="sig-prename descclassname">panda_core_data.custom_exceptions.</code><code class="sig-name descname">PCDInvalidBaseData</code><a class="headerlink" href="#panda_core_data.custom_exceptions.PCDInvalidBaseData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised if a base doesn’t have a method.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="panda_core_data.custom_exceptions.PCDInvalidFolderType">
+<em class="property">exception </em><code class="sig-prename descclassname">panda_core_data.custom_exceptions.</code><code class="sig-name descname">PCDInvalidFolderType</code><a class="headerlink" href="#panda_core_data.custom_exceptions.PCDInvalidFolderType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised if a invalid folder type was requested.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="panda_core_data.custom_exceptions.PCDTypeError">
+<em class="property">exception </em><code class="sig-prename descclassname">panda_core_data.custom_exceptions.</code><code class="sig-name descname">PCDTypeError</code><a class="headerlink" href="#panda_core_data.custom_exceptions.PCDTypeError" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="panda_core_data.custom_exceptions.PCDTypeGroupNotFound">
+<em class="property">exception </em><code class="sig-prename descclassname">panda_core_data.custom_exceptions.</code><code class="sig-name descname">PCDTypeGroupNotFound</code><a class="headerlink" href="#panda_core_data.custom_exceptions.PCDTypeGroupNotFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised if the ~Model or ~Template Group is not found.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="panda_core_data.custom_exceptions.PCDTypeNotFound">
+<em class="property">exception </em><code class="sig-prename descclassname">panda_core_data.custom_exceptions.</code><code class="sig-name descname">PCDTypeNotFound</code><a class="headerlink" href="#panda_core_data.custom_exceptions.PCDTypeNotFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised if the ~Model or ~Template Group is not found.</p>
 </dd></dl>
 
 </div>
