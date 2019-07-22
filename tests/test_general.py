@@ -4,14 +4,24 @@
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 import pytest
-
 from panda_core_data import DataCore, data_core
-from panda_core_data.custom_exceptions import PCDDataCoreIsNotUnique, PCDFolderNotFound
+from panda_core_data.custom_exceptions import (PCDDataCoreIsNotUnique, PCDFolderNotFound,
+                                               PCDInvalidBaseData)
+from panda_core_data.data_core_bases.base_data import BaseData
+
 from . import YAML_CONTENT, MODEL_TYPE_NAME, MODEL_FILE, TEMPLATE_FILE
 
-class TestRawLoading(object):
+
+class TestGeneral(object):
     @staticmethod
-    def test_exceptions(tmpdir):
+    def test_bases():
+        with pytest.raises(PCDInvalidBaseData):
+            #pylint: disable=unused-variable
+            class DataTest(BaseData):
+                pass
+
+    @staticmethod
+    def test_folders_exceptions(tmpdir):
         mods_dir = tmpdir.mkdir("mods")
         core_dir = mods_dir.mkdir("core")
 

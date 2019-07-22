@@ -40,8 +40,7 @@ class TestModels(object):
         instanced = model_type()
 
         assert isinstance(instanced, model_with_init), INSTANCE_ERROR
-        assert getattr(
-            instanced, DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
+        assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
 
     @staticmethod
     def test_load_from_file(tmpdir, model):

@@ -11,15 +11,11 @@ https://github.com/Cerberus1746/PandaCoreData/issues
 
 
 class PCDTypeGroupNotFound(Exception):
-    """
-    Exception raised if the ~Model or ~Template Group is not found.
-    """
+    """Exception raised if the ~Model or ~Template Group is not found."""
 
 
 class PCDTypeNotFound(Exception):
-    """
-    Exception raised if the ~Model or ~Template Group is not found.
-    """
+    """Exception raised if the ~Model or ~Template Group is not found."""
 
 
 class PCDDuplicatedTypeName(Exception):
@@ -28,14 +24,18 @@ class PCDDuplicatedTypeName(Exception):
     group.
     """
 
-
 class PCDFolderNotFound(Exception):
-    """
-    Exception raised if the folder is invalid.
-    """
+    """Exception raised if the folder is invalid."""
 
 
 class PCDDataCoreIsNotUnique(Exception):
-    """
-    Exception raised if the data core is not unique.
-    """
+    """Exception raised if the data core is not unique."""
+
+class PCDTypeError(TypeError):
+    pass
+
+class PCDInvalidFolderType(KeyError):
+    """Exception raised if a invalid folder type was requested."""
+
+class PCDInvalidBaseData(TypeError):
+    """Exception raised if a base doesn't have a method."""

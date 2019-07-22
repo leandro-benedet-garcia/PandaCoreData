@@ -26,4 +26,8 @@ class TestRawLoading(object):
         templates_dir.join(f"{MODEL_TYPE_NAME}.py").write(TEMPLATE_FILE)
 
         mods_dir_path = str(mods_dir.realpath())
+
+        for variable in locals().values():
+            if hasattr(variable, "realpath"):
+                print(variable.realpath())
         data_core(mods_dir_path)

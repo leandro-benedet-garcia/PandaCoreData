@@ -12,7 +12,9 @@ from tinydb import TinyDB
 from tinydb.queries import Query
 
 from .yaml_db import YAMLStorage
-from . import data_core, DEFAULT_MODEL_GROUP
+from . import data_core
+from .data_core_bases import DEFAULT_DATA_GROUP
+from .custom_exceptions import PCDTypeError
 
 
 class ModelMixin(TinyDB):
@@ -26,6 +28,11 @@ class ModelMixin(TinyDB):
     DEFAULT_STORAGE = YAMLStorage
     parents = {}
     query = Query()
+
+    data_name: str
+    dependencies: list
+    data_group: "Group"
+    data_core: "DataCore"
 
     def __new__(cls, *_, db_file=False, **kwargs):
         """
@@ -60,8 +67,7 @@ class ModelMixin(TinyDB):
         cls = _process_class(cls, **dataclass_args)
 
         if db_file:
-            # TODO: Find a way to not overwrite init if the user creates one if they want to \
-            # overwrite it
+            # TODO: Find a way to not overwrite init if the user creates one
             def custom_init(self, db_file, *init_args, storage=ModelMixin.DEFAULT_STORAGE,
                             default_table=ModelMixin.DEFAULT_TABLE, **init_kwargs):
 
@@ -103,13 +109,14 @@ class ModelMixin(TinyDB):
         return self.__repr__()
 
     def __repr__(self):
-        return self.__class__.__qualname__ + ', '.join([f"{f.name}={{self.{f.name}!r}}"
-                                                        for f in self.__dataclass_fields__])
+        fields = [f"{field_name}({field_type}) = {getattr(self, field_name)}"
+                  for field_name, field_type in self.__annotations__.items()]
+        return "Group: \n" + ', '.join(fields) + "\n" + super().__repr__()
 
     @staticmethod
     def _add_into(data_type, group_dict, data_type_dict, **kwargs):
         auto_create_group = kwargs.pop("auto_create_group", True)
-        group_name = kwargs.pop("group_name", DEFAULT_MODEL_GROUP)
+        group_name = kwargs.pop("group_name", DEFAULT_DATA_GROUP)
         replace = kwargs.pop("replace", False)
         data_name = kwargs.pop("data_name", data_type.__name__)
 
@@ -119,18 +126,17 @@ class ModelMixin(TinyDB):
         data_type.data_core = data_core
 
         if any(kwargs):
-            raise TypeError(f"Invalid attributes supplied: {list(kwargs.keys())}")
+            raise PCDTypeError(f"Invalid attributes supplied: {list(kwargs.keys())}")
 
         if data_name not in data_type_dict or replace:
             data_type_dict[data_name] = data_type
 
-        data_core.wrapper_add_to_group(group_name, data_type, group_dict,
-                                       auto_create_group, replace)
+        data_core.add_data_to_group(group_name, data_type, group_dict, auto_create_group, replace)
 
     @property
     def has_dependencies(self):
         """If the model has any dependencies"""
-        return len(self.dependencies) > 0
+        return any(self.dependencies)
 
     @staticmethod
     def load_inner_dependencies(dependency):
