@@ -4,7 +4,7 @@
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 
-import sys, inspect
+import sys
 
 from dataclasses import dataclass
 from glob import iglob
@@ -80,7 +80,7 @@ class BaseData(object):
         return group_dict.setdefault(name, Group(name))
 
     def get_data_type(self, name: str, group_dict, group_name: str, default,
-                                group_default):
+                      group_default):
         """
         Get Data type from the specified group.
 
