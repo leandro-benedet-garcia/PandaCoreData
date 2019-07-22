@@ -56,7 +56,7 @@ class ModelMixin(TinyDB):
                 continue
 
             # We use a custom repr
-            elif param == "repr":
+            elif param_name == "repr":
                 dataclass_args[param_name] = False
 
             # both cls and _cls are to avoid bugs with nightly version of python.
@@ -131,7 +131,8 @@ class ModelMixin(TinyDB):
         if data_name not in data_type_dict or replace:
             data_type_dict[data_name] = data_type
 
-        data_core.add_data_to_group(group_name, data_type, group_dict, auto_create_group, replace)
+        data_core.add_data_to_group(group_name, data_type, group_dict, # @UndefinedVariable
+                                    auto_create_group,replace)
 
     @property
     def has_dependencies(self):
