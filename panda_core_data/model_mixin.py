@@ -132,7 +132,7 @@ class ModelMixin(TinyDB):
             data_type_dict[data_name] = data_type
 
         data_core.add_data_to_group(group_name, data_type, group_dict, # @UndefinedVariable
-                                    auto_create_group,replace)
+                                    auto_create_group, replace)
 
     @property
     def has_dependencies(self):
