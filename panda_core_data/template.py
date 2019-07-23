@@ -27,5 +27,5 @@ class Template(ModelMixin):
         """
 
         cls._add_into(cls, data_core.all_key_value_templates, # @UndefinedVariable
-                      data_core.get_template_group, # @UndefinedVariable
-                      data_core.get_or_create_template_group, **kwargs) # @UndefinedVariable
+                      data_core.add_template_to_group, # @UndefinedVariable
+                      **kwargs) # @UndefinedVariable

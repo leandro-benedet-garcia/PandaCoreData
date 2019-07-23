@@ -112,7 +112,7 @@ class ModelMixin(TinyDB):
         return "Group: \n" + ', '.join(fields) + "\n" + super().__repr__()
 
     @staticmethod
-    def _add_into(data_type, data_type_dict, *args, **kwargs):
+    def _add_into(data_type, data_type_dict, add_method, *args, **kwargs):
         from . import data_core
 
         group_name = kwargs.pop("group_name", DEFAULT_DATA_GROUP)
@@ -123,11 +123,11 @@ class ModelMixin(TinyDB):
         data_type.dependencies = kwargs.pop("dependencies", [])
         data_type.data_core = data_core
         data_type.data_type_dict = data_type_dict
-
         if data_name not in data_type_dict or replace:
             data_type_dict[data_name] = data_type
 
-        data_core.add_data_to_group(group_name, data_type, *args, **kwargs) # @UndefinedVariable
+        add_method(group_name, data_type, *args, **kwargs)
+
 
     @property
     def has_dependencies(self):

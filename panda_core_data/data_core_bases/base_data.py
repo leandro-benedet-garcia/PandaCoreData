@@ -145,6 +145,7 @@ class BaseData(object):
         :type replace: bool
         """
         name = data.data_name
+
         if auto_create_group:
             group = get_or_create_data_group(group_name)
         else:

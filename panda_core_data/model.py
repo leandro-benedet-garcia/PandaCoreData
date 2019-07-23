@@ -25,8 +25,8 @@ class Model(ModelMixin):
         """
 
         cls._add_into(cls, data_core.all_key_value_models, # @UndefinedVariable
-                      data_core.get_model_group, # @UndefinedVariable
-                      data_core.get_or_create_model_group, **kwargs) # @UndefinedVariable
+                      data_core.add_model_to_group, # @UndefinedVariable
+                      **kwargs) # @UndefinedVariable
 
     def setup_values(self, value, default_value, default_min, default_max):
         try:
