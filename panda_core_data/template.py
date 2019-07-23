@@ -26,5 +26,6 @@ class Template(ModelMixin):
         :type template_group_name: str
         """
 
-        cls._add_into(cls, data_core.all_template_groups, data_core.all_key_value_templates,
-                      **kwargs)
+        cls._add_into(cls, data_core.all_key_value_templates, # @UndefinedVariable
+                      data_core.get_template_group, # @UndefinedVariable
+                      data_core.get_or_create_template_group, **kwargs) # @UndefinedVariable

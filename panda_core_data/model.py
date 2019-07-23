@@ -24,7 +24,9 @@ class Model(ModelMixin):
         :type model_group_name: str
         """
 
-        cls._add_into(cls, data_core.all_model_groups, data_core.all_key_value_models, **kwargs)
+        cls._add_into(cls, data_core.all_key_value_models, # @UndefinedVariable
+                      data_core.get_model_group, # @UndefinedVariable
+                      data_core.get_or_create_model_group, **kwargs) # @UndefinedVariable
 
     def setup_values(self, value, default_value, default_min, default_max):
         try:

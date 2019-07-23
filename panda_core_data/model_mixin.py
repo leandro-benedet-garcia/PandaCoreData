@@ -12,9 +12,7 @@ from tinydb import TinyDB
 from tinydb.queries import Query
 
 from .yaml_db import YAMLStorage
-from . import data_core
 from .data_core_bases import DEFAULT_DATA_GROUP
-from .custom_exceptions import PCDTypeError
 
 
 class ModelMixin(TinyDB):
@@ -114,25 +112,22 @@ class ModelMixin(TinyDB):
         return "Group: \n" + ', '.join(fields) + "\n" + super().__repr__()
 
     @staticmethod
-    def _add_into(data_type, group_dict, data_type_dict, **kwargs):
-        auto_create_group = kwargs.pop("auto_create_group", True)
+    def _add_into(data_type, data_type_dict, *args, **kwargs):
+        from . import data_core
+
         group_name = kwargs.pop("group_name", DEFAULT_DATA_GROUP)
-        replace = kwargs.pop("replace", False)
+        replace = kwargs.get("replace", False)
         data_name = kwargs.pop("data_name", data_type.__name__)
 
         data_type.data_name = data_name
         data_type.dependencies = kwargs.pop("dependencies", [])
-        data_type.data_group = group_name
         data_type.data_core = data_core
-
-        if any(kwargs):
-            raise PCDTypeError(f"Invalid attributes supplied: {list(kwargs.keys())}")
+        data_type.data_type_dict = data_type_dict
 
         if data_name not in data_type_dict or replace:
             data_type_dict[data_name] = data_type
 
-        data_core.add_data_to_group(group_name, data_type, group_dict, # @UndefinedVariable
-                                    auto_create_group, replace)
+        data_core.add_data_to_group(group_name, data_type, *args, **kwargs) # @UndefinedVariable
 
     @property
     def has_dependencies(self):
@@ -148,6 +143,10 @@ class ModelMixin(TinyDB):
                 ModelMixin.load_inner_dependencies(current_data))
 
         return tmp_dependencies
+
+    @classmethod
+    def instance_from_raw(cls, raw_file):
+        return cls(db_file=raw_file)
 
     def load_db(self, db_file, *init_args, storage=DEFAULT_STORAGE, default_table=DEFAULT_TABLE,
                 **init_kwargs):

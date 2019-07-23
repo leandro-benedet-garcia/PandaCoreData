@@ -47,6 +47,9 @@ class DataCore(DataModel, DataTemplate):
         :type raw_templates_folder: str
         :raise PCDFolderNotFound: If any of the folders are invalid.
         """
+        #===========================================================================================
+        # Extract params from kwarg
+        #===========================================================================================
         try:
             self._check_if_path_exists(mods_path, "mods_path")
         except PCDFolderNotFound as invalid_path:
@@ -59,6 +62,10 @@ class DataCore(DataModel, DataTemplate):
 
         raw_models_folder = kwargs.pop("raw_models_folder", models_folder)
         raw_templates_folder = kwargs.pop("raw_templates_folder", templates_folder)
+
+        #===========================================================================================
+        # Check paths availability
+        #===========================================================================================
 
         core_folder = join(mods_path, core_mod_folder)
         self._check_if_path_exists(core_folder, "core_mod_folder")
@@ -85,17 +92,12 @@ class DataCore(DataModel, DataTemplate):
                                         f"path which is set to {core_folder}' or the 'raw_folder' "
                                         f"that is '{raws_folder}'.")
 
+        # Import models and templates
         self.add_model_module(self.get_folder("models"))
         self.add_template_module(self.get_folder("templates"))
 
-
-        #===========================================================================================
-        # for raw_file in iglob(join(path, '*.yaml')):
-        #     raw = Path(raw_file).stem
-        #     print(self.get_model_type(raw)(db_file=raw_file))
-        #     print(self.get_template_type(raw)(db_file=raw_file))
-        #===========================================================================================
-
+        self.recursively_instance_template(self.get_folder("raw_templates"))
+        #self.recursively_instance_model(self.get_folder("raw_models"))
 
         #===========================================================================================
         # for model_type in self.all_models:

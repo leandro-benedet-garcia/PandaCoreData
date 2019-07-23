@@ -4,7 +4,7 @@
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 from panda_core_data import data_core
-from . import YAML_CONTENT, MODEL_TYPE_NAME, MODEL_FILE, TEMPLATE_FILE
+from . import YAML_CONTENT, MODEL_TYPE_NAME, TEMPLATE_TYPE_NAME, MODEL_FILE, TEMPLATE_FILE
 
 class TestRawLoading(object):
     @staticmethod
@@ -20,10 +20,10 @@ class TestRawLoading(object):
         raw_templates_dir = raws_dir.mkdir("templates")
 
         raw_models_dir.join(f"{MODEL_TYPE_NAME}.yaml").write(YAML_CONTENT)
-        raw_templates_dir.join(f"{MODEL_TYPE_NAME}.yaml").write(YAML_CONTENT)
+        raw_templates_dir.join(f"{TEMPLATE_TYPE_NAME}.yaml").write(YAML_CONTENT)
 
         models_dir.join(f"{MODEL_TYPE_NAME}.py").write(MODEL_FILE)
-        templates_dir.join(f"{MODEL_TYPE_NAME}.py").write(TEMPLATE_FILE)
+        templates_dir.join(f"{TEMPLATE_TYPE_NAME}.py").write(TEMPLATE_FILE)
 
         mods_dir_path = str(mods_dir.realpath())
 

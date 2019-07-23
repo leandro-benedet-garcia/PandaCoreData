@@ -27,12 +27,15 @@ class Group(dict):
                   for field_name, field_type in self.__annotations__.items()]
 
         to_return = []
-        to_return += "Group:"
-        to_return += ', '.join(fields)
-        to_return += super().__repr__()
+        to_return.append("Group:")
+        to_return.append(', '.join(fields))
+        to_return.append(super().__repr__())
 
         return "\n".join(to_return)
 
+@dataclass(repr=False)
+class GroupInstance(Group):
+    data_type: "ModelMixin"
 
 class BaseData(object):
     def __init_subclass__(cls):  # @NoSelf
@@ -79,8 +82,14 @@ class BaseData(object):
         """
         return group_dict.setdefault(name, Group(name))
 
-    def get_data_type(self, name: str, group_dict, group_name: str, default,
-                      group_default):
+    @staticmethod
+    def recursively_instance_data(path, from_all_method):
+        for raw_file in iglob(join(path, '*.yaml')):
+            raw_data_name = Path(raw_file).stem
+            template_type = from_all_method(raw_data_name)
+            template_type.instance_from_raw(raw_file)
+
+    def get_data_type(self, name: str, group_dict, group_name: str, default, group_default):
         """
         Get Data type from the specified group.
 
@@ -93,13 +102,13 @@ class BaseData(object):
         :param group_default: Default value to return if the group couldn't be found.
         :type group_default: any
         """
-        group = self.get_data_group(group_name, group_dict, default=group_default)
+        group = self.get_data_group(group_name, group_dict, group_default)
         if group:
-            model = group.get(name, default)
-            if not model and default is None:
+            data_type = group.get(name, default)
+            if not data_type and default is None:
                 raise PCDTypeNotFound(f"Model type {name} could not be found inside "
                                       f"the group {group_name}")
-            return model
+            return data_type
         return default
 
     @staticmethod
@@ -116,7 +125,13 @@ class BaseData(object):
             module_name = Path(py_file).stem
             module_type.append(import_module(module_name))
 
-    def add_data_to_group(self, group_name: str, data, group_dict, auto_create_group, replace):
+    @staticmethod
+    def get_data_from_all(data_name, data_dict):
+        return data_dict[data_name]
+
+    @staticmethod
+    def add_data_to_group(group_name: str, data, data_group_method, get_or_create_data_group,
+                          auto_create_group=True, replace=False):
         """
         Add the supplied Data type to the group.
 
@@ -131,9 +146,9 @@ class BaseData(object):
         """
         name = data.data_name
         if auto_create_group:
-            group = self.get_or_create_data_group(group_name, group_dict)
+            group = get_or_create_data_group(group_name)
         else:
-            group = self.get_data_group(group_name, group_dict, None)
+            group = data_group_method(group_name, None)
 
         if not replace and name in group:
             raise PCDDuplicatedTypeName(f"There's already a {type(data)} with the name {name} "

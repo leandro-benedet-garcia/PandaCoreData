@@ -1,4 +1,5 @@
-MODEL_TYPE_NAME = "model_type_name"
+MODEL_TYPE_NAME = "TestModel"
+TEMPLATE_TYPE_NAME = "TestTemplate"
 SECOND_MODEL_TYPE_NAME = "second_model_type_name"
 MODEL_WITH_INIT_NAME = "model_with_init_name"
 CREATION_TEST_NAME = "creation_test_name"
@@ -14,14 +15,14 @@ data:
 MODEL_FILE = f"""
 from panda_core_data.model import Model
 
-class TestModel(Model, data_name = "{MODEL_TYPE_NAME}", dependencies = ["{MODEL_TYPE_NAME}",]):
+class {MODEL_TYPE_NAME}(Model, data_name="test_model", dependencies=["{TEMPLATE_TYPE_NAME}",]):
     name: str
     """.strip()
 
 TEMPLATE_FILE = f"""
 from panda_core_data.template import Template
 
-class TestTemplate(Template, data_name = "{MODEL_TYPE_NAME}"):
+class {TEMPLATE_TYPE_NAME}(Template, data_name="{TEMPLATE_TYPE_NAME}"):
     name: str
 """.strip()
 

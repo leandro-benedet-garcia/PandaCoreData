@@ -21,6 +21,12 @@ class DataTemplate(BaseData):
         """Get all template types"""
         return list(self.all_key_value_templates.values())
 
+    def get_template_from_all(self, template_name):
+        return self.get_data_from_all(template_name, self.all_key_value_templates)
+
+    def recursively_instance_template(self, path):
+        self.recursively_instance_data(path, self.get_template_from_all)
+
     def get_or_create_template_group(self, name: str):
         return self.get_or_create_data_group(name, self.all_template_groups)
 
@@ -35,6 +41,6 @@ class DataTemplate(BaseData):
         return self.get_data_type(name, self.all_template_groups, group_name, default,
                                   group_default)
 
-    def add_template_to_group(self, group_name: str, template, auto_create_group: bool = True):
-        self.add_data_to_group(group_name, template, self.all_template_groups, auto_create_group,
-                               False)
+    def add_template_to_group(self, group_name: str, template, **kwargs):
+        self.add_data_to_group(group_name, template, self.get_template_group,
+                               self.get_or_create_template_group, **kwargs)
