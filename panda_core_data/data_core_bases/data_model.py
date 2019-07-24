@@ -18,6 +18,9 @@ class DataModel(BaseData):
         """Get all model types"""
         return list(self.all_key_value_models.values())
 
+    def instance_model(self, data_type_name, path, **kwargs) -> "Model":
+        return self.instance_data(data_type_name, path, self.get_model_type, **kwargs)
+
     def get_model_from_all(self, model_name):
         return self.get_data_from_all(model_name, self.all_key_value_models)
 

@@ -15,6 +15,16 @@ from . import (DEFAULT_TEST_FIELD_CONTENT, DEFAULT_TEST_FIELD_NAME, INSTANCE_ERR
 
 class TestModels(object):
     @staticmethod
+    def test_repr(model):
+        print(repr(model))
+        print(repr(data_core.get_model_group()))
+        assert repr(model) in repr(data_core.get_model_group())
+
+    @staticmethod
+    def test_default():
+        assert data_core.get_model_type("invalid", default=False) is False
+
+    @staticmethod
     def test_check_if_created(model, second_model):
         assert model in data_core.all_models
         assert second_model in data_core.all_models

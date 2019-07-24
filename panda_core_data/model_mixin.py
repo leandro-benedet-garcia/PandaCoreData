@@ -13,6 +13,7 @@ from tinydb.queries import Query
 
 from .yaml_db import YAMLStorage
 from .data_core_bases import DEFAULT_DATA_GROUP
+from .custom_exceptions import PCDDuplicatedTypeName
 
 
 class ModelMixin(TinyDB):
@@ -123,8 +124,12 @@ class ModelMixin(TinyDB):
         data_type.dependencies = kwargs.pop("dependencies", [])
         data_type.data_core = data_core
         data_type.data_type_dict = data_type_dict
+
         if data_name not in data_type_dict or replace:
             data_type_dict[data_name] = data_type
+        else:
+            raise PCDDuplicatedTypeName(f"There's already a {type(data_type)} with the name "
+                                        f"{data_name}")
 
         add_method(group_name, data_type, *args, **kwargs)
 

@@ -14,17 +14,6 @@ from . import YAML_CONTENT, MODEL_TYPE_NAME, MODEL_FILE, TEMPLATE_FILE
 
 class TestGeneral(object):
     @staticmethod
-    def test_default():
-        assert data_core.get_model_type("invalid", default=False) is False
-        assert data_core.get_template_type("invalid", default=False) is False
-
-    @staticmethod
-    def test_repr(model):
-        print(repr(model))
-        print(repr(data_core.get_model_group()))
-        assert repr(model) in repr(data_core.get_model_group())
-
-    @staticmethod
     def test_bases():
         with pytest.raises(PCDInvalidBaseData):
             #pylint: disable=unused-variable

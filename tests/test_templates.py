@@ -15,6 +15,16 @@ from . import MODEL_TYPE_NAME
 
 class TestTemplates(object):
     @staticmethod
+    def test_repr(template):
+        print(repr(template))
+        print(repr(data_core.get_template_group()))
+        assert repr(template) in repr(data_core.get_template_group())
+
+    @staticmethod
+    def test_default():
+        assert data_core.get_template_type("invalid", default=False) is False
+
+    @staticmethod
     def test_check_if_created(template, second_template):
         assert template in data_core.all_templates
         assert second_template in data_core.all_templates

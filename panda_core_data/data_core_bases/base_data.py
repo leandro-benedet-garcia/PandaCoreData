@@ -39,6 +39,15 @@ class GroupInstance(Group):
 
 class BaseData(object):
     def __init_subclass__(cls):  # @NoSelf
+        """
+        This function checks if a method is lacking inside any class that inherits this, and also
+        automatically creates docstrings into those methods based on the original method.
+
+        :param cls: Child class
+        :type cls: any
+        """
+
+        # The only class that don't go trough the check is DataCore
         if cls.__name__ == "DataCore":
             return
 
@@ -83,11 +92,16 @@ class BaseData(object):
         return group_dict.setdefault(name, Group(name))
 
     @staticmethod
+    def instance_data(data_type_name, path, get_type_method, **kwargs) -> "ModelMixin":
+        data_type = get_type_method(data_type_name, **kwargs)
+        return data_type.instance_from_raw(path)
+
+    @staticmethod
     def recursively_instance_data(path, from_all_method):
         for raw_file in iglob(join(path, '*.yaml')):
             raw_data_name = Path(raw_file).stem
-            template_type = from_all_method(raw_data_name)
-            template_type.instance_from_raw(raw_file)
+            data_type = from_all_method(raw_data_name)
+            data_type.instance_from_raw(raw_file)
 
     @staticmethod
     def get_data_type(name: str, group_method, **kwargs):
@@ -104,7 +118,7 @@ class BaseData(object):
         :type group_default: any
         """
         default = kwargs.pop("default", None)
-        group = group_method(group_default=kwargs.pop("group_default", None), **kwargs)
+        group = group_method(**kwargs)
         if group:
             data_type = group.get(name, default)
             if not data_type and default is None:

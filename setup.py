@@ -18,6 +18,18 @@ VERSION = '0.0.1.dev1'
 with open("README.md", "r") as fh:
     LONG_DESCRIPTION = fh.read()
 
+with open("LICENSE", "r") as fh:
+    LICENSE = fh.read()
+
+with open("requirements.txt", "r") as fh:
+    REQUIREMENTS = fh.read().strip().split("\n")
+
+with open("requirements-tests.txt", "r") as fh:
+    TEST_PACKAGES = fh.read().strip().split("\n")
+
+with open("requirements-docs.txt", "r") as fh:
+    REQUIREMENTS_DOCS = fh.read().strip().split("\n")
+
 setuptools.setup(
     name=NAME,
     version=VERSION,
@@ -27,21 +39,19 @@ setuptools.setup(
     description="Data management system with modding and Panda3D engine in mind.",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
+    license=LICENSE,
+    python_requires=">=3.7",
     url="https://github.com/Cerberus1746/PandaCoreData",
+    tests_require=TEST_PACKAGES,
     packages=["panda_core_data",],
     setup_requires=[
         'pytest-runner'
     ],
-    tests_require=[
-        'pytest',
-        'pylint',
-        'pytest-pylint',
-        'python-coveralls',
-    ],
-    install_requires=[
-        "tinydb",
-        "pyyaml",
-    ],
+    extras_require={
+        'tests': TEST_PACKAGES,
+        'docs': REQUIREMENTS_DOCS
+    },
+    install_requires=REQUIREMENTS,
     classifiers=[
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.7",

@@ -1,0 +1,5 @@
+pytest
+pytest-pylint
+pytest-runner
+pylint
+python-coveralls
