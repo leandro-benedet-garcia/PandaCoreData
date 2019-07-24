@@ -12,7 +12,7 @@ from os.path import join
 from pathlib import Path
 from importlib import import_module
 
-
+from . import DEFAULT_DATA_GROUP
 from ..custom_exceptions import (PCDTypeGroupNotFound, PCDTypeNotFound, PCDDuplicatedTypeName,
                                  PCDInvalidBaseData)
 
@@ -65,9 +65,9 @@ class BaseData(object):
                 getattr(cls, current_attribute).__doc__ = base_docstring
 
     @staticmethod
-    def get_data_group(name: str, group_dict, default):
-        group = group_dict.get(name, default)
-        if not group and default is None:
+    def get_data_group(group_dict, name: str = DEFAULT_DATA_GROUP, group_default=None):
+        group = group_dict.get(name, group_default)
+        if not group and group_default is None:
             raise PCDTypeGroupNotFound(f"Group '{name}' could not be found.")
 
         return group
@@ -89,7 +89,8 @@ class BaseData(object):
             template_type = from_all_method(raw_data_name)
             template_type.instance_from_raw(raw_file)
 
-    def get_data_type(self, name: str, group_dict, group_name: str, default, group_default):
+    @staticmethod
+    def get_data_type(name: str, group_method, **kwargs):
         """
         Get Data type from the specified group.
 
@@ -102,12 +103,13 @@ class BaseData(object):
         :param group_default: Default value to return if the group couldn't be found.
         :type group_default: any
         """
-        group = self.get_data_group(group_name, group_dict, group_default)
+        default = kwargs.pop("default", None)
+        group = group_method(group_default=kwargs.pop("group_default", None), **kwargs)
         if group:
             data_type = group.get(name, default)
             if not data_type and default is None:
                 raise PCDTypeNotFound(f"Model type {name} could not be found inside "
-                                      f"the group {group_name}")
+                                      f"the group {kwargs.get('group_name', DEFAULT_DATA_GROUP)}")
             return data_type
         return default
 
@@ -149,7 +151,7 @@ class BaseData(object):
         if auto_create_group:
             group = get_or_create_data_group(group_name)
         else:
-            group = data_group_method(group_name, None)
+            group = data_group_method(name=group_name, group_default=None)
 
         if not replace and name in group:
             raise PCDDuplicatedTypeName(f"There's already a {type(data)} with the name {name} "

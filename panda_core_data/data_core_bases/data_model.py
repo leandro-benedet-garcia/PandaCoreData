@@ -4,7 +4,6 @@
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 from .base_data import BaseData, Group
-from . import DEFAULT_DATA_GROUP
 
 class DataModel(BaseData):
     model_modules = []
@@ -28,8 +27,8 @@ class DataModel(BaseData):
     def get_or_create_model_group(self, name: str):
         return self.get_or_create_data_group(name, self.all_model_groups)
 
-    def get_model_group(self, name: str, default=None):
-        return self.get_data_group(name, self.all_model_groups, default)
+    def get_model_group(self, **kwargs):
+        return self.get_data_group(self.all_model_groups, **kwargs)
 
     def add_model_module(self, path):
         self.add_data_module(path, self.model_modules)
@@ -38,7 +37,5 @@ class DataModel(BaseData):
         self.add_data_to_group(group_name, model, self.get_model_group,
                                self.get_or_create_model_group, **kwargs)
 
-    def get_model_type(self, name: str, group_name: str = DEFAULT_DATA_GROUP, default=None,
-                       group_default=None):
-        return self.get_data_type(name, self.all_model_groups, group_name, default,
-                                  group_default)
+    def get_model_type(self, name: str, **kwargs):
+        return self.get_data_type(name, self.get_model_group, **kwargs)
