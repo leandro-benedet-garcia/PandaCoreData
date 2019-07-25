@@ -5,7 +5,6 @@
 '''
 
 import sys
-
 from dataclasses import dataclass
 from glob import iglob
 from os.path import join
@@ -28,7 +27,7 @@ class Group(dict):
 
         to_return = []
         to_return.append("Group:")
-        to_return.append(', '.join(fields))
+        to_return.append("\t" + ", ".join(fields))
         to_return.append(super().__repr__())
 
         return "\n".join(to_return)
@@ -36,6 +35,18 @@ class Group(dict):
 @dataclass(repr=False)
 class GroupInstance(Group):
     data_type: "ModelMixin"
+
+@dataclass(repr=False)
+class GroupWrapper(object):
+    data_type: "ModelMixin"
+    parent_group: Group
+    instances: GroupInstance = None
+
+    def __post_init__(self):
+        self.instances = GroupInstance(self.parent_group.group_name, self.data_type)
+
+    def __repr__(self):
+        return f"{self.data_type.data_name}: \n\t{repr(self.instances)}"
 
 class BaseData(object):
     def __init_subclass__(cls):  # @NoSelf
@@ -74,6 +85,12 @@ class BaseData(object):
                 getattr(cls, current_attribute).__doc__ = base_docstring
 
     @staticmethod
+    def get_data_instances(all_data_intances):
+        for instance_group in all_data_intances.values():
+            for current_instance in instance_group.values():
+                yield current_instance
+
+    @staticmethod
     def get_data_group(group_dict, name: str = DEFAULT_DATA_GROUP, group_default=None):
         group = group_dict.get(name, group_default)
         if not group and group_default is None:
@@ -94,14 +111,23 @@ class BaseData(object):
     @staticmethod
     def instance_data(data_type_name, path, get_type_method, **kwargs) -> "ModelMixin":
         data_type = get_type_method(data_type_name, **kwargs)
-        return data_type.instance_from_raw(path)
+        data_name = data_type.data_name
+        data_id = data_name + str(len(data_type.data_group))
+        all_data_instances = data_type.all_data_instances
+
+        instanced = data_type.instance_from_raw(path)
+        group = all_data_instances.setdefault(data_name, GroupInstance(data_name, data_type))
+        group[data_id] = instanced
+
+        data_type.wrapper.instances[data_id] = instanced
+        instanced.id = data_id
+        return instanced
 
     @staticmethod
-    def recursively_instance_data(path, from_all_method):
+    def recursively_instance_data(path, instance_method, *args, **kwargs):
         for raw_file in iglob(join(path, '*.yaml')):
             raw_data_name = Path(raw_file).stem
-            data_type = from_all_method(raw_data_name)
-            data_type.instance_from_raw(raw_file)
+            instance_method(raw_data_name, raw_file, *args, **kwargs)
 
     @staticmethod
     def get_data_type(name: str, group_method, **kwargs):
@@ -119,12 +145,13 @@ class BaseData(object):
         """
         default = kwargs.pop("default", None)
         group = group_method(**kwargs)
-        if group:
+        if isinstance(group, Group):
             data_type = group.get(name, default)
             if not data_type and default is None:
                 raise PCDTypeNotFound(f"Model type {name} could not be found inside "
-                                      f"the group {kwargs.get('group_name', DEFAULT_DATA_GROUP)}")
-            return data_type
+                                      f"the group {group.group_name}")
+
+            return data_type.data_type if isinstance(data_type, GroupWrapper) else default
         return default
 
     @staticmethod
@@ -142,12 +169,16 @@ class BaseData(object):
             module_type.append(import_module(module_name))
 
     @staticmethod
-    def get_data_from_all(data_name, data_dict):
-        return data_dict[data_name]
+    def get_data_from_all(data_name, data_dict, default=None):
+        data_type = data_dict.get(data_name, default)
+        if not data_type and default is None:
+            raise PCDTypeNotFound(f"Data type {data_name} could not be found.")
+
+        return data_type
 
     @staticmethod
     def add_data_to_group(group_name: str, data, data_group_method, get_or_create_data_group,
-                          auto_create_group=True, replace=False):
+                          all_data_instances, auto_create_group=True, replace=False):
         """
         Add the supplied Data type to the group.
 
@@ -171,6 +202,13 @@ class BaseData(object):
             raise PCDDuplicatedTypeName(f"There's already a {type(data)} with the name {name} "
                                         f"inside the group {group_name}.")
 
+
+        wrapper = GroupWrapper(data, group)
+
+        group[name] = wrapper
+
         data.data_group = group
-        group[name] = data
+        data.all_data_instances = all_data_instances
+        data.wrapper = wrapper
+
         return group

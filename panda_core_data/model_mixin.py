@@ -32,6 +32,8 @@ class ModelMixin(TinyDB):
     dependencies: list
     data_group: "Group"
     data_core: "DataCore"
+    wrapper: "GroupWrapper"
+    all_data_instances: "Group"
 
     def __new__(cls, *_, db_file=False, **kwargs):
         """
@@ -141,11 +143,10 @@ class ModelMixin(TinyDB):
 
     @staticmethod
     def load_inner_dependencies(dependency):
-        tmp_dependencies = {dependency.model_name: dependency}
+        tmp_dependencies = {dependency.data_name: dependency}
 
         for current_data in dependency.parents.values():
-            tmp_dependencies.update(
-                ModelMixin.load_inner_dependencies(current_data))
+            tmp_dependencies.update(ModelMixin.load_inner_dependencies(current_data))
 
         return tmp_dependencies
 
@@ -189,7 +190,7 @@ class ModelMixin(TinyDB):
     def add_dependencies(self):
         """Add a dependency to the model"""
         for current_dependency in self.dependencies:
-            dependency = self.data_core.get_template_type(current_dependency)
+            dependency = self.data_core.get_template_from_all(current_dependency)
             if dependency.has_dependencies:
                 self.parents.update(self.load_inner_dependencies(dependency))
 

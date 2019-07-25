@@ -27,7 +27,9 @@ class TestRawLoading(object):
 
         mods_dir_path = str(mods_dir.realpath())
 
-        for variable in locals().values():
-            if hasattr(variable, "realpath"):
-                print(variable.realpath())
         data_core(mods_dir_path)
+        for current_model_instance in data_core.get_model_instances():
+            for current_template_instance in data_core.get_template_instances():
+                template_name = current_template_instance.data_name
+                model_parent = current_model_instance.parents.get(template_name)
+                assert isinstance(current_template_instance, model_parent)

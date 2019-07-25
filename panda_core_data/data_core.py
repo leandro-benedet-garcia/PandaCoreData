@@ -97,13 +97,11 @@ class DataCore(DataModel, DataTemplate):
         self.add_template_module(self.get_folder("templates"))
 
         self.recursively_instance_template(self.get_folder("raw_templates"))
-        #self.recursively_instance_model(self.get_folder("raw_models"))
+        self.recursively_instance_model(self.get_folder("raw_models"))
 
-        #===========================================================================================
-        # for model_type in self.all_models:
-        #     if model_type.has_dependencies:
-        #         model_type.add_dependencies(model_type)
-        #===========================================================================================
+        for current_instance in self.get_model_instances():
+            if current_instance.has_dependencies:
+                current_instance.add_dependencies()
 
     def get_folder(self, folder_type):
         try:

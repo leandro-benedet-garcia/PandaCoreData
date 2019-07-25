@@ -12,20 +12,24 @@ class DataModel(BaseData):
 
     all_model_groups = Group("all_model_groups")
     all_key_value_models = Group("all_key_value_models")
+    all_key_value_model_intances = Group("all_key_value_model_intances")
 
     @property
     def all_models(self):
         """Get all model types"""
         return list(self.all_key_value_models.values())
 
+    def get_model_instances(self):
+        return self.get_data_instances(self.all_key_value_model_intances)
+
     def instance_model(self, data_type_name, path, **kwargs) -> "Model":
         return self.instance_data(data_type_name, path, self.get_model_type, **kwargs)
 
-    def get_model_from_all(self, model_name):
-        return self.get_data_from_all(model_name, self.all_key_value_models)
+    def get_model_from_all(self, model_name, **kwargs):
+        return self.get_data_from_all(model_name, self.all_key_value_models, **kwargs)
 
     def recursively_instance_model(self, path):
-        self.recursively_instance_data(path, self.get_model_from_all)
+        self.recursively_instance_data(path, self.instance_model)
 
     def get_or_create_model_group(self, name: str):
         return self.get_or_create_data_group(name, self.all_model_groups)
@@ -38,7 +42,8 @@ class DataModel(BaseData):
 
     def add_model_to_group(self, group_name: str, model, **kwargs):
         self.add_data_to_group(group_name, model, self.get_model_group,
-                               self.get_or_create_model_group, **kwargs)
+                               self.get_or_create_model_group,
+                               self.all_key_value_model_intances, **kwargs)
 
     def get_model_type(self, name: str, **kwargs):
         return self.get_data_type(name, self.get_model_group, **kwargs)
