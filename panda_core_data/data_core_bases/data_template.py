@@ -4,7 +4,7 @@
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 
-from .base_data import BaseData, Group
+from .base_data import BaseData, Group, GroupInstance
 
 class DataTemplate(BaseData):
     '''classdocs'''
@@ -14,7 +14,7 @@ class DataTemplate(BaseData):
 
     all_template_groups = Group("all_template_groups")
     all_key_value_templates = Group("all_key_value_templates")
-    all_key_value_template_intances = Group("all_key_value_template_intances")
+    all_template_instances = GroupInstance("all_template_instances", None)
 
     @property
     def all_templates(self):
@@ -22,13 +22,14 @@ class DataTemplate(BaseData):
         return list(self.all_key_value_templates.values())
 
     def get_template_instances(self):
-        return self.get_data_instances(self.all_key_value_template_intances)
+        return self.all_template_instances.values()
 
     def get_template_from_all(self, model_name, **kwargs):
         return self.get_data_from_all(model_name, self.all_key_value_templates, **kwargs)
 
     def instance_template(self, data_type_name, path, **kwargs) -> "Template":
-        return self.instance_data(data_type_name, path, self.get_template_type, **kwargs)
+        return self.instance_data(data_type_name, path, self.get_template_type, generate_id=False,
+                                  **kwargs)
 
     def recursively_instance_template(self, path):
         self.recursively_instance_data(path, self.instance_template)
@@ -48,4 +49,4 @@ class DataTemplate(BaseData):
     def add_template_to_group(self, group_name: str, template, **kwargs):
         self.add_data_to_group(group_name, template, self.get_template_group,
                                self.get_or_create_template_group,
-                               self.all_key_value_template_intances, **kwargs)
+                               self.all_template_instances, **kwargs)

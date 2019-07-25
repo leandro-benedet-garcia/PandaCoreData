@@ -191,6 +191,7 @@ class ModelMixin(TinyDB):
         """Add a dependency to the model"""
         for current_dependency in self.dependencies:
             dependency = self.data_core.get_template_from_all(current_dependency)
+            dependency = dependency.all_data_instances[0]
             if dependency.has_dependencies:
                 self.parents.update(self.load_inner_dependencies(dependency))
 

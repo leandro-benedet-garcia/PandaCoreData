@@ -36,6 +36,11 @@ class Group(dict):
 class GroupInstance(Group):
     data_type: "ModelMixin"
 
+    def __getitem__(self, key):
+        if isinstance(key, int):
+            return list(self.values())[key]
+        return super().__getitem__(key)
+
 @dataclass(repr=False)
 class GroupWrapper(object):
     data_type: "ModelMixin"
@@ -110,24 +115,35 @@ class BaseData(object):
 
     @staticmethod
     def instance_data(data_type_name, path, get_type_method, **kwargs) -> "ModelMixin":
+        generate_id = kwargs.pop("generate_id", True)
+
         data_type = get_type_method(data_type_name, **kwargs)
-        data_name = data_type.data_name
-        data_id = data_name + str(len(data_type.data_group))
-        all_data_instances = data_type.all_data_instances
-
         instanced = data_type.instance_from_raw(path)
-        group = all_data_instances.setdefault(data_name, GroupInstance(data_name, data_type))
-        group[data_id] = instanced
+        data_name = data_type.data_name
 
-        data_type.wrapper.instances[data_id] = instanced
-        instanced.id = data_id
+        if generate_id:
+            all_data_instances = data_type.all_data_instances
+            group = all_data_instances.setdefault(data_name, GroupInstance(data_name, data_type))
+            data_id = data_name + str(len(data_type.data_group))
+
+            data_type.wrapper.instances[data_id] = instanced
+            instanced.id = data_id
+        else:
+            group = data_type.all_data_instances
+            data_type.wrapper.instances[data_name] = instanced
+            instanced.id = False
+
+        group[data_name] = instanced
         return instanced
 
     @staticmethod
     def recursively_instance_data(path, instance_method, *args, **kwargs):
+        instanced_data = []
         for raw_file in iglob(join(path, '*.yaml')):
             raw_data_name = Path(raw_file).stem
-            instance_method(raw_data_name, raw_file, *args, **kwargs)
+            instanced_data.append(instance_method(raw_data_name, raw_file, *args, **kwargs))
+
+        return instanced_data
 
     @staticmethod
     def get_data_type(name: str, group_method, **kwargs):
@@ -164,9 +180,14 @@ class BaseData(object):
         """
         sys.path.append(path)
 
+        added_modules = []
         for py_file in iglob(join(path, '*.py')):
             module_name = Path(py_file).stem
-            module_type.append(import_module(module_name))
+            imported_module = import_module(module_name)
+            module_type.append(imported_module)
+
+        module_type += added_modules
+        return added_modules
 
     @staticmethod
     def get_data_from_all(data_name, data_dict, default=None):
