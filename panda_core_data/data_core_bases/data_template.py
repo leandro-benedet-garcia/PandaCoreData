@@ -15,7 +15,7 @@ class DataTemplate(BaseData):
         self.template_modules = []
         self.raw_templates = []
         self.raw_template_folders = []
-    
+
         self.all_template_groups = Group("all_template_groups")
         self.all_key_value_templates = Group("all_key_value_templates")
         self.all_template_instances = GroupInstance("all_template_instances", None)
@@ -26,7 +26,7 @@ class DataTemplate(BaseData):
         return list(self.all_key_value_templates.values())
 
     def get_all_template_instances(self):
-        return list(self.all_template_instances.values())
+        return list(self.all_template_instances)
 
     def get_template_from_all(self, model_name, **kwargs):
         return self.get_data_from_all(model_name, self.all_key_value_templates, **kwargs)
