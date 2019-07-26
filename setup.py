@@ -38,7 +38,7 @@ setuptools.setup(
     description="Data management system with modding and Panda3D engine in mind.",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
-    license=LICENSE,
+    license="MIT License",
     python_requires=">=3.7",
     url="https://github.com/Cerberus1746/PandaCoreData",
     tests_require=TEST_PACKAGES,
