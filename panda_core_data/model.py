@@ -24,7 +24,7 @@ class Model(ModelMixin):
         :type model_group_name: str
         """
 
-        cls._add_into(cls, data_core.all_key_value_models, # @UndefinedVariable
+        cls._add_into(cls, data_core.all_model_types, # @UndefinedVariable
                       data_core.add_model_to_group, # @UndefinedVariable
                       **kwargs) # @UndefinedVariable
 

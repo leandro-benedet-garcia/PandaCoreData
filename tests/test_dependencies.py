@@ -17,10 +17,13 @@ class TestRawLoading(object):
         templates_dir = core_dir.mkdir("templates")
 
         raws_dir = core_dir.mkdir("raws")
-        raw_models_dir = raws_dir.mkdir("models")
+
+        model_raw_dir = raws_dir.mkdir("models").mkdir(MODEL_TYPE_NAME)
+
         raw_templates_dir = raws_dir.mkdir("templates")
 
-        raw_models_dir.join(f"{MODEL_TYPE_NAME}.yaml").write(YAML_CONTENT)
+        model_raw = model_raw_dir.join(f"test.yaml")
+        model_raw.write(YAML_CONTENT)
 
         raw_template = raw_templates_dir.join(f"{TEMPLATE_TYPE_NAME}.yaml")
         raw_template.write(YAML_CONTENT)
@@ -34,8 +37,14 @@ class TestRawLoading(object):
         test_field_value = getattr(test_instance, DEFAULT_TEST_FIELD_NAME)
 
         data_core(mods_dir_path)
-        for current_model_instance in data_core.get_model_instances():
-            for template_instance in data_core.get_template_instances():
+        for name, path in locals().items():
+            if hasattr(path, "realpath"):
+                print(f"{name}: {path.realpath()}")
+
+        #assert any(data_core.get_all_model_instances())
+
+        for current_model_instance in data_core.get_all_model_instances():
+            for template_instance in data_core.get_all_template_instances():
                 template_name = template_instance.data_name
                 model_parent = current_model_instance.parents.get(template_name)
                 assert model_parent == template_instance

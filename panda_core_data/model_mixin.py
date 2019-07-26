@@ -12,7 +12,6 @@ from tinydb import TinyDB
 from tinydb.queries import Query
 
 from .yaml_db import YAMLStorage
-from .data_core_bases import DEFAULT_DATA_GROUP
 from .custom_exceptions import PCDDuplicatedTypeName
 
 
@@ -35,7 +34,7 @@ class ModelMixin(TinyDB):
     wrapper: "GroupWrapper"
     all_data_instances: "Group"
 
-    def __new__(cls, *_, db_file=False, **kwargs):
+    def __new__(cls, *_, db_file=False, **__):
         """
         Method that handles the instancing of the models and templates, this is necessary because
         dataclasses create a custom __init__ method. Which we doesn't use at all if a raw file is
@@ -47,26 +46,6 @@ class ModelMixin(TinyDB):
         like a normal dataclass
         :type path: str
         """
-        dataclass_args = {}
-        # Let's extract the dataclass parameters from kwarg
-        for param_name, param in signature(dataclass).parameters.items():
-            # If we load attrs from the file, we will never use the dataclass init
-            if db_file and param_name == "init":
-                dataclass_args[param_name] = False
-                kwargs.pop("init", None)
-                continue
-
-            # We use a custom repr
-            elif param_name == "repr":
-                dataclass_args[param_name] = False
-
-            # both cls and _cls are to avoid bugs with nightly version of python.
-            elif param_name not in ["_cls", "cls"]:
-                dataclass_args[param_name] = kwargs.pop(param_name, param.default)
-
-        # pylint: disable=self-cls-assignment
-        cls = _process_class(cls, **dataclass_args)
-
         if db_file:
             # TODO: Find a way to not overwrite init if the user creates one
             def custom_init(self, db_file, *init_args, storage=ModelMixin.DEFAULT_STORAGE,
@@ -94,7 +73,7 @@ class ModelMixin(TinyDB):
         :param name: name of the attribute to get
         :type name: str
         """
-        raise AttributeError(f"type object '{self}' has no attribute '{name}'")
+        raise AttributeError(f"type object has no attribute '{name}'")
 
     def __setattr__(self, attr_name, value):
         """
@@ -106,9 +85,6 @@ class ModelMixin(TinyDB):
         """
         object.__setattr__(self, attr_name, value)
 
-    def __str__(self):
-        return self.__repr__()
-
     def __repr__(self):
         fields = [f"{field_name}({field_type}) = {getattr(self, field_name)}"
                   for field_name, field_type in self.__annotations__.items()]
@@ -118,7 +94,20 @@ class ModelMixin(TinyDB):
     def _add_into(data_type, data_type_dict, add_method, *args, **kwargs):
         from . import data_core
 
-        group_name = kwargs.pop("group_name", DEFAULT_DATA_GROUP)
+        dataclass_args = {}
+        # Let's extract the dataclass parameters from kwarg
+        for param_name, param in signature(dataclass).parameters.items():
+            # If we load attrs from the file, we will never use the dataclass init
+            if param_name == "repr":
+                dataclass_args[param_name] = False
+
+            # both cls and _cls are to avoid bugs with nightly version of python.
+            elif param_name not in ["_cls", "cls"]:
+                dataclass_args[param_name] = kwargs.pop(param_name, param.default)
+
+        data_type = _process_class(data_type, **dataclass_args)
+
+        group_name = kwargs.pop("group_name", "DEFAULT_DATA_GROUP")
         replace = kwargs.get("replace", False)
         data_name = kwargs.pop("data_name", data_type.__name__)
 
@@ -140,6 +129,10 @@ class ModelMixin(TinyDB):
     def has_dependencies(self):
         """If the model has any dependencies"""
         return any(self.dependencies)
+
+    @classmethod
+    def all_instances(cls):
+        return cls.wrapper.instances
 
     @staticmethod
     def load_inner_dependencies(dependency):
@@ -167,7 +160,7 @@ class ModelMixin(TinyDB):
         :type default_table: str
         """
         if not os.path.isfile(db_file):
-            raise FileNotFoundError(f"File {db_file} don't exist")
+            raise FileNotFoundError(f"File '{db_file}' don't exist")
 
         TinyDB.__init__(self, db_file, *init_args, storage=storage,
                         default_table=default_table, **init_kwargs)

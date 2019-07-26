@@ -8,12 +8,11 @@ except(ModuleNotFoundError, ImportError):
     SPHINX_LOADED = False
 
 import setuptools
-
+from panda_core_data.__version__ import __version__
 if SPHINX_LOADED:
     CMDCLASS = {'build_sphinx': BuildDoc}
 
 NAME = 'panda_core_data'
-VERSION = '0.0.1.dev1'
 
 with open("README.md", "r") as fh:
     LONG_DESCRIPTION = fh.read()
@@ -32,7 +31,7 @@ with open("requirements-docs.txt", "r") as fh:
 
 setuptools.setup(
     name=NAME,
-    version=VERSION,
+    version=__version__,
     cmdclass=CMDCLASS if SPHINX_LOADED else {},
     author="Leandro (Cerberus1746) Benedet Garcia",
     author_email="leandro.benedet.garcia@gmail.com",
@@ -43,10 +42,9 @@ setuptools.setup(
     python_requires=">=3.7",
     url="https://github.com/Cerberus1746/PandaCoreData",
     tests_require=TEST_PACKAGES,
-    packages=["panda_core_data",],
-    setup_requires=[
-        'pytest-runner'
-    ],
+    packages=["panda_core_data", "panda_core_data.data_core_bases"],
+    setup_requires=['pytest-runner'],
+    scripts=['scripts/panda_core_data_commands.py'],
     extras_require={
         'tests': TEST_PACKAGES,
         'docs': REQUIREMENTS_DOCS
@@ -74,7 +72,7 @@ setuptools.setup(
     command_options={
         'build_sphinx': {
             'project': ('setup.py', NAME),
-            'version': ('setup.py', VERSION),
+            'version': ('setup.py', __version__),
             'source_dir': ('setup.py', 'docs/source'),
             'build_dir': ('setup.py', 'docs/build'),
         }

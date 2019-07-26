@@ -3,38 +3,67 @@
 
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
+
+from dataclasses import fields, dataclass
 import pytest
 
 from panda_core_data import data_core
-from panda_core_data.custom_exceptions import PCDDuplicatedTypeName, PCDTypeGroupNotFound,\
-    PCDTypeNotFound
+from panda_core_data.custom_exceptions import (PCDDuplicatedTypeName, PCDTypeGroupNotFound,
+                                               PCDTypeNotFound)
+
 from panda_core_data.model import Model
+from panda_core_data.template import Template
 
 from . import (DEFAULT_TEST_FIELD_CONTENT, DEFAULT_TEST_FIELD_NAME, INSTANCE_ERROR, MODEL_TYPE_NAME,
                MODEL_WITH_INIT_NAME, YAML_CONTENT)
 
 class TestModels(object):
     @staticmethod
-    def test_repr(model):
+    def test_check_compatibility():
+        class TemplateWithoutDataClass(Template):
+            name: str
+
+        class ModelWithoutDataClass(Model):
+            name: str
+
+        @dataclass
+        class WithDataClass(object):
+            name: str
+
+        for template_data, model_data, with_data in zip(fields(TemplateWithoutDataClass),
+                                                        fields(ModelWithoutDataClass),
+                                                        fields(WithDataClass)):
+            assert template_data.name == model_data.name == with_data.name
+            assert template_data.type == model_data.type == with_data.type
+
+    @staticmethod
+    def test_repr(model, template):
         print(repr(model))
         print(repr(data_core.get_model_group()))
-        assert repr(model) in repr(data_core.get_model_group())
+
+        print(repr(template))
+        print(repr(data_core.get_template_group()))
 
     @staticmethod
     def test_default():
         assert data_core.get_model_type("invalid", default=False) is False
+        assert data_core.get_template_type("invalid", default=False) is False
 
     @staticmethod
-    def test_check_if_created(model, second_model):
+    def test_check_if_created(model, second_model, template, second_template):
         assert model in data_core.all_models
         assert second_model in data_core.all_models
 
+        assert template in data_core.all_templates
+        assert second_template in data_core.all_templates
+
     @staticmethod
-    def test_check_if_unequal(model, second_model, model_with_init):
+    def test_check_if_unequal(model, second_model, model_with_init, template, second_template):
+        assert template != second_template
         assert model != second_model != model_with_init
 
     @staticmethod
-    def test_direct_instance_dataclass(model):
+    def test_direct_instance_dataclass(model, template):
         model_type = data_core.get_model_type(MODEL_TYPE_NAME)
         instanced = model_type(DEFAULT_TEST_FIELD_CONTENT)
 
@@ -42,6 +71,15 @@ class TestModels(object):
         assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
 
         instanced = model_type(name=DEFAULT_TEST_FIELD_CONTENT)
+        assert instanced.name == DEFAULT_TEST_FIELD_CONTENT
+
+        template_type = data_core.get_template_type(MODEL_TYPE_NAME)
+        instanced = template_type(DEFAULT_TEST_FIELD_CONTENT)
+
+        assert isinstance(instanced, template), INSTANCE_ERROR
+        assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
+
+        instanced = template_type(name=DEFAULT_TEST_FIELD_CONTENT)
         assert instanced.name == DEFAULT_TEST_FIELD_CONTENT
 
     @staticmethod
@@ -87,10 +125,24 @@ class TestModels(object):
         assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == "another_content"
 
     @staticmethod
-    def test_exceptions(model):
+    def test_exceptions(model, template):
+        assert template
         with pytest.raises(PCDTypeGroupNotFound):
             #pylint: disable=unused-variable
-            class GroupTesting(Model, group_name="invalid", auto_create_group=False):
+            class TemplateGroupTesting(Template, group_name="invalid", auto_create_group=False):
+                name: str
+
+        with pytest.raises(PCDTypeNotFound):
+            data_core.get_template_type("invalid")
+
+        with pytest.raises(PCDDuplicatedTypeName):
+            #pylint: disable=unused-variable
+            class TestTemplate(Template, data_name=MODEL_TYPE_NAME):
+                name: str
+
+        with pytest.raises(PCDTypeGroupNotFound):
+            #pylint: disable=unused-variable
+            class ModelGroupTesting(Model, group_name="invalid", auto_create_group=False):
                 name: str
 
         with pytest.raises(PCDTypeNotFound):

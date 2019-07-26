@@ -11,7 +11,6 @@ from os.path import join
 from pathlib import Path
 from importlib import import_module
 
-from . import DEFAULT_DATA_GROUP
 from ..custom_exceptions import (PCDTypeGroupNotFound, PCDTypeNotFound, PCDDuplicatedTypeName,
                                  PCDInvalidBaseData)
 
@@ -33,13 +32,10 @@ class Group(dict):
         return "\n".join(to_return)
 
 @dataclass(repr=False)
-class GroupInstance(Group):
+class GroupInstance(list):
     data_type: "ModelMixin"
+    group_name: str
 
-    def __getitem__(self, key):
-        if isinstance(key, int):
-            return list(self.values())[key]
-        return super().__getitem__(key)
 
 @dataclass(repr=False)
 class GroupWrapper(object):
@@ -89,14 +85,17 @@ class BaseData(object):
 
                 getattr(cls, current_attribute).__doc__ = base_docstring
 
-    @staticmethod
-    def get_data_instances(all_data_intances):
-        for instance_group in all_data_intances.values():
-            for current_instance in instance_group.values():
-                yield current_instance
 
     @staticmethod
-    def get_data_group(group_dict, name: str = DEFAULT_DATA_GROUP, group_default=None):
+    def get_data_group(group_dict, name: str = "DEFAULT_DATA_GROUP", group_default=None):
+        """
+        Get data group.
+
+        :param name: Name of the group.
+        :type name: str
+        :param group_default: default value to be returned if the group could not be found
+        :type group_default: any
+        """
         group = group_dict.get(name, group_default)
         if not group and group_default is None:
             raise PCDTypeGroupNotFound(f"Group '{name}' could not be found.")
@@ -115,6 +114,14 @@ class BaseData(object):
 
     @staticmethod
     def instance_data(data_type_name, path, get_type_method, **kwargs) -> "ModelMixin":
+        """
+        Create an instance Data from the raw file.
+
+        :param data_type_name: name of the Data type.
+        :type data_type_name: str
+        :param path: path of the raw file
+        :type path: str
+        """
         generate_id = kwargs.pop("generate_id", True)
 
         data_type = get_type_method(data_type_name, **kwargs)
@@ -126,24 +133,16 @@ class BaseData(object):
             group = all_data_instances.setdefault(data_name, GroupInstance(data_name, data_type))
             data_id = data_name + str(len(data_type.data_group))
 
-            data_type.wrapper.instances[data_id] = instanced
             instanced.id = data_id
         else:
             group = data_type.all_data_instances
-            data_type.wrapper.instances[data_name] = instanced
             instanced.id = False
 
-        group[data_name] = instanced
+        if not group.data_type:
+            group.data_type = data_type
+
+        data_type.wrapper.instances.append(instanced)
         return instanced
-
-    @staticmethod
-    def recursively_instance_data(path, instance_method, *args, **kwargs):
-        instanced_data = []
-        for raw_file in iglob(join(path, '*.yaml')):
-            raw_data_name = Path(raw_file).stem
-            instanced_data.append(instance_method(raw_data_name, raw_file, *args, **kwargs))
-
-        return instanced_data
 
     @staticmethod
     def get_data_type(name: str, group_method, **kwargs):
@@ -191,6 +190,14 @@ class BaseData(object):
 
     @staticmethod
     def get_data_from_all(data_name, data_dict, default=None):
+        """
+        Get Data type from a list of all Data types, completely ignoring groups.
+
+        :param data_name: The name of the Data type
+        :type data_name: str
+        :param default: Default value to be returned if the data type couldn't be found.
+        :type default: bool
+        """
         data_type = data_dict.get(data_name, default)
         if not data_type and default is None:
             raise PCDTypeNotFound(f"Data type {data_name} could not be found.")
@@ -222,7 +229,6 @@ class BaseData(object):
         if not replace and name in group:
             raise PCDDuplicatedTypeName(f"There's already a {type(data)} with the name {name} "
                                         f"inside the group {group_name}.")
-
 
         wrapper = GroupWrapper(data, group)
 

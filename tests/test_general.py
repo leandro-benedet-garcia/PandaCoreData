@@ -4,9 +4,8 @@
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 import pytest
-from panda_core_data import DataCore, data_core
-from panda_core_data.custom_exceptions import (PCDDataCoreIsNotUnique, PCDFolderNotFound,
-                                               PCDInvalidBaseData)
+from panda_core_data import DataCore
+from panda_core_data.custom_exceptions import PCDFolderNotFound, PCDInvalidBaseData
 from panda_core_data.data_core_bases.base_data import BaseData
 
 from . import YAML_CONTENT, MODEL_TYPE_NAME, MODEL_FILE, TEMPLATE_FILE
@@ -22,6 +21,7 @@ class TestGeneral(object):
 
     @staticmethod
     def test_folders_exceptions(tmpdir):
+        data_core = DataCore()
         mods_dir = tmpdir.mkdir("mods")
         core_dir = mods_dir.mkdir("core")
 
@@ -39,9 +39,6 @@ class TestGeneral(object):
         templates_dir.join(f"{MODEL_TYPE_NAME}.py").write(TEMPLATE_FILE)
 
         mods_dir_path = str(mods_dir.realpath())
-        with pytest.raises(PCDDataCoreIsNotUnique):
-            DataCore()
-
         with pytest.raises(PCDFolderNotFound):
             data_core("invalid")
 

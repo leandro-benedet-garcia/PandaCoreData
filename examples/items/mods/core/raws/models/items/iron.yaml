@@ -1,0 +1,4 @@
+data:
+    - name: "Iron"
+    - description: "Basic material"
+    - value: 10
