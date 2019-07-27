@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
 '''
-:author:     Leandro (Cerberus1746) Benedet Garcia
-:license:    MIT License
-:contact:    cerberus1746@gmail.com
+:author: Leandro (Cerberus1746) Benedet Garcia
+:license: MIT License
+:contact: cerberus1746@gmail.com
 '''
 
 import sys
@@ -16,6 +16,17 @@ from panda_core_data import __version__
 __version__ = __version__
 __date__ = '2019-07-26'
 __updated__ = '2019-07-26'
+
+MAIN_FILE = """from os.path import join, dirname, abspath
+from panda_core_data import data_core
+
+def main():
+    mods_folder = join(dirname(abspath(__file__)), "mods")
+    data_core(mods_folder)
+
+if __name__ == '__main__':
+    main()
+"""
 
 BASE_MODEL = """from panda_core_data.model import Model
 
@@ -52,7 +63,7 @@ def main(argv=None):
     parser.set_defaults(outfile=".")
 
     # process options
-    (opts, _) = parser.parse_args(argv)
+    opts = parser.parse_args(argv)
 
     if opts.outdir:
         root = opts.outdir
@@ -71,6 +82,7 @@ def main(argv=None):
         makedirs(inner_raw_model, exist_ok=True)
         makedirs(raw_templates, exist_ok=True)
 
+        create_file(join(root, "main.py"), MAIN_FILE)
         create_file(join(models_folder, "example_model.py"), BASE_MODEL)
         create_file(join(templates_folder, "example_template.py"), BASE_TEMPLATE)
         create_file(join(inner_raw_model, "model_name.yaml"), BASE_RAW)
