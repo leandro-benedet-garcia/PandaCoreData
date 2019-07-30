@@ -5,6 +5,7 @@
 /panda_core_data.egg-info/
 /panda_core_data_cerberus1746.egg-info/
 /.settings/
+/docs/build/
 
 *.pyc
 .coverage
