@@ -37,24 +37,6 @@ class DataType(TinyDB):
         dataclasses create a custom __init__ method. Which we doesn't use at all if a raw file is \
         supplied.
 
-        You can use the prefix `dataclass_` with a dataclass parameter to configure it. They can \
-        be found in this link: \
-        https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass
-
-        For example:
-
-        .. code:: python
-
-            from panda_core_data.model import Model
-
-            class ModelName(Model, dataclass_init=False):
-                out: int
-
-                def __init__(self, num):
-                    self.out = num ** num
-
-        Will make the library not create a `__init__` method and use yours instead.
-
         :param cls: the type to be instanced
         :type cls: Model or ModelTemplate.
         :param str path: path to the raw file to be loaded, if False, the class will be instanced \
@@ -129,6 +111,25 @@ class DataType(TinyDB):
 
     @staticmethod
     def _add_into(data_type, data_type_dict, **kwargs):
+        """
+        You can use the prefix `dataclass_` with a dataclass parameter to configure it. They can \
+        be found in this link: \
+        https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass
+
+        For example:
+
+        .. code:: python
+
+            from panda_core_data.model import Model
+
+            class ModelName(Model, dataclass_init=False):
+                out: int
+
+                def __init__(self, num):
+                    self.out = num ** num
+
+        Will make the library not create a `__init__` method and use yours instead.
+        """
         from .data_core_bases import GroupWrapper
         data_type.dataclass_args = {}
 

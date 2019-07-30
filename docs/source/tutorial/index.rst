@@ -62,8 +62,7 @@ with the folder named `tutorial`. Then go to the file
         cost: int
 
 Mostly, we are just setting the `data_name` parameter to make the **I** in low caps there's more
-parameters `available here </api/data_type.html#datatype>`_ in
-:meth:`panda_core_data.data_type.DataType._add_into`. Also remember, if you inherit
+parameters in :meth:`~panda_core_data.data_type.DataType.__add_into`. Also remember, if you inherit
 :class:`~panda_core_data.model.Template` or :class:`~panda_core_data.model.Model`, the class will
 turn into a dataclass, so you can instance the model like this for example:
 

@@ -12,7 +12,8 @@ class Template(DataType):
 
     def __init_subclass__(cls, core_name=None, **kwargs):  # @NoSelf
         """
-        Method that automatically registers class types into data_core
+        Method that automatically registers class types into data_core. You can use the same
+        parameters as :meth:`~panda_core_data.data_type.DataType.__add_into`
 
         :param Model cls: class type to be added
         :param str template_name: The name of the template, if not supplied, the class name is used.
