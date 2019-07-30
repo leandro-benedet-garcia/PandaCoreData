@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.0.1.dev8
+                0.0.1
               </div>
             
           
@@ -194,22 +194,10 @@
 <dt id="panda_core_data.data_type.DataType.__new__">
 <em class="property">static </em><code class="sig-name descname">__new__</code><span class="sig-paren">(</span><em class="sig-param">cls</em>, <em class="sig-param">*_</em>, <em class="sig-param">db_file=False</em>, <em class="sig-param">**__</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_type.DataType.__new__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method that handles the instancing of the models and templates, this is necessary because         dataclasses create a custom __init__ method. Which we doesn’t use at all if a raw file is         supplied.</p>
-<p>You can use the prefix <cite>dataclass_</cite> with a dataclass parameter to configure it. They can         be found in this link:         <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass">https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass</a></p>
-<p>For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">panda_core_data.model</span> <span class="kn">import</span> <span class="n">Model</span>
-
-<span class="k">class</span> <span class="nc">ModelName</span><span class="p">(</span><span class="n">Model</span><span class="p">,</span> <span class="n">dataclass_init</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="n">out</span><span class="p">:</span> <span class="nb">int</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="n">num</span> <span class="o">**</span> <span class="n">num</span>
-</pre></div>
-</div>
-<p>Will make the library not create a <cite>__init__</cite> method and use yours instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cls</strong> (<a class="reference internal" href="#panda_core_data.model.Model" title="panda_core_data.model.Model"><em>Model</em></a><em> or </em><em>ModelTemplate.</em>) – the type to be instanced</p></li>
+<li><p><strong>cls</strong> (<a class="reference internal" href="#panda_core_data.model.Model" title="panda_core_data.model.Model"><em>Model</em></a><em> or </em><a class="reference internal" href="#panda_core_data.model.Template" title="panda_core_data.model.Template"><em>Template</em></a>) – the type to be instanced</p></li>
 <li><p><strong>path</strong> (<em>str</em>) – path to the raw file to be loaded, if False, the class will be instanced         like a normal dataclass</p></li>
 </ul>
 </dd>
@@ -231,6 +219,32 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – name of the attribute to write</p></li>
 <li><p><strong>value</strong> (<em>any</em>) – value of the attribute.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="panda_core_data.data_type.DataType._add_into">
+<em class="property">static </em><code class="sig-name descname">_add_into</code><span class="sig-paren">(</span><em class="sig-param">data_type</em>, <em class="sig-param">data_type_dict</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_type.DataType._add_into" title="Permalink to this definition">¶</a></dt>
+<dd><p>You can use the prefix <cite>dataclass_</cite> with a dataclass parameter to configure it. They can         be found in this link:         <a class="reference external" href="https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass">https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass</a></p>
+<p>For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">panda_core_data.model</span> <span class="kn">import</span> <span class="n">Model</span>
+
+<span class="k">class</span> <span class="nc">ModelName</span><span class="p">(</span><span class="n">Model</span><span class="p">,</span> <span class="n">dataclass_init</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="n">out</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="n">num</span> <span class="o">**</span> <span class="n">num</span>
+</pre></div>
+</div>
+<p>Will make the library not create a <cite>__init__</cite> method and use yours instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cls</strong> (<a class="reference internal" href="#panda_core_data.model.Model" title="panda_core_data.model.Model"><em>Model</em></a><em> or </em><a class="reference internal" href="#panda_core_data.model.Template" title="panda_core_data.model.Template"><em>Template</em></a>) – class type to be added</p></li>
+<li><p><strong>template_name</strong> (<em>str</em>) – The name of the template, if not supplied, the class name is used.</p></li>
+<li><p><strong>dependency_list</strong> (<em>list</em><em>(</em><em>str</em><em>)</em>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">Template</span></code> to be used as dependency.</p></li>
 </ul>
 </dd>
 </dl>
@@ -261,7 +275,7 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>db_file</strong> (<em>str</em>) – Path to a raw file</p></li>
-<li><p><strong>storage</strong> (<em>TinyDB.tinydb.storages.Storage</em>) – storage class to be used, it needs to         inherit TinyDB.tinydb.storages.Storage</p></li>
+<li><p><strong>storage</strong> (<a class="reference external" href="https://tinydb.readthedocs.io/en/latest/api.html#tinydb.storages.Storage" title="(in TinyDB v3.14)"><em>tinydb.storages.Storage</em></a>) – storage class to be used, it needs to         inherit <a class="reference external" href="https://tinydb.readthedocs.io/en/latest/api.html#tinydb.storages.Storage" title="(in TinyDB v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tinydb.storages.Storage</span></code></a></p></li>
 <li><p><strong>default_table</strong> (<em>str</em>) – default main field in the raw file.</p></li>
 </ul>
 </dd>
@@ -280,26 +294,8 @@
 <dl class="method">
 <dt id="panda_core_data.model.Model.__init_subclass__">
 <em class="property">classmethod </em><code class="sig-name descname">__init_subclass__</code><span class="sig-paren">(</span><em class="sig-param">core_name=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.model.Model.__init_subclass__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that automatically registers class types into data_core</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>cls</strong> (<a class="reference internal" href="#panda_core_data.model.Model" title="panda_core_data.model.Model"><em>Model</em></a>) – class type to be added</p></li>
-<li><p><strong>model_name</strong> (<em>str</em>) – The name of the model, if not supplied, the class name is used</p></li>
-<li><p><strong>dependency_list</strong> (<em>list</em><em>(</em><em>str</em><em>)</em>) – list of <a class="reference internal" href="#panda_core_data.model.Template" title="panda_core_data.model.Template"><code class="xref py py-class docutils literal notranslate"><span class="pre">Template</span></code></a> names to be used as dependency.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="panda_core_data.model.Model.initialize_dependencies">
-<code class="sig-name descname">initialize_dependencies</code><span class="sig-paren">(</span><em class="sig-param">parent_name</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.model.Model.initialize_dependencies" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>parent_name</strong> (<em>str</em>) – name of the template to be instanced.</p>
-</dd>
-</dl>
+<dd><p>Method that automatically registers class types into data_core. You can use the same
+parameters as <a class="reference internal" href="#panda_core_data.data_type.DataType._add_into" title="panda_core_data.data_type.DataType._add_into"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_add_into()</span></code></a></p>
 </dd></dl>
 
 </dd></dl>
@@ -315,16 +311,8 @@
 <dl class="method">
 <dt id="panda_core_data.model.Template.__init_subclass__">
 <em class="property">classmethod </em><code class="sig-name descname">__init_subclass__</code><span class="sig-paren">(</span><em class="sig-param">core_name=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.model.Template.__init_subclass__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that automatically registers class types into data_core</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>cls</strong> (<a class="reference internal" href="#panda_core_data.model.Model" title="panda_core_data.model.Model"><em>Model</em></a>) – class type to be added</p></li>
-<li><p><strong>template_name</strong> (<em>str</em>) – The name of the template, if not supplied, the class name is used.</p></li>
-<li><p><strong>dependency_list</strong> (<em>list</em><em>(</em><em>str</em><em>)</em>) – <a class="reference internal" href="#panda_core_data.model.Template" title="panda_core_data.model.Template"><code class="xref py py-class docutils literal notranslate"><span class="pre">Template</span></code></a> to be used as dependency.</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>Method that automatically registers class types into data_core. You can use the same
+parameters as <a class="reference internal" href="#panda_core_data.data_type.DataType._add_into" title="panda_core_data.data_type.DataType._add_into"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_add_into()</span></code></a></p>
 </dd></dl>
 
 </dd></dl>

@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.0.1.dev8
+                0.0.1
               </div>
             
           
@@ -235,8 +235,7 @@ with the folder named <cite>tutorial</cite>. Then go to the file
 </pre></div>
 </div>
 <p>Mostly, we are just setting the <cite>data_name</cite> parameter to make the <strong>I</strong> in low caps there’s more
-parameters <a class="reference external" href="/api/data_type.html#datatype">available here</a> in
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">panda_core_data.data_type.DataType._add_into()</span></code>. Also remember, if you inherit
+parameters in <code class="xref py py-meth docutils literal notranslate"><span class="pre">__add_into()</span></code>. Also remember, if you inherit
 <a class="reference internal" href="../api/data_type.html#panda_core_data.model.Template" title="panda_core_data.model.Template"><code class="xref py py-class docutils literal notranslate"><span class="pre">Template</span></code></a> or <a class="reference internal" href="../api/data_type.html#panda_core_data.model.Model" title="panda_core_data.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a>, the class will
 turn into a dataclass, so you can instance the model like this for example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Items</span><span class="p">(</span><span class="s2">&quot;Copper&quot;</span><span class="p">,</span> <span class="s2">&quot;Fragile material&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># The args are in the field order</span>
@@ -300,7 +299,7 @@ It’s use is (hopefully) simple. Let’s edit the file <cite>/tutorial/main.py<
         <span class="c1"># Remember that I said our class turned into a dataclass?</span>
         <span class="c1"># We can iter along the fields now.</span>
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="n">instance</span><span class="p">):</span>
-             <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;t{field.name}: {getattr(instance, field.name)}&quot;</span><span class="p">)</span>
+             <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">{field.name}: {getattr(instance, field.name)}&quot;</span><span class="p">)</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>

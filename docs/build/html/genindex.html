@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.0.1.dev8
+                0.0.1
               </div>
             
           
@@ -167,7 +167,6 @@
  | <a href="#D"><strong>D</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
- | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#P"><strong>P</strong></a>
@@ -183,18 +182,8 @@
 </li>
       <li><a href="api/data_type.html#panda_core_data.data_type.DataType.__getattr__">__getattr__() (panda_core_data.data_type.DataType method)</a>
 </li>
-      <li><a href="api/core_data.html#panda_core_data.data_core_bases.data_model.DataModel.__init__">__init__() (panda_core_data.data_core_bases.data_model.DataModel method)</a>
-
-      <ul>
-        <li><a href="api/core_data.html#panda_core_data.DataCore.__init__">(panda_core_data.DataCore method)</a>
+      <li><a href="api/storage.html#panda_core_data.yaml_db.YAMLStorage.__init__">__init__() (panda_core_data.yaml_db.YAMLStorage method)</a>
 </li>
-        <li><a href="api/core_data.html#panda_core_data.data_core_bases.data_template.DataTemplate.__init__">(panda_core_data.data_core_bases.data_template.DataTemplate method)</a>
-</li>
-        <li><a href="api/storage.html#panda_core_data.yaml_db.YAMLStorage.__init__">(panda_core_data.yaml_db.YAMLStorage method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/core_data.html#panda_core_data.data_core_bases.base_data.BaseData.__init_subclass__">__init_subclass__() (panda_core_data.data_core_bases.base_data.BaseData class method)</a>
 
       <ul>
@@ -203,11 +192,15 @@
         <li><a href="api/data_type.html#panda_core_data.model.Template.__init_subclass__">(panda_core_data.model.Template class method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/data_type.html#panda_core_data.data_type.DataType.__new__">__new__() (panda_core_data.data_type.DataType static method)</a>
 </li>
       <li><a href="api/data_type.html#panda_core_data.data_type.DataType.__repr__">__repr__() (panda_core_data.data_type.DataType method)</a>
 </li>
       <li><a href="api/data_type.html#panda_core_data.data_type.DataType.__setattr__">__setattr__() (panda_core_data.data_type.DataType method)</a>
+</li>
+      <li><a href="api/data_type.html#panda_core_data.data_type.DataType._add_into">_add_into() (panda_core_data.data_type.DataType static method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -216,6 +209,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/data_type.html#panda_core_data.data_type.DataType.add_dependencies">add_dependencies() (panda_core_data.data_type.DataType method)</a>
+</li>
+      <li><a href="api/core_data.html#panda_core_data.data_core_bases.base_data.BaseData.add_module">add_module() (panda_core_data.data_core_bases.base_data.BaseData static method)</a>
 </li>
       <li><a href="api/core_data.html#panda_core_data.data_core_bases.base_data.BaseData.all_datas">all_datas() (panda_core_data.data_core_bases.base_data.BaseData static method)</a>
 </li>
@@ -290,14 +285,6 @@
   </ul></td>
 </tr></table>
 
-<h2 id="I">I</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/data_type.html#panda_core_data.model.Model.initialize_dependencies">initialize_dependencies() (panda_core_data.model.Model method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -349,16 +336,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/storage.html#panda_core_data.yaml_db.YAMLStorage.read">read() (panda_core_data.yaml_db.YAMLStorage method)</a>
 </li>
-      <li><a href="api/core_data.html#panda_core_data.data_core_bases.base_data.BaseData.recursively_add_data_module">recursively_add_data_module() (panda_core_data.data_core_bases.base_data.BaseData static method)</a>
+      <li><a href="api/core_data.html#panda_core_data.data_core_bases.base_data.BaseData.recursively_add_module">recursively_add_module() (panda_core_data.data_core_bases.base_data.BaseData method)</a>
 </li>
-      <li><a href="api/core_data.html#panda_core_data.data_core_bases.data_model.DataModel.recursively_add_model_module">recursively_add_model_module() (panda_core_data.data_core_bases.data_model.DataModel method)</a>
-</li>
-      <li><a href="api/core_data.html#panda_core_data.data_core_bases.data_template.DataTemplate.recursively_add_template_module">recursively_add_template_module() (panda_core_data.data_core_bases.data_template.DataTemplate method)</a>
+      <li><a href="api/core_data.html#panda_core_data.data_core_bases.base_data.BaseData.recursively_instance_data">recursively_instance_data() (panda_core_data.data_core_bases.base_data.BaseData static method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/core_data.html#panda_core_data.data_core_bases.base_data.BaseData.recursively_instance_data">recursively_instance_data() (panda_core_data.data_core_bases.base_data.BaseData static method)</a>
-</li>
       <li><a href="api/core_data.html#panda_core_data.data_core_bases.data_model.DataModel.recursively_instance_model">recursively_instance_model() (panda_core_data.data_core_bases.data_model.DataModel method)</a>
 </li>
       <li><a href="api/core_data.html#panda_core_data.data_core_bases.data_template.DataTemplate.recursively_instance_template">recursively_instance_template() (panda_core_data.data_core_bases.data_template.DataTemplate method)</a>

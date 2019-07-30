@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.0.1.dev8
+                0.0.1
               </div>
             
           
@@ -185,21 +185,15 @@
 <li><p><strong>core_mod_folder</strong> (<em>str</em>) – Name of the core mod folder. The base mod.</p></li>
 <li><p><strong>raws_folder</strong> (<em>str</em>) – Name of the raw folder.</p></li>
 <li><p><strong>models_folder</strong> (<em>str</em>) – Name of the models folder.</p></li>
-<li><p><strong>templates_folder</strong> (<em>str</em>) – Name of the templates folder.</p></li>
-<li><p><strong>raw_models_folder</strong> (<em>str</em>) – Name of the raws that are related to the models. Default is         ‘models_folder’ param.</p></li>
-<li><p><strong>raw_templates_folder</strong> (<em>str</em>) – Name of the raws that are related to the templates. Default         is the ‘templates_folder’ param</p></li>
+<li><p><strong>templates_folder</strong> (<em>bool</em><em> or </em><em>str</em>) – Name of the templates folder.</p></li>
+<li><p><strong>raw_models_folder</strong> (<em>str</em><em> or </em><em>bool</em>) – Name of the raws that are related to the models. Default is         ‘models_folder’ param.</p></li>
+<li><p><strong>raw_templates_folder</strong> (<em>str</em><em> or </em><em>bool</em>) – Name of the raws that are related to the templates. Default         is the ‘templates_folder’ param</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><a class="reference internal" href="custom_exceptions.html#panda_core_data.custom_exceptions.PCDFolderNotFound" title="panda_core_data.custom_exceptions.PCDFolderNotFound"><strong>PCDFolderNotFound</strong></a> – If any of the folders are invalid.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="panda_core_data.DataCore.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.DataCore.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 </dd></dl>
@@ -211,12 +205,6 @@
 <dt id="panda_core_data.data_core_bases.data_template.DataTemplate">
 <em class="property">class </em><code class="sig-prename descclassname">panda_core_data.data_core_bases.data_template.</code><code class="sig-name descname">DataTemplate</code><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#panda_core_data.data_core_bases.base_data.BaseData" title="panda_core_data.data_core_bases.base_data.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">panda_core_data.data_core_bases.base_data.BaseData</span></code></a></p>
-<dl class="method">
-<dt id="panda_core_data.data_core_bases.data_template.DataTemplate.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="panda_core_data.data_core_bases.data_template.DataTemplate.all_template_instances">
 <em class="property">property </em><code class="sig-name descname">all_template_instances</code><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate.all_template_instances" title="Permalink to this definition">¶</a></dt>
@@ -257,20 +245,6 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="panda_core_data.data_core_bases.data_template.DataTemplate.recursively_add_template_module">
-<code class="sig-name descname">recursively_add_template_module</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate.recursively_add_template_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Recursively add a module with <code class="xref py py-class docutils literal notranslate"><span class="pre">Template</span></code> from the supplied path.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the template module</p>
-</dd>
-<dt class="field-even">Return list(module)</dt>
-<dd class="field-even"><p>Returns the loaded modules.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
 <dt id="panda_core_data.data_core_bases.data_template.DataTemplate.recursively_instance_template">
 <code class="sig-name descname">recursively_instance_template</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate.recursively_instance_template" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instance <code class="xref py py-class docutils literal notranslate"><span class="pre">Template</span></code> recursively based on the raws inside the folders.</p>
@@ -293,12 +267,6 @@
 <dt id="panda_core_data.data_core_bases.data_model.DataModel">
 <em class="property">class </em><code class="sig-prename descclassname">panda_core_data.data_core_bases.data_model.</code><code class="sig-name descname">DataModel</code><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#panda_core_data.data_core_bases.base_data.BaseData" title="panda_core_data.data_core_bases.base_data.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">panda_core_data.data_core_bases.base_data.BaseData</span></code></a></p>
-<dl class="method">
-<dt id="panda_core_data.data_core_bases.data_model.DataModel.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="panda_core_data.data_core_bases.data_model.DataModel.all_model_instances">
 <em class="property">property </em><code class="sig-name descname">all_model_instances</code><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.all_model_instances" title="Permalink to this definition">¶</a></dt>
@@ -339,20 +307,6 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="panda_core_data.data_core_bases.data_model.DataModel.recursively_add_model_module">
-<code class="sig-name descname">recursively_add_model_module</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.recursively_add_model_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Recursively add a module with <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code> from the supplied path.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the model module</p>
-</dd>
-<dt class="field-even">Return list(module)</dt>
-<dd class="field-even"><p>Returns the loaded modules.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
 <dt id="panda_core_data.data_core_bases.data_model.DataModel.recursively_instance_model">
 <code class="sig-name descname">recursively_instance_model</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.recursively_instance_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instance <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code> recursively based on the raws inside the folders.</p>
@@ -387,6 +341,21 @@ automatically creates docstrings into those methods based on the original method
 </dd></dl>
 
 <dl class="method">
+<dt id="panda_core_data.data_core_bases.base_data.BaseData.add_module">
+<em class="property">static </em><code class="sig-name descname">add_module</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.base_data.BaseData.add_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatically import the module from the python file and add it’s directory to <cite>sys.path</cite>
+if it wasn’t in there before.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>Path</em><em> or </em><em>str</em>) – The path to the python file.</p>
+</dd>
+<dt class="field-even">Return module</dt>
+<dd class="field-even"><p>Returns the imported module.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="panda_core_data.data_core_bases.base_data.BaseData.all_datas">
 <em class="property">static </em><code class="sig-name descname">all_datas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.base_data.BaseData.all_datas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all <code class="xref py py-class docutils literal notranslate"><span class="pre">DataType</span></code> types</p>
@@ -415,8 +384,8 @@ automatically creates docstrings into those methods based on the original method
 </dd></dl>
 
 <dl class="method">
-<dt id="panda_core_data.data_core_bases.base_data.BaseData.recursively_add_data_module">
-<em class="property">static </em><code class="sig-name descname">recursively_add_data_module</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">module_type</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.base_data.BaseData.recursively_add_data_module" title="Permalink to this definition">¶</a></dt>
+<dt id="panda_core_data.data_core_bases.base_data.BaseData.recursively_add_module">
+<code class="sig-name descname">recursively_add_module</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.base_data.BaseData.recursively_add_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recursively add a module with <code class="xref py py-class docutils literal notranslate"><span class="pre">DataType</span></code> from the supplied path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
