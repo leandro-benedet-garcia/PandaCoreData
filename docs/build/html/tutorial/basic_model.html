@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Storages &mdash; panda_core_data  documentation</title>
+  <title>Getting Started &mdash; panda_core_data  documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Utils" href="utils.html" />
-    <link rel="prev" title="Data Types" href="data_type.html" /> 
+    <link rel="next" title="CoreData" href="../api/core_data.html" />
+    <link rel="prev" title="Tutorial" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -84,20 +84,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">Tutorial</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
-</ul>
-<p class="caption"><span class="caption-text">API</span></p>
+              <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="core_data.html">CoreData</a></li>
-<li class="toctree-l1"><a class="reference internal" href="custom_exceptions.html">Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data_type.html">Data Types</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Storages</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#yamlstorage">YAMLStorage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorial</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Getting Started</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/core_data.html">CoreData</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/custom_exceptions.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/data_type.html">Data Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/storage.html">Storages</a></li>
 </ul>
 
             
@@ -143,13 +139,15 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Storages</li>
+          <li><a href="index.html">Tutorial</a> &raquo;</li>
+        
+      <li>Getting Started</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/api/storage.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/tutorial/basic_model.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -162,48 +160,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="storages">
-<h1>Storages<a class="headerlink" href="#storages" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="yamlstorage">
-<h2>YAMLStorage<a class="headerlink" href="#yamlstorage" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="panda_core_data.yaml_db.YAMLStorage">
-<em class="property">class </em><code class="sig-prename descclassname">panda_core_data.yaml_db.</code><code class="sig-name descname">YAMLStorage</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.yaml_db.YAMLStorage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parser storage class used to read yaml files</p>
-<dl class="method">
-<dt id="panda_core_data.yaml_db.YAMLStorage.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.yaml_db.YAMLStorage.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open file as Data Base</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>str</strong> (<em>path</em>) – path pointing to a yaml file</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="panda_core_data.yaml_db.YAMLStorage.read">
-<code class="sig-name descname">read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.yaml_db.YAMLStorage.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method used by TinyDB to read the file</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="panda_core_data.yaml_db.YAMLStorage.represent_doc">
-<em class="property">static </em><code class="sig-name descname">represent_doc</code><span class="sig-paren">(</span><em class="sig-param">dumper</em>, <em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.yaml_db.YAMLStorage.represent_doc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method used to transform a dict to a yaml representation</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dumper</strong> – yaml dumper</p></li>
-<li><p><strong>data</strong> – data to be parsed</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -214,10 +172,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="utils.html" class="btn btn-neutral float-right" title="Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../api/core_data.html" class="btn btn-neutral float-right" title="CoreData" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="data_type.html" class="btn btn-neutral float-left" title="Data Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

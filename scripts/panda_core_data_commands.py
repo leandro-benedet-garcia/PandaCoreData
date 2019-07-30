@@ -34,11 +34,13 @@ class ModelName(Model, data_name="model_name"):
     name: str
 """
 
-BASE_TEMPLATE = """from panda_core_data.template import Template
-
-class TemplateName(Template, data_name="template_name"):
-    name: str
-"""
+#===================================================================================================
+# BASE_TEMPLATE = """from panda_core_data.template import Template
+#
+# class TemplateName(Template, data_name="template_name"):
+#     name: str
+# """
+#===================================================================================================
 
 BASE_RAW = """data:
     - name: "name"
@@ -69,24 +71,24 @@ def main(argv=None):
         root = opts.outdir
 
         models_folder = join(root, "mods", "core", "models")
-        templates_folder = join(root, "mods", "core", "templates")
+        # templates_folder = join(root, "mods", "core", "templates")
 
         raw_models = join(root, "mods", "core", "raws", "models")
         inner_raw_model = join(root, "mods", "core", "raws", "models", "model_name")
-        raw_templates = join(root, "mods", "core", "raws", "templates")
+        # raw_templates = join(root, "mods", "core", "raws", "templates")
 
         makedirs(models_folder, exist_ok=True)
-        makedirs(templates_folder, exist_ok=True)
+        # makedirs(templates_folder, exist_ok=True)
 
         makedirs(raw_models, exist_ok=True)
         makedirs(inner_raw_model, exist_ok=True)
-        makedirs(raw_templates, exist_ok=True)
+        # makedirs(raw_templates, exist_ok=True)
 
         create_file(join(root, "main.py"), MAIN_FILE)
         create_file(join(models_folder, "example_model.py"), BASE_MODEL)
-        create_file(join(templates_folder, "example_template.py"), BASE_TEMPLATE)
-        create_file(join(inner_raw_model, "model_name.yaml"), BASE_RAW)
-        create_file(join(raw_templates, "template_name.yaml"), BASE_RAW)
+        # create_file(join(templates_folder, "example_template.py"), BASE_TEMPLATE)
+        create_file(join(inner_raw_model, "example_model_raw.yaml"), BASE_RAW)
+        # create_file(join(raw_templates, "example_template_raw.yaml"), BASE_RAW)
 
 
 if __name__ == "__main__":

@@ -2,9 +2,17 @@ Welcome to PandaCoreData's documentation!
 =========================================
 
 .. toctree::
-	:maxdepth: 2
+	:maxdepth: 4
 	:glob:
-	:caption: API:
+	:caption: Tutorial
+
+	tutorial/index
+
+
+.. toctree::
+	:maxdepth: 4
+	:glob:
+	:caption: API
 
 	api/*
 

@@ -1,7 +1,6 @@
 import pytest
 
-from panda_core_data.model import Model
-from panda_core_data.template import Template
+from panda_core_data.model import Model, Template
 #pylint: disable=unused-import
 from . import (MODEL_TYPE_NAME, MODEL_WITH_INIT_NAME, DEFAULT_TEST_FIELD_CONTENT,
                SECOND_MODEL_TYPE_NAME)
@@ -53,3 +52,23 @@ def template():
 @pytest.fixture
 def second_template():
     return create_test_template(SECOND_MODEL_TYPE_NAME)
+
+@pytest.fixture
+def file_structure(tmpdir):
+    return_dict = {}
+    mods_dir = tmpdir.mkdir("mods")
+    core_dir = mods_dir.mkdir("core")
+    raws_dir = core_dir.mkdir("raws")
+
+    return_dict["mods_dir"] = mods_dir
+    return_dict["raws_dir"] = raws_dir
+    return_dict["core_dir"] = core_dir
+
+    return_dict["models_dir"] = core_dir.mkdir("models")
+    return_dict["templates_dir"] = core_dir.mkdir("templates")
+
+    return_dict["root_model_raw_dir"] = raws_dir.mkdir("models")
+    return_dict["model_raw_dir"] = return_dict["root_model_raw_dir"].mkdir(MODEL_TYPE_NAME)
+    return_dict["raw_templates_dir"] = return_dict["raws_dir"].mkdir("templates")
+
+    return return_dict

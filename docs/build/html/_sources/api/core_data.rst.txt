@@ -4,34 +4,38 @@ CoreData
 DataCore
 ---------
 
-.. automodule:: panda_core_data.data_core
+.. autoclass:: panda_core_data.DataCore
 	:members:
 	:private-members:
 	:special-members:
-	:exclude-members: __weakref__
+	:show-inheritance:
+	:exclude-members: __weakref__, __dir__, __format__, __new__, __reduce__, \
+					  __sizeof__, __subclasshook__
 
-BaseData
----------
+DataTemplate
+-------------
 
-.. automodule:: panda_core_data.data_core_bases.base_data
+.. autoclass:: panda_core_data.data_core_bases.data_template.DataTemplate
 	:members:
 	:private-members:
 	:special-members:
+	:show-inheritance:
 	:exclude-members: __weakref__
 
 DataModel
 ----------
 
-.. automodule:: panda_core_data.data_core_bases.data_model
+.. autoclass:: panda_core_data.data_core_bases.data_model.DataModel
 	:members:
 	:private-members:
 	:special-members:
+	:show-inheritance:
 	:exclude-members: __weakref__
 
-DataTemplate
--------------
+BaseData
+---------
 
-.. automodule:: panda_core_data.data_core_bases.data_template
+.. autoclass:: panda_core_data.data_core_bases.base_data.BaseData
 	:members:
 	:private-members:
 	:special-members:

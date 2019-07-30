@@ -15,8 +15,7 @@ class YAMLStorage(MemoryStorage, Storage):
         """
         Open file as Data Base
 
-        :param path: path pointing to a yaml file
-        :type path: str
+        :param path str: path pointing to a yaml file
         """
         super().__init__()
         self.path = path

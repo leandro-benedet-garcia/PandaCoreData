@@ -8,46 +8,33 @@ import sys
 from dataclasses import dataclass
 from glob import iglob
 from os.path import join
-from pathlib import Path
 from importlib import import_module
 
-from ..custom_exceptions import (PCDTypeGroupNotFound, PCDTypeNotFound, PCDDuplicatedTypeName,
-                                 PCDInvalidBaseData)
+
+from ..custom_exceptions import PCDTypeNotFound, PCDInvalidBaseData
+from ..utils import auto_convert_to_pathlib
 
 @dataclass(repr=False)
 class Group(dict):
-    """Class that is used to store Models or Templates"""
+    """Class that is used to store :class:`Model` or :class:`Template` classes"""
     group_name: str
-
-    def __repr__(self):
-        #pylint: disable=no-member
-        fields = [f"{field_name}({field_type}) = {getattr(self, field_name)}"
-                  for field_name, field_type in self.__annotations__.items()]
-
-        to_return = []
-        to_return.append("Group:")
-        to_return.append("\t" + ", ".join(fields))
-        to_return.append(super().__repr__())
-
-        return "\n".join(to_return)
 
 @dataclass(repr=False)
 class GroupInstance(list):
-    data_type: "ModelMixin"
-    group_name: str
-
+    """Class that is used to store Instances"""
+    data_type: "DataType"
 
 @dataclass(repr=False)
 class GroupWrapper(object):
-    data_type: "ModelMixin"
-    parent_group: Group
+    """Class that is used to store Models or Templates"""
+    data_type: "DataType"
     instances: GroupInstance = None
 
     def __post_init__(self):
-        self.instances = GroupInstance(self.parent_group.group_name, self.data_type)
+        self.instances = GroupInstance(self.data_type)
 
     def __repr__(self):
-        return f"{self.data_type.data_name}: \n\t{repr(self.instances)}"
+        return f"Wrapper of {type(self.data_type.data_name).__name__}: \n\t{repr(self.instances)}"
 
 class BaseData(object):
     def __init_subclass__(cls):  # @NoSelf
@@ -55,8 +42,7 @@ class BaseData(object):
         This function checks if a method is lacking inside any class that inherits this, and also
         automatically creates docstrings into those methods based on the original method.
 
-        :param cls: Child class
-        :type cls: any
+        :param DataType cls: Child class
         """
 
         # The only class that don't go trough the check is DataCore
@@ -67,11 +53,12 @@ class BaseData(object):
 
         cls_attributes = dir(cls)
         base_attributes = dir(BaseData)
+        changed_attrs = []
 
         for original_attr in base_attributes:
             if "data" not in original_attr:
                 continue
-
+            changed_attrs.append([original_attr, 0])
             current_attribute = original_attr.replace("data", data_type)
 
             if current_attribute not in cls_attributes:
@@ -80,162 +67,68 @@ class BaseData(object):
 
             base_docstring = getattr(BaseData, original_attr).__doc__
             if base_docstring:
-                base_docstring = base_docstring.replace("Data", data_type.capitalize())
+                base_docstring = base_docstring.replace("DataType", data_type.capitalize())
                 base_docstring = base_docstring.replace("data", data_type)
 
                 getattr(cls, current_attribute).__doc__ = base_docstring
 
+    @staticmethod
+    def all_datas():
+        """
+        Get all :class:`DataType` types
+
+        :return list(DataType): return a list of data types.
+        """
 
     @staticmethod
-    def get_data_group(group_dict, name: str = "DEFAULT_DATA_GROUP", group_default=None):
+    def recursively_add_data_module(path, module_type):
         """
-        Get data group.
+        Recursively add a module with :class:`DataType` from the supplied path.
 
-        :param name: Name of the group.
-        :type name: str
-        :param group_default: default value to be returned if the group could not be found
-        :type group_default: any
+        :param str path: Path to the data module
+        :return list(module): Returns the loaded modules.
         """
-        group = group_dict.get(name, group_default)
-        if not group and group_default is None:
-            raise PCDTypeGroupNotFound(f"Group '{name}' could not be found.")
-
-        return group
-
-    @staticmethod
-    def get_or_create_data_group(name: str, group_dict):
-        """
-        Get or create the data group. If it doesn't exist, it will be created.
-
-        :param name: Name of the group.
-        :type name: str
-        """
-        return group_dict.setdefault(name, Group(name))
-
-    @staticmethod
-    def instance_data(data_type_name, path, get_type_method, **kwargs) -> "ModelMixin":
-        """
-        Create an instance Data from the raw file.
-
-        :param data_type_name: name of the Data type.
-        :type data_type_name: str
-        :param path: path of the raw file
-        :type path: str
-        """
-        generate_id = kwargs.pop("generate_id", True)
-
-        data_type = get_type_method(data_type_name, **kwargs)
-        instanced = data_type.instance_from_raw(path)
-        data_name = data_type.data_name
-
-        if generate_id:
-            all_data_instances = data_type.all_data_instances
-            group = all_data_instances.setdefault(data_name, GroupInstance(data_name, data_type))
-            data_id = data_name + str(len(data_type.data_group))
-
-            instanced.id = data_id
-        else:
-            group = data_type.all_data_instances
-            instanced.id = False
-
-        if not group.data_type:
-            group.data_type = data_type
-
-        data_type.wrapper.instances.append(instanced)
-        return instanced
-
-    @staticmethod
-    def get_data_type(name: str, group_method, **kwargs):
-        """
-        Get Data type from the specified group.
-
-        :param name: Name of the Data type.
-        :type name: str
-        :param group_name: Name of the group.
-        :type group_name: str
-        :param default: Default value to return if the Data type couldn't be found.
-        :type default: any
-        :param group_default: Default value to return if the group couldn't be found.
-        :type group_default: any
-        """
-        default = kwargs.pop("default", None)
-        group = group_method(**kwargs)
-        if isinstance(group, Group):
-            data_type = group.get(name, default)
-            if not data_type and default is None:
-                raise PCDTypeNotFound(f"Model type {name} could not be found inside "
-                                      f"the group {group.group_name}")
-
-            return data_type.data_type if isinstance(data_type, GroupWrapper) else default
-        return default
-
-    @staticmethod
-    def add_data_module(path, module_type):
-        """
-        Recursively add a data module from the supplied path.
-
-        :param path: Path to the data module
-        :type path: str
-        """
-        sys.path.append(path)
-
         added_modules = []
+        path = auto_convert_to_pathlib(path, True)
+
         for py_file in iglob(join(path, '*.py')):
-            module_name = Path(py_file).stem
-            imported_module = import_module(module_name)
+            module_full_path = auto_convert_to_pathlib(py_file, False)
+            module_name = module_full_path.stem
+            module_path = str(module_full_path.parent)
+            if module_path not in sys.path:
+                sys.path.append(module_path)
+
+            try:
+                imported_module = import_module(module_name)
+            except ModuleNotFoundError as module_error:
+                raise ModuleNotFoundError(f"{module_error} with the base_path '{path}' sys.path "
+                                          f"'{sys.path}'")
             module_type.append(imported_module)
 
         module_type += added_modules
         return added_modules
 
     @staticmethod
-    def get_data_from_all(data_name, data_dict, default=None):
+    def get_data_type(data_name, data_dict, default=None):
         """
-        Get Data type from a list of all Data types, completely ignoring groups.
+        Get Data type from a list of all :class:`DataType` types.
 
-        :param data_name: The name of the Data type
-        :type data_name: str
-        :param default: Default value to be returned if the data type couldn't be found.
-        :type default: bool
+        :param str data_name: The name of the DataType
+        :param bool default: Default value to be returned if the data type couldn't be found.
+        :return DataType: the :class:`DataType`
         """
         data_type = data_dict.get(data_name, default)
         if not data_type and default is None:
-            raise PCDTypeNotFound(f"Data type {data_name} could not be found.")
+            raise PCDTypeNotFound(f"Data type {data_name} could not be found. The available "
+                                  f"templates are {list(data_dict.values())}")
 
         return data_type
 
     @staticmethod
-    def add_data_to_group(group_name: str, data, data_group_method, get_or_create_data_group,
-                          all_data_instances, auto_create_group=True, replace=False):
+    def recursively_instance_data():
         """
-        Add the supplied Data type to the group.
+        Instance :class:`DataType` recursively based on the raws inside the folders.
 
-        :param group_name: Name of the group
-        :type group_name: str
-        :param data: The Data type to be added.
-        :type data: Data
-        :param auto_create_group: If the group should be automatically created if it doesn't exist.
-        :type auto_create_group: bool
-        :param replace: If the Data type should be replaced if it already exists.
-        :type replace: bool
+        :param str path: Starting path to search for raws.
+        :return list(DataType): returns all the instanced data from the path.
         """
-        name = data.data_name
-
-        if auto_create_group:
-            group = get_or_create_data_group(group_name)
-        else:
-            group = data_group_method(name=group_name, group_default=None)
-
-        if not replace and name in group:
-            raise PCDDuplicatedTypeName(f"There's already a {type(data)} with the name {name} "
-                                        f"inside the group {group_name}.")
-
-        wrapper = GroupWrapper(data, group)
-
-        group[name] = wrapper
-
-        data.data_group = group
-        data.all_data_instances = all_data_instances
-        data.wrapper = wrapper
-
-        return group

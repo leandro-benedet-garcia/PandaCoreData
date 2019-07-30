@@ -12,6 +12,7 @@
 #
 import os
 import sys
+from panda_core_data.__version__ import __version__
 sys.path.insert(0, os.path.abspath('../..'))
 
 
@@ -20,6 +21,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 project = 'PandaCoreData'
 copyright = '2019, Leandro (Cerberus1746) Benedet Garcia'
 author = 'Leandro (Cerberus1746) Benedet Garcia'
+version = __version__
 
 
 # -- General configuration ---------------------------------------------------

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Template &mdash; panda_core_data  documentation</title>
+  <title>Getting Started &mdash; panda_core_data  documentation</title>
   
 
   
@@ -35,7 +35,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Storages" href="storage.html" /> 
+    <link rel="next" title="CoreData" href="../api/core_data.html" />
+    <link rel="prev" title="Tutorial" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -59,7 +60,7 @@
             
             
               <div class="version">
-                0.0.1.dev1
+                0.0.1.dev8
               </div>
             
           
@@ -83,14 +84,20 @@
               
             
             
-              <p class="caption"><span class="caption-text">API:</span></p>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="core_data.html">CoreData</a></li>
-<li class="toctree-l1"><a class="reference internal" href="custom_exceptions.html">Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model.html">Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model_mixin.html">ModelMixin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="storage.html">Storages</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Template</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorial</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Getting Started</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/core_data.html">CoreData</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/custom_exceptions.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/data_type.html">Data Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/storage.html">Storages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/utils.html">Utils</a></li>
 </ul>
 
             
@@ -136,13 +143,15 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Template</li>
+          <li><a href="index.html">Tutorial</a> &raquo;</li>
+        
+      <li>Getting Started</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/api/template.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/tutorial/getting_started.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -155,38 +164,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-panda_core_data.template">
-<span id="template"></span><h1>Template<a class="headerlink" href="#module-panda_core_data.template" title="Permalink to this headline">¶</a></h1>
-<dl class="field-list simple">
-<dt class="field-odd">created</dt>
-<dd class="field-odd"><p>2019-04-26</p>
-</dd>
-<dt class="field-even">author</dt>
-<dd class="field-even"><p>Leandro (Cerberu1746) Benedet Garcia</p>
-</dd>
-</dl>
-<dl class="class">
-<dt id="panda_core_data.template.Template">
-<em class="property">class </em><code class="sig-prename descclassname">panda_core_data.template.</code><code class="sig-name descname">Template</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.template.Template" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class that will be used to make ModelTemplates</p>
-<dl class="method">
-<dt id="panda_core_data.template.Template.__init_subclass__">
-<em class="property">classmethod </em><code class="sig-name descname">__init_subclass__</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.template.Template.__init_subclass__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that automatically registers class types into data_core</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>cls</strong> (<a class="reference internal" href="model.html#panda_core_data.model.Model" title="panda_core_data.model.Model"><em>Model</em></a>) – class type to be added</p></li>
-<li><p><strong>template_name</strong> (<em>str</em>) – The name of the template, if not supplied, the class name is used</p></li>
-<li><p><strong>template_group_name</strong> (<em>str</em>) – Name of the group that the template type will be added. If it         doesn’t exists, it will be created.</p></li>
-<li><p><strong>dependency_list</strong> (<em>list of strings</em>) – TODO</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -197,8 +176,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="../api/core_data.html" class="btn btn-neutral float-right" title="CoreData" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="storage.html" class="btn btn-neutral float-left" title="Storages" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

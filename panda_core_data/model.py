@@ -3,30 +3,52 @@
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 
-from .model_mixin import ModelMixin
-from . import data_core
+from panda_core_data.data_type import DataType
 
+class Template(DataType):
+    """
+    Class that will be used to make ModelTemplates
+    """
 
-class Model(ModelMixin):
-
-    def __init_subclass__(cls, **kwargs):  # @NoSelf
+    def __init_subclass__(cls, core_name=None, **kwargs):  # @NoSelf
         """
         Method that automatically registers class types into data_core
 
-        :param cls: class type to be added
-        :type cls: Model
-        :param model_name: The name of the model, if not supplied, the class name is used
-        :type model_name: str
-        :param dependency_list: TODO
-        :type dependency_list: list of strings
-        :param model_group_name: Name of the group that the model type will be added. If it \
-        doesn't exists, it will be created.
-        :type model_group_name: str
+        :param Model cls: class type to be added
+        :param str template_name: The name of the template, if not supplied, the class name is used.
+        :param list(str) dependency_list: :class:`Template` to be used as dependency.
         """
+        current_core = cls._get_core(core_name)
+        cls.data_core = current_core
 
-        cls._add_into(cls, data_core.all_model_types, # @UndefinedVariable
-                      data_core.add_model_to_group, # @UndefinedVariable
-                      **kwargs) # @UndefinedVariable
+        cls._add_into(cls, current_core.all_key_value_templates, **kwargs)
+
+    @classmethod
+    def instanced(cls):
+        return cls.wrapper.instances
+
+class ModelIter(type):
+    #pylint: disable=non-iterator-returned
+    def __iter__(cls):  # @NoSelf
+        return cls.all_instances
+
+    @property
+    def all_instances(cls):  # @NoSelf
+        return iter(cls.wrapper.instances)
+
+
+class Model(DataType, metaclass=ModelIter):
+    def __init_subclass__(cls, core_name=None, **kwargs):  # @NoSelf
+        """
+        Method that automatically registers class types into data_core
+
+        :param Model cls: class type to be added
+        :param str model_name: The name of the model, if not supplied, the class name is used
+        :param list(str) dependency_list: list of :class:`Template` names to be used as dependency.
+        """
+        current_core = cls._get_core(core_name)
+        cls.data_core = current_core
+        cls._add_into(cls, current_core.all_model_types, **kwargs)
 
     def setup_values(self, value, default_value, default_min, default_max):
         try:
@@ -56,9 +78,7 @@ class Model(ModelMixin):
 
     def initialize_dependencies(self, parent_name):
         """
-        :todo: make it work again.
-        :param parent_name: name of the template to be instanced.
-        :type parent_name: str
+        :param str parent_name: name of the template to be instanced.
         """
         current_parent = self.parents[parent_name]
         all_values = current_parent.all()
@@ -69,8 +89,8 @@ class Model(ModelMixin):
             current_value = current_parent.get_single_value("default_value")
             min_value = current_parent.get_single_value("default_min")
             max_value = current_parent.get_single_value("default_max")
-            formated = map(lambda x: self.setup_values(
-                x, current_value, min_value, max_value), all_values)
+            formated = map(lambda x: self.setup_values(x, current_value, min_value, max_value),
+                           all_values)
 
         formated = filter(lambda a: not a, formated)
         self.parents[parent_name].purge()

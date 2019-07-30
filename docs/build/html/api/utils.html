@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Model &mdash; panda_core_data  documentation</title>
+  <title>Utils &mdash; panda_core_data  documentation</title>
   
 
   
@@ -35,8 +35,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="ModelMixin" href="model_mixin.html" />
-    <link rel="prev" title="Exceptions" href="custom_exceptions.html" /> 
+    <link rel="prev" title="Storages" href="storage.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -60,7 +59,7 @@
             
             
               <div class="version">
-                0.0.1.dev1
+                0.0.1.dev8
               </div>
             
           
@@ -84,14 +83,17 @@
               
             
             
-              <p class="caption"><span class="caption-text">API:</span></p>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="core_data.html">CoreData</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_exceptions.html">Exceptions</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model_mixin.html">ModelMixin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_type.html">Data Types</a></li>
 <li class="toctree-l1"><a class="reference internal" href="storage.html">Storages</a></li>
-<li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Utils</a></li>
 </ul>
 
             
@@ -137,13 +139,13 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Model</li>
+      <li>Utils</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/api/model.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/api/utils.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -156,48 +158,54 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-panda_core_data.model">
-<span id="model"></span><h1>Model<a class="headerlink" href="#module-panda_core_data.model" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-panda_core_data.utils">
+<span id="utils"></span><h1>Utils<a class="headerlink" href="#module-panda_core_data.utils" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">created</dt>
-<dd class="field-odd"><p>2019-04-30</p>
+<dd class="field-odd"><p>2019-07-29</p>
 </dd>
 <dt class="field-even">author</dt>
 <dd class="field-even"><p>Leandro (Cerberus1746) Benedet Garcia</p>
 </dd>
 </dl>
-<dl class="class">
-<dt id="panda_core_data.model.Model">
-<em class="property">class </em><code class="sig-prename descclassname">panda_core_data.model.</code><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.model.Model" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="panda_core_data.model.Model.__init_subclass__">
-<em class="property">classmethod </em><code class="sig-name descname">__init_subclass__</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.model.Model.__init_subclass__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method that automatically registers class types into data_core</p>
+<dl class="function">
+<dt id="panda_core_data.utils.auto_convert_to_pathlib">
+<code class="sig-prename descclassname">panda_core_data.utils.</code><code class="sig-name descname">auto_convert_to_pathlib</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">is_folder</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.utils.auto_convert_to_pathlib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the path is valid and automatically convert it into a Path object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cls</strong> (<a class="reference internal" href="#panda_core_data.model.Model" title="panda_core_data.model.Model"><em>Model</em></a>) – class type to be added</p></li>
-<li><p><strong>model_name</strong> (<em>str</em>) – The name of the model, if not supplied, the class name is used</p></li>
-<li><p><strong>dependency_list</strong> (<em>list of strings</em>) – TODO</p></li>
-<li><p><strong>model_group_name</strong> (<em>str</em>) – Name of the group that the model type will be added. If it         doesn’t exists, it will be created.</p></li>
+<li><p><strong>path</strong> (<em>str</em><em> or </em><em>Path</em>) – source folder.</p></li>
+<li><p><strong>is_folder</strong> (<em>bool</em>) – If the path should be from a folder or file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return Path</dt>
+<dd class="field-even"><p>The Path object.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="custom_exceptions.html#panda_core_data.custom_exceptions.PCDFolderNotFound" title="panda_core_data.custom_exceptions.PCDFolderNotFound"><strong>PCDFolderNotFound</strong></a> – If the folder is invalid.</p></li>
+<li><p><a class="reference internal" href="custom_exceptions.html#panda_core_data.custom_exceptions.PCDFileNotFound" title="panda_core_data.custom_exceptions.PCDFileNotFound"><strong>PCDFileNotFound</strong></a> – If the file is invalid.</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="panda_core_data.model.Model.initialize_dependencies">
-<code class="sig-name descname">initialize_dependencies</code><span class="sig-paren">(</span><em class="sig-param">parent_name</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.model.Model.initialize_dependencies" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Todo</dt>
-<dd class="field-odd"><p>make it work again.</p>
+<dl class="function">
+<dt id="panda_core_data.utils.check_if_valid_instance">
+<code class="sig-prename descclassname">panda_core_data.utils.</code><code class="sig-name descname">check_if_valid_instance</code><span class="sig-paren">(</span><em class="sig-param">an_object</em>, <em class="sig-param">the_type</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.utils.check_if_valid_instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if <cite>an_object</cite> is a instance from <cite>the_type</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>an_object</strong> (<em>any</em>) – source object.</p></li>
+<li><p><strong>the_type</strong> (<em>type</em>) – type object.</p></li>
+</ul>
 </dd>
-<dt class="field-even">Parameters</dt>
-<dd class="field-even"><p><strong>parent_name</strong> (<em>str</em>) – name of the template to be instanced.</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="custom_exceptions.html#panda_core_data.custom_exceptions.PCDTypeError" title="panda_core_data.custom_exceptions.PCDTypeError"><strong>PCDTypeError</strong></a> – if the type is not a instance or wrong type.</p>
 </dd>
 </dl>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -210,10 +218,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="model_mixin.html" class="btn btn-neutral float-right" title="ModelMixin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="custom_exceptions.html" class="btn btn-neutral float-left" title="Exceptions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="storage.html" class="btn btn-neutral float-left" title="Storages" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

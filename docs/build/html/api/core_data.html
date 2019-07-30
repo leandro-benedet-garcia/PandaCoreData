@@ -36,7 +36,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Exceptions" href="custom_exceptions.html" />
-    <link rel="prev" title="Welcome to PandaCoreData’s documentation!" href="../index.html" /> 
+    <link rel="prev" title="Getting Started" href="../tutorial/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.0.1.dev1
+                0.0.1.dev8
               </div>
             
           
@@ -84,20 +84,23 @@
               
             
             
-              <p class="caption"><span class="caption-text">API:</span></p>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CoreData</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-panda_core_data.data_core">DataCore</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-panda_core_data.data_core_bases.base_data">BaseData</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-panda_core_data.data_core_bases.data_model">DataModel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-panda_core_data.data_core_bases.data_template">DataTemplate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#datacore">DataCore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#datatemplate">DataTemplate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#datamodel">DataModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basedata">BaseData</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="custom_exceptions.html">Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model.html">Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model_mixin.html">ModelMixin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_type.html">Data Types</a></li>
 <li class="toctree-l1"><a class="reference internal" href="storage.html">Storages</a></li>
-<li class="toctree-l1"><a class="reference internal" href="template.html">Template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
 </ul>
 
             
@@ -164,23 +167,16 @@
             
   <div class="section" id="coredata">
 <h1>CoreData<a class="headerlink" href="#coredata" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-panda_core_data.data_core">
-<span id="datacore"></span><h2>DataCore<a class="headerlink" href="#module-panda_core_data.data_core" title="Permalink to this headline">¶</a></h2>
-<dl class="field-list simple">
-<dt class="field-odd">created</dt>
-<dd class="field-odd"><p>2019-07-22</p>
-</dd>
-<dt class="field-even">author</dt>
-<dd class="field-even"><p>Leandro (Cerberus1746) Benedet Garcia</p>
-</dd>
-</dl>
+<div class="section" id="datacore">
+<h2>DataCore<a class="headerlink" href="#datacore" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="panda_core_data.data_core.DataCore">
-<em class="property">class </em><code class="sig-prename descclassname">panda_core_data.data_core.</code><code class="sig-name descname">DataCore</code><a class="headerlink" href="#panda_core_data.data_core.DataCore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class where everything is kept.</p>
+<dt id="panda_core_data.DataCore">
+<em class="property">class </em><code class="sig-prename descclassname">panda_core_data.</code><code class="sig-name descname">DataCore</code><span class="sig-paren">(</span><em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.DataCore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#panda_core_data.data_core_bases.data_model.DataModel" title="panda_core_data.data_core_bases.data_model.DataModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">panda_core_data.data_core_bases.data_model.DataModel</span></code></a>, <a class="reference internal" href="#panda_core_data.data_core_bases.data_template.DataTemplate" title="panda_core_data.data_core_bases.data_template.DataTemplate"><code class="xref py py-class docutils literal notranslate"><span class="pre">panda_core_data.data_core_bases.data_template.DataTemplate</span></code></a></p>
+<p>Class where everything is kept.</p>
 <dl class="method">
-<dt id="panda_core_data.data_core.DataCore.__call__">
-<code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">mods_path</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core.DataCore.__call__" title="Permalink to this definition">¶</a></dt>
+<dt id="panda_core_data.DataCore.__call__">
+<code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">mods_path</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.DataCore.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically import all data types based on the paths in the params.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -201,151 +197,33 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="panda_core_data.data_core.DataCore.__new__">
-<em class="property">static </em><code class="sig-name descname">__new__</code><span class="sig-paren">(</span><em class="sig-param">cls</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core.DataCore.__new__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create and return a new object.  See help(type) for accurate signature.</p>
+<dt id="panda_core_data.DataCore.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.DataCore.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 </dd></dl>
 
 </div>
-<div class="section" id="module-panda_core_data.data_core_bases.base_data">
-<span id="basedata"></span><h2>BaseData<a class="headerlink" href="#module-panda_core_data.data_core_bases.base_data" title="Permalink to this headline">¶</a></h2>
-<dl class="field-list simple">
-<dt class="field-odd">created</dt>
-<dd class="field-odd"><p>2019-07-22</p>
-</dd>
-<dt class="field-even">author</dt>
-<dd class="field-even"><p>Leandro (Cerberus1746) Benedet Garcia</p>
-</dd>
-</dl>
-<dl class="class">
-<dt id="panda_core_data.data_core_bases.base_data.Group">
-<em class="property">class </em><code class="sig-prename descclassname">panda_core_data.data_core_bases.base_data.</code><code class="sig-name descname">Group</code><span class="sig-paren">(</span><em class="sig-param">group_name: str</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.base_data.Group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class that is used to store Models or Templates</p>
-<dl class="method">
-<dt id="panda_core_data.data_core_bases.base_data.Group.__repr__">
-<code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.base_data.Group.__repr__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return repr(self).</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-panda_core_data.data_core_bases.data_model">
-<span id="datamodel"></span><h2>DataModel<a class="headerlink" href="#module-panda_core_data.data_core_bases.data_model" title="Permalink to this headline">¶</a></h2>
-<dl class="field-list simple">
-<dt class="field-odd">created</dt>
-<dd class="field-odd"><p>2019-07-22</p>
-</dd>
-<dt class="field-even">author</dt>
-<dd class="field-even"><p>Leandro (Cerberus1746) Benedet Garcia</p>
-</dd>
-</dl>
-<dl class="class">
-<dt id="panda_core_data.data_core_bases.data_model.DataModel">
-<em class="property">class </em><code class="sig-prename descclassname">panda_core_data.data_core_bases.data_model.</code><code class="sig-name descname">DataModel</code><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>classdocs</p>
-<dl class="method">
-<dt id="panda_core_data.data_core_bases.data_model.DataModel.add_model_module">
-<code class="sig-name descname">add_model_module</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.add_model_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Recursively add a model module from the supplied path.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the model module</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="panda_core_data.data_core_bases.data_model.DataModel.add_model_to_group">
-<code class="sig-name descname">add_model_to_group</code><span class="sig-paren">(</span><em class="sig-param">group_name: str</em>, <em class="sig-param">model</em>, <em class="sig-param">auto_create_group=True</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.add_model_to_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add the supplied Model type to the group.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>group_name</strong> (<em>str</em>) – Name of the group</p></li>
-<li><p><strong>model</strong> (<a class="reference internal" href="model.html#panda_core_data.model.Model" title="panda_core_data.model.Model"><em>Model</em></a>) – The Model type to be added.</p></li>
-<li><p><strong>auto_create_group</strong> (<em>bool</em>) – If the group should be automatically created if it doesn’t exist.</p></li>
-<li><p><strong>replace</strong> (<em>bool</em>) – If the Model type should be replaced if it already exists.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="panda_core_data.data_core_bases.data_model.DataModel.all_models">
-<em class="property">property </em><code class="sig-name descname">all_models</code><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.all_models" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all model types</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="panda_core_data.data_core_bases.data_model.DataModel.get_model_type">
-<code class="sig-name descname">get_model_type</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">group_name: str = 'DEFAULT_DATA_GROUP'</em>, <em class="sig-param">default=None</em>, <em class="sig-param">group_default=None</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.get_model_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get Model type from the specified group.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – Name of the Model type.</p></li>
-<li><p><strong>group_name</strong> (<em>str</em>) – Name of the group.</p></li>
-<li><p><strong>default</strong> (<em>any</em>) – Default value to return if the Model type couldn’t be found.</p></li>
-<li><p><strong>group_default</strong> (<em>any</em>) – Default value to return if the group couldn’t be found.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="panda_core_data.data_core_bases.data_model.DataModel.get_or_create_model_group">
-<code class="sig-name descname">get_or_create_model_group</code><span class="sig-paren">(</span><em class="sig-param">name: str</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.get_or_create_model_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get or create the model group. If it doesn’t exist, it will be created.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – Name of the group.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-panda_core_data.data_core_bases.data_template">
-<span id="datatemplate"></span><h2>DataTemplate<a class="headerlink" href="#module-panda_core_data.data_core_bases.data_template" title="Permalink to this headline">¶</a></h2>
-<dl class="field-list simple">
-<dt class="field-odd">created</dt>
-<dd class="field-odd"><p>2019-07-22</p>
-</dd>
-<dt class="field-even">author</dt>
-<dd class="field-even"><p>Leandro (Cerberus1746) Benedet Garcia</p>
-</dd>
-</dl>
+<div class="section" id="datatemplate">
+<h2>DataTemplate<a class="headerlink" href="#datatemplate" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="panda_core_data.data_core_bases.data_template.DataTemplate">
 <em class="property">class </em><code class="sig-prename descclassname">panda_core_data.data_core_bases.data_template.</code><code class="sig-name descname">DataTemplate</code><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate" title="Permalink to this definition">¶</a></dt>
-<dd><p>classdocs</p>
+<dd><p>Bases: <a class="reference internal" href="#panda_core_data.data_core_bases.base_data.BaseData" title="panda_core_data.data_core_bases.base_data.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">panda_core_data.data_core_bases.base_data.BaseData</span></code></a></p>
 <dl class="method">
-<dt id="panda_core_data.data_core_bases.data_template.DataTemplate.add_template_module">
-<code class="sig-name descname">add_template_module</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate.add_template_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Recursively add a template module from the supplied path.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the template module</p>
-</dd>
-</dl>
+<dt id="panda_core_data.data_core_bases.data_template.DataTemplate.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="panda_core_data.data_core_bases.data_template.DataTemplate.add_template_to_group">
-<code class="sig-name descname">add_template_to_group</code><span class="sig-paren">(</span><em class="sig-param">group_name: str</em>, <em class="sig-param">model</em>, <em class="sig-param">auto_create_group: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate.add_template_to_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add the supplied Template type to the group.</p>
+<dt id="panda_core_data.data_core_bases.data_template.DataTemplate.all_template_instances">
+<em class="property">property </em><code class="sig-name descname">all_template_instances</code><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate.all_template_instances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all the template instances</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>group_name</strong> (<em>str</em>) – Name of the group</p></li>
-<li><p><strong>template</strong> (<a class="reference internal" href="template.html#panda_core_data.template.Template" title="panda_core_data.template.Template"><em>Template</em></a>) – The Template type to be added.</p></li>
-<li><p><strong>auto_create_group</strong> (<em>bool</em>) – If the group should be automatically created if it doesn’t exist.</p></li>
-<li><p><strong>replace</strong> (<em>bool</em>) – If the Template type should be replaced if it already exists.</p></li>
-</ul>
+<dt class="field-odd">Yield Template</dt>
+<dd class="field-odd"><p>returns a generator of all instanced templates.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -353,32 +231,213 @@
 <dl class="method">
 <dt id="panda_core_data.data_core_bases.data_template.DataTemplate.all_templates">
 <em class="property">property </em><code class="sig-name descname">all_templates</code><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate.all_templates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all template types</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="panda_core_data.data_core_bases.data_template.DataTemplate.get_or_create_template_group">
-<code class="sig-name descname">get_or_create_template_group</code><span class="sig-paren">(</span><em class="sig-param">name: str</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate.get_or_create_template_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get or create the template group. If it doesn’t exist, it will be created.</p>
+<dd><p>Get all <code class="xref py py-class docutils literal notranslate"><span class="pre">Template</span></code> types</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – Name of the group.</p>
+<dt class="field-odd">Return list(Template)</dt>
+<dd class="field-odd"><p>return a list of template types.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="panda_core_data.data_core_bases.data_template.DataTemplate.get_template_type">
-<code class="sig-name descname">get_template_type</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">group_name: str = 'DEFAULT_DATA_GROUP'</em>, <em class="sig-param">default=None</em>, <em class="sig-param">group_default=None</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate.get_template_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get Template type from the specified group.</p>
+<code class="sig-name descname">get_template_type</code><span class="sig-paren">(</span><em class="sig-param">template_name</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate.get_template_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Data type from a list of all <code class="xref py py-class docutils literal notranslate"><span class="pre">Template</span></code> types.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – Name of the Template type.</p></li>
-<li><p><strong>group_name</strong> (<em>str</em>) – Name of the group.</p></li>
-<li><p><strong>default</strong> (<em>any</em>) – Default value to return if the Template type couldn’t be found.</p></li>
-<li><p><strong>group_default</strong> (<em>any</em>) – Default value to return if the group couldn’t be found.</p></li>
+<li><p><strong>template_name</strong> (<em>str</em>) – The name of the Template</p></li>
+<li><p><strong>default</strong> (<em>bool</em>) – Default value to be returned if the template type couldn’t be found.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Return Template</dt>
+<dd class="field-even"><p>the <code class="xref py py-class docutils literal notranslate"><span class="pre">Template</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="panda_core_data.data_core_bases.data_template.DataTemplate.recursively_add_template_module">
+<code class="sig-name descname">recursively_add_template_module</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate.recursively_add_template_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursively add a module with <code class="xref py py-class docutils literal notranslate"><span class="pre">Template</span></code> from the supplied path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the template module</p>
+</dd>
+<dt class="field-even">Return list(module)</dt>
+<dd class="field-even"><p>Returns the loaded modules.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="panda_core_data.data_core_bases.data_template.DataTemplate.recursively_instance_template">
+<code class="sig-name descname">recursively_instance_template</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_template.DataTemplate.recursively_instance_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance <code class="xref py py-class docutils literal notranslate"><span class="pre">Template</span></code> recursively based on the raws inside the folders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Starting path to search for raws.</p>
+</dd>
+<dt class="field-even">Return list(Template)</dt>
+<dd class="field-even"><p>returns all the instanced template from the path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="datamodel">
+<h2>DataModel<a class="headerlink" href="#datamodel" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="panda_core_data.data_core_bases.data_model.DataModel">
+<em class="property">class </em><code class="sig-prename descclassname">panda_core_data.data_core_bases.data_model.</code><code class="sig-name descname">DataModel</code><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#panda_core_data.data_core_bases.base_data.BaseData" title="panda_core_data.data_core_bases.base_data.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">panda_core_data.data_core_bases.base_data.BaseData</span></code></a></p>
+<dl class="method">
+<dt id="panda_core_data.data_core_bases.data_model.DataModel.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="panda_core_data.data_core_bases.data_model.DataModel.all_model_instances">
+<em class="property">property </em><code class="sig-name descname">all_model_instances</code><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.all_model_instances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all the model instances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Yield Model</dt>
+<dd class="field-odd"><p>returns a generator of all instanced templates.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="panda_core_data.data_core_bases.data_model.DataModel.all_models">
+<em class="property">property </em><code class="sig-name descname">all_models</code><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.all_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code> types</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return list(Model)</dt>
+<dd class="field-odd"><p>return a list of model types.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="panda_core_data.data_core_bases.data_model.DataModel.get_model_type">
+<code class="sig-name descname">get_model_type</code><span class="sig-paren">(</span><em class="sig-param">model_name: str</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.get_model_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Data type from a list of all <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code> types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_name</strong> (<em>str</em>) – The name of the Model</p></li>
+<li><p><strong>default</strong> (<em>bool</em>) – Default value to be returned if the model type couldn’t be found.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return Model</dt>
+<dd class="field-even"><p>the <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="panda_core_data.data_core_bases.data_model.DataModel.recursively_add_model_module">
+<code class="sig-name descname">recursively_add_model_module</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.recursively_add_model_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursively add a module with <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code> from the supplied path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the model module</p>
+</dd>
+<dt class="field-even">Return list(module)</dt>
+<dd class="field-even"><p>Returns the loaded modules.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="panda_core_data.data_core_bases.data_model.DataModel.recursively_instance_model">
+<code class="sig-name descname">recursively_instance_model</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.data_model.DataModel.recursively_instance_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code> recursively based on the raws inside the folders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Starting path to search for raws.</p>
+</dd>
+<dt class="field-even">Return list(Model)</dt>
+<dd class="field-even"><p>returns all the instanced model from the path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="basedata">
+<h2>BaseData<a class="headerlink" href="#basedata" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="panda_core_data.data_core_bases.base_data.BaseData">
+<em class="property">class </em><code class="sig-prename descclassname">panda_core_data.data_core_bases.base_data.</code><code class="sig-name descname">BaseData</code><a class="headerlink" href="#panda_core_data.data_core_bases.base_data.BaseData" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="panda_core_data.data_core_bases.base_data.BaseData.__init_subclass__">
+<em class="property">classmethod </em><code class="sig-name descname">__init_subclass__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.base_data.BaseData.__init_subclass__" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function checks if a method is lacking inside any class that inherits this, and also
+automatically creates docstrings into those methods based on the original method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cls</strong> (<a class="reference internal" href="data_type.html#panda_core_data.data_type.DataType" title="panda_core_data.data_type.DataType"><em>DataType</em></a>) – Child class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="panda_core_data.data_core_bases.base_data.BaseData.all_datas">
+<em class="property">static </em><code class="sig-name descname">all_datas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.base_data.BaseData.all_datas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all <code class="xref py py-class docutils literal notranslate"><span class="pre">DataType</span></code> types</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return list(DataType)</dt>
+<dd class="field-odd"><p>return a list of data types.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="panda_core_data.data_core_bases.base_data.BaseData.get_data_type">
+<em class="property">static </em><code class="sig-name descname">get_data_type</code><span class="sig-paren">(</span><em class="sig-param">data_name</em>, <em class="sig-param">data_dict</em>, <em class="sig-param">default=None</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.base_data.BaseData.get_data_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Data type from a list of all <code class="xref py py-class docutils literal notranslate"><span class="pre">DataType</span></code> types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_name</strong> (<em>str</em>) – The name of the DataType</p></li>
+<li><p><strong>default</strong> (<em>bool</em>) – Default value to be returned if the data type couldn’t be found.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return DataType</dt>
+<dd class="field-even"><p>the <code class="xref py py-class docutils literal notranslate"><span class="pre">DataType</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="panda_core_data.data_core_bases.base_data.BaseData.recursively_add_data_module">
+<em class="property">static </em><code class="sig-name descname">recursively_add_data_module</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">module_type</em><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.base_data.BaseData.recursively_add_data_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursively add a module with <code class="xref py py-class docutils literal notranslate"><span class="pre">DataType</span></code> from the supplied path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the data module</p>
+</dd>
+<dt class="field-even">Return list(module)</dt>
+<dd class="field-even"><p>Returns the loaded modules.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="panda_core_data.data_core_bases.base_data.BaseData.recursively_instance_data">
+<em class="property">static </em><code class="sig-name descname">recursively_instance_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#panda_core_data.data_core_bases.base_data.BaseData.recursively_instance_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance <code class="xref py py-class docutils literal notranslate"><span class="pre">DataType</span></code> recursively based on the raws inside the folders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Starting path to search for raws.</p>
+</dd>
+<dt class="field-even">Return list(DataType)</dt>
+<dd class="field-even"><p>returns all the instanced data from the path.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -399,7 +458,7 @@
         <a href="custom_exceptions.html" class="btn btn-neutral float-right" title="Exceptions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to PandaCoreData’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../tutorial/index.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

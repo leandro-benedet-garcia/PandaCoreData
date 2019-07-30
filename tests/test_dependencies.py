@@ -3,49 +3,91 @@
 
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
-from panda_core_data import data_core
+import pprint
+
+from panda_core_data import DataCore
 from . import (YAML_CONTENT, MODEL_TYPE_NAME, TEMPLATE_TYPE_NAME, MODEL_FILE, TEMPLATE_FILE,
-               DEFAULT_TEST_FIELD_NAME)
+               DEFAULT_TEST_FIELD_NAME, DEFAULT_TEST_FIELD_CONTENT)
 
 class TestRawLoading(object):
     @staticmethod
-    def test_load_types(tmpdir, template):
-        mods_dir = tmpdir.mkdir("mods")
-        core_dir = mods_dir.mkdir("core")
+    def test_load_types(file_structure):
+        core_name = "test_load_types"
 
-        models_dir = core_dir.mkdir("models")
-        templates_dir = core_dir.mkdir("templates")
+        data_core = DataCore(core_name)
+        model_content = MODEL_FILE.replace("CORE_NAME", core_name)
+        template_content = TEMPLATE_FILE.replace("CORE_NAME", core_name)
 
-        raws_dir = core_dir.mkdir("raws")
-
-        model_raw_dir = raws_dir.mkdir("models").mkdir(MODEL_TYPE_NAME)
-
-        raw_templates_dir = raws_dir.mkdir("templates")
-
-        model_raw = model_raw_dir.join(f"test.yaml")
+        model_raw = file_structure["model_raw_dir"].join(f"test.yaml")
         model_raw.write(YAML_CONTENT)
 
-        raw_template = raw_templates_dir.join(f"{TEMPLATE_TYPE_NAME}.yaml")
+        raw_template = file_structure["raw_templates_dir"].join(f"{TEMPLATE_TYPE_NAME}.yaml")
         raw_template.write(YAML_CONTENT)
 
-        models_dir.join(f"{MODEL_TYPE_NAME}.py").write(MODEL_FILE)
-        templates_dir.join(f"{TEMPLATE_TYPE_NAME}.py").write(TEMPLATE_FILE)
+        file_structure["models_dir"].join(f"{MODEL_TYPE_NAME}.py").write(model_content)
+        file_structure["templates_dir"].join(f"{TEMPLATE_TYPE_NAME}.py").write(template_content)
 
-        mods_dir_path = str(mods_dir.realpath())
+        data_core(file_structure["mods_dir"].realpath())
 
-        test_instance = template.instance_from_raw(raw_template.realpath())
-        test_field_value = getattr(test_instance, DEFAULT_TEST_FIELD_NAME)
+        assert len(list(data_core.all_template_instances)) == 1
+        assert len(list(data_core.all_model_instances)) == 1
 
-        data_core(mods_dir_path)
-        for name, path in locals().items():
-            if hasattr(path, "realpath"):
-                print(f"{name}: {path.realpath()}")
-
-        #assert any(data_core.get_all_model_instances())
-
-        for current_model_instance in data_core.get_all_model_instances():
-            for template_instance in data_core.get_all_template_instances():
+        for current_model_instance in data_core.all_model_instances:
+            for template_instance in data_core.all_template_instances:
                 template_name = template_instance.data_name
                 model_parent = current_model_instance.parents.get(template_name)
+                field_content = getattr(template_instance, DEFAULT_TEST_FIELD_NAME)
+
                 assert model_parent == template_instance
-                assert getattr(template_instance, DEFAULT_TEST_FIELD_NAME) == test_field_value
+                assert field_content == DEFAULT_TEST_FIELD_CONTENT
+
+    @staticmethod
+    def test_inner_dependencies(file_structure):
+        pwetty = pprint.PrettyPrinter()
+        pwetty.pprint(file_structure)
+        core_name = "test_inner_dependencies"
+
+        data_core = DataCore(core_name)
+        model_content = MODEL_FILE.replace("CORE_NAME", core_name)
+        template_content = TEMPLATE_FILE.replace("CORE_NAME", core_name)
+
+        template_file2 = """from panda_core_data.model import Template
+
+class TestTemplate2(Template, data_name="TestTemplate2",
+                    dependencies=["TestTemplate",], core_name="test_inner_dependencies"):
+    name: str
+        """.strip()
+
+        model_raw = file_structure["model_raw_dir"].join(f"test.yaml")
+        model_raw.write(YAML_CONTENT)
+
+        raw_template = file_structure["raw_templates_dir"].join(f"{TEMPLATE_TYPE_NAME}.yaml")
+        raw_template2 = file_structure["raw_templates_dir"].join(f"{TEMPLATE_TYPE_NAME}2.yaml")
+
+        raw_template.write(YAML_CONTENT)
+        raw_template2.write(YAML_CONTENT)
+
+        file_structure["models_dir"].join(f"test_model.py").write(model_content)
+        file_structure["templates_dir"].join(f"test_template.py").write(template_content)
+        file_structure["templates_dir"].join(f"test_template2.py").write(template_file2)
+
+        data_core.recursively_add_model_module(file_structure["models_dir"])
+        assert len(data_core.model_modules) == 1
+
+        data_core.recursively_add_template_module(file_structure["templates_dir"])
+        pwetty.pprint(list(data_core.template_modules))
+        assert len(list(data_core.template_modules)) == 2
+
+        data_core.recursively_instance_template(file_structure["raw_templates_dir"])
+        pwetty.pprint(list(data_core.all_template_instances))
+        assert len(list(data_core.all_template_instances)) == 2
+
+        data_core.recursively_instance_model(file_structure["root_model_raw_dir"])
+        pwetty.pprint(list(data_core.all_model_instances))
+        assert len(list(data_core.all_model_instances)) == 1
+
+        for current_instance in data_core.all_model_instances:
+            if current_instance.has_dependencies:
+                current_instance.add_dependencies()
+
+        print("Final Output: " + str(list(data_core.all_model_instances)))
