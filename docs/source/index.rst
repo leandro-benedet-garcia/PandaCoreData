@@ -11,8 +11,8 @@ is commonly used to hold data, for now the library only support yaml.
 The library might have Panda3D in mind, however it’s not a dependency and can pretty much be
 used for any sort of software or game engine that uses python.
 
-Internally the library use `dataclasses<https://docs.python.org/3/library/dataclasses.html>`_ to
-handle the data and `TinyDB<https://tinydb.readthedocs.io/en/latest/>`_ to load them from raws.
+Internally the library use `dataclasses <https://docs.python.org/3/library/dataclasses.html>`_ to
+handle the data and `TinyDB <https://tinydb.readthedocs.io/en/latest/>`_ to load them from raws.
 
 .. toctree::
 	:maxdepth: 4
