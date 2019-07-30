@@ -41,11 +41,13 @@ class TestModels(object):
         class TemplateRepr(Template, core_name="test_repr"):
             name: str
 
-        class ModelRepr(Model, core_name="test_repr"):
+        class ModelRepr(Model, core_name="test_repr", data_name="model"):
             name: str
 
         print(repr(TemplateRepr("Test")))
         print(repr(ModelRepr("Test")))
+        print(repr(TemplateRepr("Test").wrapper))
+        print(repr(ModelRepr("Test").wrapper))
 
     @staticmethod
     def test_default():

@@ -11,7 +11,6 @@ from .base_data import BaseData, Group
 
 class DataTemplate(BaseData):
     def __init__(self):
-        self.template_modules = []
         self.raw_templates = []
         self.raw_template_folders = []
 
@@ -51,6 +50,3 @@ class DataTemplate(BaseData):
             instanced_data.append(self.instance_template(raw_data_name, raw_file, *args, **kwargs))
 
         return instanced_data
-
-    def recursively_add_template_module(self, path):
-        self.recursively_add_data_module(path, self.template_modules)

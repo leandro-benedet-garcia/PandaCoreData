@@ -44,30 +44,26 @@ class DataCore(DataModel, DataTemplate):
 
         else:
             raise PCDDataCoreIsNotUnique("A DataCore instance already exists, you must set a name "
-                                         "for any new instances now. And to use the original "
-                                         "use data_core['DEFAULT']")
+                                         "for any new instances now. If you want to use the "
+                                         "original instance, call it with data_core['DEFAULT']")
 
 
     def __call__(self, mods_path, **kwargs):
         """
         Automatically import all data types based on the paths in the params.
 
-        :param mods_path: Absolute root folder to the root mods folder
-        :type mods_path: str
-        :param core_mod_folder: Name of the core mod folder. The base mod.
-        :type core_mod_folder: str
-        :param raws_folder: Name of the raw folder.
-        :type raws_folder: str
-        :param models_folder: Name of the models folder.
-        :type models_folder: str
+        :param str mods_path: Absolute root folder to the root mods folder
+        :param str core_mod_folder: Name of the core mod folder. The base mod.
+        :param str raws_folder: Name of the raw folder.
+        :param str models_folder: Name of the models folder.
         :param templates_folder: Name of the templates folder.
-        :type templates_folder: str
+        :type templates_folder: bool or str
         :param raw_models_folder: Name of the raws that are related to the models. Default is \
         'models_folder' param.
-        :type raw_models_folder: str
+        :type raw_models_folder: str or bool
         :param raw_templates_folder: Name of the raws that are related to the templates. Default \
         is the 'templates_folder' param
-        :type raw_templates_folder: str
+        :type raw_templates_folder: str or bool
         :raise PCDFolderNotFound: If any of the folders are invalid.
         """
         #===========================================================================================
@@ -113,10 +109,10 @@ class DataCore(DataModel, DataTemplate):
                                         f"that is '{raws_folder}'.")
 
         # Import models and templates
-        self.recursively_add_model_module(self.get_folder("models"))
+        self.recursively_add_module(self.get_folder("models"))
 
         if templates_folder:
-            self.recursively_add_template_module(self.get_folder("templates"))
+            self.recursively_add_module(self.get_folder("templates"))
             self.recursively_instance_template(self.get_folder("raw_templates"))
 
         self.recursively_instance_model(self.get_folder("raw_models"))

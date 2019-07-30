@@ -34,7 +34,11 @@ class GroupWrapper(object):
         self.instances = GroupInstance(self.data_type)
 
     def __repr__(self):
-        return f"Wrapper of {type(self.data_type.data_name).__name__}: \n\t{repr(self.instances)}"
+        type_name = self.data_type.data_name
+        the_type = self.data_type.__name__
+        if type_name != the_type:
+            return f"Wrapper of {type_name} ({the_type}): \n\t{repr(self.instances)}"
+        return f"Wrapper of {type_name}: \n\t{repr(self.instances)}"
 
 class BaseData(object):
     def __init_subclass__(cls):  # @NoSelf
@@ -81,7 +85,27 @@ class BaseData(object):
         """
 
     @staticmethod
-    def recursively_add_data_module(path, module_type):
+    def add_module(path):
+        """
+        Automatically import the module from the python file and add it's directory to `sys.path`
+        if it wasn't in there before.
+
+        :param path: The path to the python file.
+        :type path: Path or str
+        :return module: Returns the imported module.
+        """
+        module_full_path = auto_convert_to_pathlib(path, False)
+        module_name = module_full_path.stem
+        module_path = str(module_full_path.parent)
+        if module_path not in sys.path:
+            sys.path.append(module_path)
+        try:
+            return import_module(module_name)
+        except ModuleNotFoundError as module_error:
+            raise ModuleNotFoundError(f"{module_error} with the base_path '{path}' sys.path "
+                                      f"'{sys.path}'")
+
+    def recursively_add_module(self, path):
         """
         Recursively add a module with :class:`DataType` from the supplied path.
 
@@ -92,20 +116,8 @@ class BaseData(object):
         path = auto_convert_to_pathlib(path, True)
 
         for py_file in iglob(join(path, '*.py')):
-            module_full_path = auto_convert_to_pathlib(py_file, False)
-            module_name = module_full_path.stem
-            module_path = str(module_full_path.parent)
-            if module_path not in sys.path:
-                sys.path.append(module_path)
+            added_modules.append(self.add_module(py_file))
 
-            try:
-                imported_module = import_module(module_name)
-            except ModuleNotFoundError as module_error:
-                raise ModuleNotFoundError(f"{module_error} with the base_path '{path}' sys.path "
-                                          f"'{sys.path}'")
-            module_type.append(imported_module)
-
-        module_type += added_modules
         return added_modules
 
     @staticmethod

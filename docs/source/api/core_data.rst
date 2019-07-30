@@ -9,8 +9,7 @@ DataCore
 	:private-members:
 	:special-members:
 	:show-inheritance:
-	:exclude-members: __weakref__, __dir__, __format__, __new__, __reduce__, \
-					  __sizeof__, __subclasshook__
+	:exclude-members: __weakref__, __dir__, __format__, __new__, __reduce__, __sizeof__, __subclasshook__, __init__
 
 DataTemplate
 -------------
@@ -20,7 +19,7 @@ DataTemplate
 	:private-members:
 	:special-members:
 	:show-inheritance:
-	:exclude-members: __weakref__
+	:exclude-members: __weakref__, __init__
 
 DataModel
 ----------
@@ -30,7 +29,7 @@ DataModel
 	:private-members:
 	:special-members:
 	:show-inheritance:
-	:exclude-members: __weakref__
+	:exclude-members: __weakref__, __init__
 
 BaseData
 ---------
@@ -39,4 +38,4 @@ BaseData
 	:members:
 	:private-members:
 	:special-members:
-	:exclude-members: __weakref__
+	:exclude-members: __weakref__, __init__

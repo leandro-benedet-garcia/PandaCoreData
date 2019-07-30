@@ -38,7 +38,7 @@ class DataType(TinyDB):
         supplied.
 
         :param cls: the type to be instanced
-        :type cls: Model or ModelTemplate.
+        :type cls: Model or Template
         :param str path: path to the raw file to be loaded, if False, the class will be instanced \
         like a normal dataclass
         """
@@ -79,21 +79,24 @@ class DataType(TinyDB):
 
     def __repr__(self):
         return_value = []
-        return_value.append(f"DataType '{type(self).__name__}' {self.data_name}:")
+        if self.data_name != type(self).__name__:
+            return_value.append(f"DataType {self.data_name} ({type(self).__name__}):")
+        else:
+            return_value.append(f"DataType {self.data_name}:")
         return_value.append("\tFields:")
         fields = [f"\t\t{field_name}({field_type.__name__}) = {getattr(self, field_name)}"
                   for field_name, field_type in self.__annotations__.items()]
         return_value.append('\n'.join(fields))
 
-        if any(self.parents):
-            checked_parents = [self.data_name,]
-            return_value.append("\tParents:")
-            for parent_name, parent_value in self.parents.items():
-                if parent_name in checked_parents:
-                    continue
-                checked_parents.append(parent_name)
-                return_value.append("\t\t" + parent_name + "\n\t\t\t" +
-                                    repr(parent_value).replace("\n", "\n\t\t\t"))
+        #if any(self.parents):
+        #    checked_parents = [self.data_name,]
+        #    return_value.append("\tParents:")
+        #    for parent_name, parent_value in self.parents.items():
+        #        if parent_name in checked_parents:
+        #            continue
+        #        checked_parents.append(parent_name)
+        #        return_value.append("\t\t" + parent_name + "\n\t\t\t" +
+        #                            repr(parent_value).replace("\n", "\n\t\t\t"))
 
         return "\n".join(return_value)
 
@@ -129,6 +132,12 @@ class DataType(TinyDB):
                     self.out = num ** num
 
         Will make the library not create a `__init__` method and use yours instead.
+
+        :param cls: class type to be added
+        :type cls: Model or Template
+        :param str template_name: The name of the template, if not supplied, the class name is used.
+        :param dependency_list: :class:`Template` to be used as dependency.
+        :type dependency_list: list(str)
         """
         from .data_core_bases import GroupWrapper
         data_type.dataclass_args = {}
@@ -173,15 +182,15 @@ class DataType(TinyDB):
         check_if_valid_instance(self, DataType)
         return any(self.dependencies)
 
-    def load_inner_dependencies(self, dependency):
-        check_if_valid_instance(dependency, DataType)
-
-        tmp_dependencies = {dependency.data_name: dependency}
-
-        for current_data in dependency.parents.values():
-            tmp_dependencies.update(self.load_inner_dependencies(current_data))
-
-        return tmp_dependencies
+    #def load_inner_dependencies(self, dependency):
+    #    check_if_valid_instance(dependency, DataType)
+    #
+    #    tmp_dependencies = {dependency.data_name: dependency}
+    #
+    #    for current_data in dependency.parents.values():
+    #        tmp_dependencies.update(self.load_inner_dependencies(current_data))
+    #
+    #    return tmp_dependencies
 
     @classmethod
     def instance_from_raw(cls, raw_file):
@@ -193,8 +202,8 @@ class DataType(TinyDB):
         Method that load raw files and assign each field to an attribute.
 
         :param str db_file: Path to a raw file
-        :param TinyDB.tinydb.storages.Storage storage: storage class to be used, it needs to \
-        inherit TinyDB.tinydb.storages.Storage
+        :param tinydb.storages.Storage storage: storage class to be used, it needs to \
+        inherit :class:`tinydb.storages.Storage`
         :param str default_table: default main field in the raw file.
         """
         check_if_valid_instance(self, DataType)
@@ -215,8 +224,8 @@ class DataType(TinyDB):
         for current_dependency in self.dependencies:
             dependency = self.data_core.get_template_type(current_dependency)
             dependency = dependency.instanced()
-            if dependency.has_dependencies:
-                self.parents.update(self.load_inner_dependencies(dependency))
+            #if dependency.has_dependencies:
+            #    self.parents.update(self.load_inner_dependencies(dependency))
 
             self.parents[current_dependency] = dependency
 

@@ -10,7 +10,6 @@ from ..utils import auto_convert_to_pathlib
 
 class DataModel(BaseData):
     def __init__(self):
-        self.model_modules = []
         self.raw_models = []
         self.raw_model_folders = []
 
@@ -63,6 +62,3 @@ class DataModel(BaseData):
                 instanced_data.append(instanced)
 
         return instanced_data
-
-    def recursively_add_model_module(self, path):
-        self.recursively_add_data_module(path, self.model_modules)

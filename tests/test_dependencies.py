@@ -71,12 +71,8 @@ class TestTemplate2(Template, data_name="TestTemplate2",
         file_structure["templates_dir"].join(f"test_template.py").write(template_content)
         file_structure["templates_dir"].join(f"test_template2.py").write(template_file2)
 
-        data_core.recursively_add_model_module(file_structure["models_dir"])
-        assert len(data_core.model_modules) == 1
-
-        data_core.recursively_add_template_module(file_structure["templates_dir"])
-        pwetty.pprint(list(data_core.template_modules))
-        assert len(list(data_core.template_modules)) == 2
+        assert len(data_core.recursively_add_module(file_structure["models_dir"])) == 1
+        assert len(data_core.recursively_add_module(file_structure["templates_dir"])) == 2
 
         data_core.recursively_instance_template(file_structure["raw_templates_dir"])
         pwetty.pprint(list(data_core.all_template_instances))
