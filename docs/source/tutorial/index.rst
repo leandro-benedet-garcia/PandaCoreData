@@ -141,7 +141,7 @@ It's use is (hopefully) simple. Let's edit the file `/tutorial/main.py` to this:
             # Remember that I said our class turned into a dataclass?
             # We can iter along the fields now.
             for field in fields(instance):
-                 print(f"t{field.name}: {getattr(instance, field.name)}")
+                 print(f"\t{field.name}: {getattr(instance, field.name)}")
 
 
     if __name__ == '__main__':
