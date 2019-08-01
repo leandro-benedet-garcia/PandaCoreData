@@ -1,4 +1,8 @@
-from tinydb.storages import MemoryStorage, JSONStorage
+try:
+    from tinydb.storages import MemoryStorage, JSONStorage
+except ModuleNotFoundError:
+    print("Tiny Db could not be found")
+
 from ..custom_exceptions import PCDInvalidRaw
 
 #pylint: disable=invalid-name
