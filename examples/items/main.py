@@ -10,7 +10,7 @@ from panda_core_data import DataCore
 def main():
     return_value = []
     mods_folder = join(dirname(abspath(__file__)), "mods")
-    data_core = DataCore("items")
+    data_core = DataCore(name="items")
     data_core(mods_folder, templates_folder=False)
     for instance in data_core.get_model_type("items"):
         field_dict = {}

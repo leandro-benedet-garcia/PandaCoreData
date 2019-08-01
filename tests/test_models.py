@@ -8,8 +8,7 @@ from dataclasses import fields, dataclass
 import pytest
 
 from panda_core_data import data_core, DataCore
-from panda_core_data.custom_exceptions import (PCDDuplicatedTypeName, PCDTypeNotFound,
-                                               PCDFileNotFound, PCDTypeError)
+from panda_core_data.custom_exceptions import (PCDDuplicatedTypeName, PCDFileNotFound, PCDTypeError)
 
 from panda_core_data.model import Model, Template
 
@@ -37,7 +36,7 @@ class TestModels(object):
 
     @staticmethod
     def test_repr():
-        DataCore("test_repr")  # @UnusedVariable
+        DataCore(name="test_repr")  # @UnusedVariable
         class TemplateRepr(Template, core_name="test_repr"):
             name: str
 
@@ -169,7 +168,7 @@ class TestModels(object):
             class TemplateDuplicateTest1(Template, data_name="same"):
                 name: str
 
-        with pytest.raises(PCDTypeNotFound):
+        with pytest.raises(PCDTypeError):
             data_core.get_template_type("invalid")
 
         #===========================================================================================
@@ -190,7 +189,7 @@ class TestModels(object):
             class ModelDuplicatedTest1(Model, data_name="same"):
                 name: str
 
-        with pytest.raises(PCDTypeNotFound):
+        with pytest.raises(PCDTypeError):
             data_core.get_model_type("invalid")
 
         with pytest.raises(PCDFileNotFound):

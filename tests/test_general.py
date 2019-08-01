@@ -15,7 +15,7 @@ from . import (MODEL_TYPE_NAME, MODEL_FILE, TEMPLATE_FILE)
 class TestGeneral(object):
     @staticmethod
     def test_exceptions(tmpdir):
-        data_core = DataCore("test_exceptions")
+        data_core = DataCore(name="test_exceptions")
         with pytest.raises(PCDInvalidBaseData):
             #pylint: disable=unused-variable
             class DataTest(BaseData):
@@ -36,7 +36,7 @@ class TestGeneral(object):
     def test_folders_exceptions(file_structure):
         pwetty = pprint.PrettyPrinter()
         pwetty.pprint(file_structure)
-        data_core = DataCore("test_folders_exceptions")
+        data_core = DataCore(name="test_folders_exceptions")
 
         #===========================================================================================
         # file_structure["model_raw_dir"].join(f"{MODEL_TYPE_NAME}.yaml").write(YAML_CONTENT)

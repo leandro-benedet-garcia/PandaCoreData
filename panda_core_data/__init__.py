@@ -7,7 +7,7 @@ from .data_core_bases import DataModel
 from .data_core_bases import DataTemplate
 from .data_core_bases import BaseData
 from .__version__ import __version__
-from .utils import auto_convert_to_pathlib
+from .storages import auto_convert_to_pathlib
 
 from .custom_exceptions import (PCDDataCoreIsNotUnique, PCDInvalidPathType, PCDTypeError,
                                 PCDFolderNotFound)
@@ -16,36 +16,50 @@ from .custom_exceptions import (PCDDataCoreIsNotUnique, PCDInvalidPathType, PCDT
 data_core = None
 
 class DataCore(DataModel, DataTemplate):
-    """
-    Class where everything is kept.
-    """
+    """Class where everything is kept."""
 
-    def __init__(self, name=None):
+    def __init__(self, *args, name=None, replace=False, **kwargs):
+        """
+        Start a new instance for the DataCore
+
+        :param str name: name of the core data instance
+        :param excluded_extensions: extensions to be ignored
+        :param bool replace: if instances of data_core of the same name should be replaced
+        :type excluded_extensions: list(str)
+        """
         self.folders = {}
 
         DataModel.__init__(self)
         DataTemplate.__init__(self)
+        super().__init__(*args, **kwargs)
 
         #pylint: disable=global-statement
         global data_core
-        if isinstance(data_core, DataCore) and name:
+
+        is_dict = isinstance(data_core, dict)
+        if isinstance(data_core, DataCore) and name and name != "DEFAULT":
             old = data_core
             data_core = {}
 
             data_core["DEFAULT"] = old
             data_core[name] = self
 
-        elif name and isinstance(data_core, dict):
+        elif (name and is_dict and name not in data_core) or (replace and name and is_dict):
             #pylint: disable=unsupported-assignment-operation
             data_core[name] = self
+
+        elif name and is_dict and name not in data_core.keys():
+            raise PCDDataCoreIsNotUnique(f"A data_core of the name {name} already exists")
 
         elif data_core is None:
             data_core = self
 
         else:
             raise PCDDataCoreIsNotUnique("A DataCore instance already exists, you must set a name "
-                                         "for any new instances now. If you want to use the "
-                                         "original instance, call it with data_core['DEFAULT']")
+                                         "for any new instances now passing the parameter 'name' "
+                                         "like this: 'DataCore(name='core_name')'. If you want to "
+                                         "use the original instance, call it with "
+                                         "data_core['DEFAULT']")
 
 
     def __call__(self, mods_path, **kwargs):
@@ -74,6 +88,7 @@ class DataCore(DataModel, DataTemplate):
         except PCDFolderNotFound as invalid_path:
             raise PCDFolderNotFound(f"{invalid_path} This path must be absolute.")
 
+        self.excluded_extensions = kwargs.pop("excluded_extensions", self.excluded_extensions)
         core_mod_folder = kwargs.pop("core_mod_folder", "core")
         raws_folder = kwargs.pop("raws_folder", "raws")
         models_folder = kwargs.pop("models_folder", "models")

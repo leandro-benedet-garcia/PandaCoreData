@@ -21,5 +21,6 @@ DEFAULT_TEST_FIELD_CONTENT = "name_content"
 INSTANCE_ERROR = "The class wansn't instanced correctly, check __new__ in ModelMixin class"
 
 YAML_CONTENT = read_and_replace("test.yaml")
+JSON_CONTENT = read_and_replace("test.json")
 MODEL_FILE = read_and_replace("dummy_model.py")
 TEMPLATE_FILE = read_and_replace("dummy_template.py")

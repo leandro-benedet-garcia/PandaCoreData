@@ -4,15 +4,15 @@
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 
-import sys
 from dataclasses import dataclass
 from glob import iglob
-from os.path import join
 from importlib import import_module
+from os.path import join
+import sys
 
+from ..custom_exceptions import PCDTypeError, PCDInvalidBaseData, PCDFolderIsEmpty
+from ..storages import auto_convert_to_pathlib
 
-from ..custom_exceptions import PCDTypeNotFound, PCDInvalidBaseData
-from ..utils import auto_convert_to_pathlib
 
 @dataclass(repr=False)
 class Group(dict):
@@ -41,6 +41,10 @@ class GroupWrapper(object):
         return f"Wrapper of {type_name}: \n\t{repr(self.instances)}"
 
 class BaseData(object):
+    def __init__(self, excluded_extensions=False):
+        self._raw_extensions = []
+        self.excluded_extensions = excluded_extensions
+
     def __init_subclass__(cls):  # @NoSelf
         """
         This function checks if a method is lacking inside any class that inherits this, and also
@@ -105,6 +109,7 @@ class BaseData(object):
             raise ModuleNotFoundError(f"{module_error} with the base_path '{path}' sys.path "
                                       f"'{sys.path}'")
 
+
     def recursively_add_module(self, path):
         """
         Recursively add a module with :class:`DataType` from the supplied path.
@@ -116,7 +121,8 @@ class BaseData(object):
         path = auto_convert_to_pathlib(path, True)
 
         for py_file in iglob(join(path, '*.py')):
-            added_modules.append(self.add_module(py_file))
+            current_module = self.add_module(py_file)
+            added_modules.append(current_module)
 
         return added_modules
 
@@ -131,10 +137,33 @@ class BaseData(object):
         """
         data_type = data_dict.get(data_name, default)
         if not data_type and default is None:
-            raise PCDTypeNotFound(f"Data type {data_name} could not be found. The available "
-                                  f"templates are {list(data_dict.values())}")
+            raise PCDTypeError(f"Data type {data_name} could not be found. The available "
+                               f"templates are {list(data_dict.values())}")
 
         return data_type
+
+    @staticmethod
+    def instance_data(data_name, get_data_type, path, multiple_instances, **kwargs):
+        path = auto_convert_to_pathlib(path, False)
+        data_type = get_data_type(data_name, **kwargs)
+
+        instanced = data_type.instance_from_raw(path)
+        instanced.raws.append(path)
+        if multiple_instances:
+            data_type.wrapper.instances.append(instanced)
+        else:
+            data_type.wrapper.instances = instanced
+
+        return instanced
+
+    def folder_contents(self, path):
+        root_data = auto_convert_to_pathlib(path, True)
+        folder_contents = list(root_data.iterdir())
+
+        if not any(folder_contents):
+            raise PCDFolderIsEmpty(f"The folder {path} is empty")
+
+        return folder_contents
 
     @staticmethod
     def recursively_instance_data():

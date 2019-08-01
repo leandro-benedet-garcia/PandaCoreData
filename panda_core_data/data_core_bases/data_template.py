@@ -3,19 +3,20 @@
 
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
-from glob import iglob
-from os.path import join
 from pathlib import Path
 
+from ..storages import raw_glob_iterator
 from .base_data import BaseData, Group
 
+
 class DataTemplate(BaseData):
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.raw_templates = []
         self.raw_template_folders = []
 
         self.all_template_groups = Group("all_template_groups")
         self.all_key_value_templates = Group("all_key_value_templates")
+        super().__init__(*args, **kwargs)
 
     @property
     def all_templates(self):
@@ -35,18 +36,13 @@ class DataTemplate(BaseData):
         return self.get_data_type(template_name, self.all_key_value_templates, **kwargs)
 
     def instance_template(self, data_type_name, path, **kwargs) -> "Template":
-        self.raw_templates.append(Path(path))
-
-        data_type = self.get_template_type(data_type_name, **kwargs)
-        instanced = data_type.instance_from_raw(path)
-
-        data_type.wrapper.instances = instanced
-        return instanced
+        return self.instance_data(data_type_name, self.get_template_type, path, False, **kwargs)
 
     def recursively_instance_template(self, path, *args, **kwargs):
         instanced_data = []
-        for raw_file in iglob(join(path, '*.yaml')):
+        for raw_file in raw_glob_iterator(path):
             raw_data_name = Path(raw_file).stem
-            instanced_data.append(self.instance_template(raw_data_name, raw_file, *args, **kwargs))
+            instanced = self.instance_template(raw_data_name, raw_file, *args, **kwargs)
+            instanced_data.append(instanced)
 
         return instanced_data

@@ -9,14 +9,10 @@ https://github.com/Cerberus1746/PandaCoreData/issues
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 
-class PCDTypeNotFound(Exception):
-    """Exception raised if the ~Model or ~Template Group is not found."""
-
-
 class PCDDuplicatedTypeName(Exception):
     """
-    Exception raised if a ~Model or ~Template Type already exists with the same name inside the
-    group.
+    Exception raised if a :class:`~panda_core_data.models.Model` or \
+    :class:`~panda_core_data.models.Template` Type already exists with the same name.
     """
 
 class PCDFolderNotFound(Exception):
@@ -31,11 +27,17 @@ class PCDFolderIsEmpty(PCDFolderNotFound):
 class PCDDataCoreIsNotUnique(Exception):
     """Exception raised if the data core is not unique."""
 
+class PCDInvalidRaw(Exception):
+    """Exception raised if a raw is invalid"""
+
 class PCDTypeError(TypeError):
-    pass
+    """Exception raised if a invalid type was found."""
 
 class PCDInvalidPathType(KeyError):
     """Exception raised if a invalid folder type was requested."""
 
 class PCDInvalidBaseData(TypeError):
     """Exception raised if a base doesn't have a method."""
+
+class PCDRawFileNotSupported(Exception):
+    """Exception raised if the package can't read the extension."""

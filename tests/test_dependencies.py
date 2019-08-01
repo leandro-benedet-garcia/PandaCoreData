@@ -7,14 +7,14 @@ import pprint
 
 from panda_core_data import DataCore
 from . import (YAML_CONTENT, MODEL_TYPE_NAME, TEMPLATE_TYPE_NAME, MODEL_FILE, TEMPLATE_FILE,
-               DEFAULT_TEST_FIELD_NAME, DEFAULT_TEST_FIELD_CONTENT)
+               DEFAULT_TEST_FIELD_NAME, DEFAULT_TEST_FIELD_CONTENT, JSON_CONTENT)
 
 class TestRawLoading(object):
     @staticmethod
-    def test_load_types(file_structure):
-        core_name = "test_load_types"
+    def test_load_yaml_types(file_structure):
+        core_name = "test_load_yaml_types"
 
-        data_core = DataCore(core_name)
+        data_core = DataCore(name=core_name)
         model_content = MODEL_FILE.replace("CORE_NAME", core_name)
         template_content = TEMPLATE_FILE.replace("CORE_NAME", core_name)
 
@@ -42,12 +42,45 @@ class TestRawLoading(object):
                 assert field_content == DEFAULT_TEST_FIELD_CONTENT
 
     @staticmethod
+    def test_load_json_types(file_structure):
+        pwetty = pprint.PrettyPrinter()
+        pwetty.pprint(file_structure)
+        core_name = "test_load_json_types"
+
+        data_core = DataCore(name=core_name)
+        model_content = MODEL_FILE.replace("CORE_NAME", core_name)
+        template_content = TEMPLATE_FILE.replace("CORE_NAME", core_name)
+
+        model_raw = file_structure["model_raw_dir"].join(f"test.json")
+        model_raw.write(JSON_CONTENT)
+
+        raw_template = file_structure["raw_templates_dir"].join(f"{TEMPLATE_TYPE_NAME}.json")
+        raw_template.write(JSON_CONTENT)
+
+        file_structure["models_dir"].join(f"{MODEL_TYPE_NAME}.py").write(model_content)
+        file_structure["templates_dir"].join(f"{TEMPLATE_TYPE_NAME}.py").write(template_content)
+
+        data_core(file_structure["mods_dir"].realpath())
+
+        assert len(list(data_core.all_template_instances)) == 1
+        assert len(list(data_core.all_model_instances)) == 1
+
+        for current_model_instance in data_core.all_model_instances:
+            for template_instance in data_core.all_template_instances:
+                template_name = template_instance.data_name
+                model_parent = current_model_instance.parents.get(template_name)
+                field_content = getattr(template_instance, DEFAULT_TEST_FIELD_NAME)
+
+                assert model_parent == template_instance
+                assert field_content == DEFAULT_TEST_FIELD_CONTENT
+
+    @staticmethod
     def test_inner_dependencies(file_structure):
         pwetty = pprint.PrettyPrinter()
         pwetty.pprint(file_structure)
         core_name = "test_inner_dependencies"
 
-        data_core = DataCore(core_name)
+        data_core = DataCore(name=core_name)
         model_content = MODEL_FILE.replace("CORE_NAME", core_name)
         template_content = TEMPLATE_FILE.replace("CORE_NAME", core_name)
 

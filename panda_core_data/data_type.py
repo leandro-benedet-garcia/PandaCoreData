@@ -1,5 +1,5 @@
 '''
-This is the heart of Models and ModelTemplates
+This is the heart of Models and Templates
 
 :created: 2019-04-30
 :author: Leandro (Cerberus1746) Benedet Garcia
@@ -10,9 +10,9 @@ from dataclasses import dataclass, _process_class
 from tinydb import TinyDB
 from tinydb.queries import Query
 
-from .yaml_db import YAMLStorage
+from .storages import auto_convert_to_pathlib, get_storage_from_extension, get_extension
 from .custom_exceptions import PCDDuplicatedTypeName, PCDTypeError
-from .utils import check_if_valid_instance, auto_convert_to_pathlib
+from .utils import check_if_valid_instance
 
 class DataType(TinyDB):
     """
@@ -21,9 +21,9 @@ class DataType(TinyDB):
     Internally it uses the TinyDB database
     """
     DEFAULT_TABLE = 'data'
-    DEFAULT_STORAGE = YAMLStorage
     parents = {}
     query = Query()
+    raws = []
 
     data_name: str
     dependencies: list
@@ -43,11 +43,10 @@ class DataType(TinyDB):
         like a normal dataclass
         """
         if db_file and cls.dataclass_args['init']:
-            def custom_init(self, db_file, *init_args, storage=DataType.DEFAULT_STORAGE,
-                            default_table=DataType.DEFAULT_TABLE, **init_kwargs):
-
-                self.load_db(db_file, *init_args, storage=storage, default_table=default_table,
-                             **init_kwargs)
+            # This method is here to replace the default dataclass
+            def custom_init(self, db_file, *init_args, default_table=DataType.DEFAULT_TABLE,
+                            **init_kwargs):
+                self.load_db(db_file, *init_args, default_table=default_table, **init_kwargs)
 
                 if hasattr(self, "__post_init__"):
                     return self.__post_init__(*init_args, **init_kwargs)
@@ -196,8 +195,7 @@ class DataType(TinyDB):
     def instance_from_raw(cls, raw_file):
         return cls(db_file=raw_file)
 
-    def load_db(self, db_file, *init_args, storage=DEFAULT_STORAGE, default_table=DEFAULT_TABLE,
-                **init_kwargs):
+    def load_db(self, db_file, *init_args, default_table=DEFAULT_TABLE, **kwargs):
         """
         Method that load raw files and assign each field to an attribute.
 
@@ -208,10 +206,12 @@ class DataType(TinyDB):
         """
         check_if_valid_instance(self, DataType)
 
-        auto_convert_to_pathlib(db_file, False)
+        db_file = auto_convert_to_pathlib(db_file, False)
+        extension = get_extension(db_file)
+        storage = get_storage_from_extension(extension)
 
-        TinyDB.__init__(self, db_file, *init_args, storage=storage,
-                        default_table=default_table, **init_kwargs)
+        TinyDB.__init__(self, db_file, *init_args, storage=storage, default_table=default_table,
+                        **kwargs)
 
         for current_field in self.all():
             setattr(self, list(current_field.keys())[0], list(current_field.values())[0])
