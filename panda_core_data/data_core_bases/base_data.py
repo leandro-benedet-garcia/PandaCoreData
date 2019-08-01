@@ -10,7 +10,8 @@ from importlib import import_module
 from os.path import join
 import sys
 
-from ..custom_exceptions import PCDTypeError, PCDInvalidBaseData, PCDFolderIsEmpty
+from ..custom_exceptions import (PCDTypeError, PCDInvalidBaseData, PCDFolderIsEmpty,
+                                 PCDDuplicatedModuleName)
 from ..storages import auto_convert_to_pathlib
 
 
@@ -40,6 +41,7 @@ class GroupWrapper(object):
             return f"Wrapper of {type_name} ({the_type}): \n\t{repr(self.instances)}"
         return f"Wrapper of {type_name}: \n\t{repr(self.instances)}"
 
+IMPORTED_DATA_MODULES = {}
 class BaseData(object):
     def __init__(self, excluded_extensions=False):
         self._raw_extensions = []
@@ -88,8 +90,7 @@ class BaseData(object):
         :return list(DataType): return a list of data types.
         """
 
-    @staticmethod
-    def add_module(path):
+    def add_module(self, path):
         """
         Automatically import the module from the python file and add it's directory to `sys.path`
         if it wasn't in there before.
@@ -101,10 +102,17 @@ class BaseData(object):
         module_full_path = auto_convert_to_pathlib(path, False)
         module_name = module_full_path.stem
         module_path = str(module_full_path.parent)
+
+        if module_name in IMPORTED_DATA_MODULES:
+            raise PCDDuplicatedModuleName(f"A data module with the name {module_name} "
+                                          "was already imported")
+
         if module_path not in sys.path:
             sys.path.append(module_path)
         try:
-            return import_module(module_name)
+            imported_module = import_module(module_name)
+            IMPORTED_DATA_MODULES[module_name] = imported_module
+            return imported_module
         except ModuleNotFoundError as module_error:
             raise ModuleNotFoundError(f"{module_error} with the base_path '{path}' sys.path "
                                       f"'{sys.path}'")

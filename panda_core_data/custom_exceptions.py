@@ -30,6 +30,9 @@ class PCDDataCoreIsNotUnique(Exception):
 class PCDInvalidRaw(Exception):
     """Exception raised if a raw is invalid"""
 
+class PCDDuplicatedModuleName(Exception):
+    """Exception raised if a module with the same name was already imported"""
+
 class PCDTypeError(TypeError):
     """Exception raised if a invalid type was found."""
 

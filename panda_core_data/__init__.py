@@ -33,6 +33,8 @@ class DataCore(DataModel, DataTemplate):
         DataTemplate.__init__(self)
         super().__init__(*args, **kwargs)
 
+        self.name = name
+
         #pylint: disable=global-statement
         global data_core
 
