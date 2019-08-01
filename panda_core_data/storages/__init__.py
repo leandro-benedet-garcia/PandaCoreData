@@ -1,8 +1,12 @@
 from pathlib import Path
 
-from .base_db import available_storages
-from .json_db import JsonDB
-from .yaml_db import YAMLDB
+try:
+    from .base_db import available_storages
+    from .json_db import JsonDB
+    from .yaml_db import YAMLDB
+except ModuleNotFoundError:
+    print("Tiny Db could not be found")
+
 from ..custom_exceptions import PCDFolderNotFound, PCDFileNotFound, PCDRawFileNotSupported
 
 def get_raw_extensions():
