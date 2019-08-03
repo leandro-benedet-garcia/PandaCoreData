@@ -33,6 +33,7 @@ matrix:
     dist: xenial
     python:
     - 3.8-dev
+    - 3.9-dev
     - nightly
     script:
     - coverage run --source=panda_core_data setup.py pytest
