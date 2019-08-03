@@ -36,13 +36,6 @@ matrix:
     script:
     - "coverage run --source=panda_core_data setup.py pytest"
 
-  - name: "Python 3.9"
-    dist: "xenial"
-    python:
-    - "3.9-dev"
-    script:
-    - "coverage run --source=panda_core_data setup.py pytest"
-
   - name: "Python Nightly"
     dist: "xenial"
     python:
