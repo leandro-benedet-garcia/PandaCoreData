@@ -57,4 +57,5 @@ master_doc = 'index'
 
 intersphinx_mapping = {
     'tinydb':  ('https://tinydb.readthedocs.io/en/latest/', None),
+    'python':  ('https://docs.python.org/3/', None),
 }

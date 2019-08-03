@@ -11,7 +11,7 @@ https://github.com/Cerberus1746/PandaCoreData/issues
 
 class PCDDuplicatedTypeName(Exception):
     """
-    Exception raised if a :class:`~panda_core_data.models.Model` or \
+    Exception raised if a :class:`~panda_core_data.models.Model` or
     :class:`~panda_core_data.models.Template` Type already exists with the same name.
     """
 

@@ -42,8 +42,13 @@ class ModelName(Model, data_name="model_name"):
 # """
 #===================================================================================================
 
-BASE_RAW = """data:
+BASE_YAML_RAW = """data:
     - name: "name"
+"""
+
+BASE_JSON_RAW = """{"data": [
+    {"name": "name"}
+]}
 """
 
 def create_file(path, contents):
@@ -58,16 +63,28 @@ def main(argv=None):
         argv = sys.argv[1:]
     # setup option parser
     parser = ArgumentParser(description=program_license)
-    parser.add_argument("-o", "--out", dest="outdir",
+    parser.add_argument("-o", "--output", dest="outdir",
                         help="set output path [default: %default]", metavar="FILE")
+    parser.add_argument("-re", "--raw_extension", dest="raw_extension",
+                        help="set raw extension. The available extensions are yaml and json "
+                        "[default: %default]")
 
     # set defaults
-    parser.set_defaults(outfile=".")
+    parser.set_defaults(outfile=".", raw_extension="json")
 
     # process options
     opts = parser.parse_args(argv)
 
     if opts.outdir:
+        if opts.raw_extension == "yaml":
+            base_raw = BASE_JSON_RAW
+        elif opts.raw_extension == "json":
+            base_raw = BASE_JSON_RAW
+        else:
+            print(f"The extension {opts.raw_extension} is not supported, the options are yaml and "
+                  "json")
+            sys.exit()
+
         root = opts.outdir
 
         models_folder = join(root, "mods", "core", "models")
@@ -82,12 +99,14 @@ def main(argv=None):
 
         makedirs(raw_models, exist_ok=True)
         makedirs(inner_raw_model, exist_ok=True)
+
         # makedirs(raw_templates, exist_ok=True)
 
         create_file(join(root, "main.py"), MAIN_FILE)
         create_file(join(models_folder, "example_model.py"), BASE_MODEL)
         # create_file(join(templates_folder, "example_template.py"), BASE_TEMPLATE)
-        create_file(join(inner_raw_model, "example_model_raw.yaml"), BASE_RAW)
+
+        create_file(join(inner_raw_model, f"example_model_raw.{opts.raw_extension}"), base_raw)
         # create_file(join(raw_templates, "example_template_raw.yaml"), BASE_RAW)
 
 

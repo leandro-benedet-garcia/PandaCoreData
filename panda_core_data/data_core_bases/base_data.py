@@ -17,7 +17,10 @@ from ..storages import auto_convert_to_pathlib
 
 @dataclass(repr=False)
 class Group(dict):
-    """Class that is used to store :class:`Model` or :class:`Template` classes"""
+    """
+    Class that is used to store :class:`~panda_core_data.model.Model` or
+    :class:`~panda_core_data.model.Template` classes
+    """
     group_name: str
 
 @dataclass(repr=False)

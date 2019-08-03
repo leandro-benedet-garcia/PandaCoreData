@@ -4,7 +4,7 @@ import yaml
 from .base_db import BaseDB
 
 
-class YAMLDB(BaseDB):
+class YamlDB(BaseDB):
     """Parser storage class used to read yaml files"""
     extensions = ["yaml", "yml"]
 
@@ -22,4 +22,4 @@ class YAMLDB(BaseDB):
         return self.base_read(yaml.safe_load, True)
 
     def write(self, data):
-        self.base_write(data)
+        self.base_write(yaml.dump, data, True)

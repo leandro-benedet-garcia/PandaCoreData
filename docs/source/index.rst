@@ -2,14 +2,14 @@ Welcome to PandaCoreData's documentation!
 =========================================
 
 So, if you already played games like Factorio, Rimworld or Dwarf Fortress and tried to mod them,
-you will find that it’s absurdly easy to mod them for simple things like changing the
+you will find that it’s absurdly easy to mod those games for simple things like changing the
 balancing, adding items, changing descriptions and etc. Because the data files of the games are
 simple raws and not binaries. This library pretty much makes the task of using raws as simple as
 possible. Raws in our case is plain text files like xml, json, yaml and etc that
-is commonly used to hold data, for now the library only support yaml.
+is commonly used to hold data, for now the library supports `yaml` and `json`.
 
-The library might have Panda3D in mind, however it’s not a dependency and can pretty much be
-used for any sort of software or game engine that uses python.
+The library might have modding in mind, however it pretty much be used for any sort of software or
+game engine that uses python.
 
 Internally the library use `dataclasses <https://docs.python.org/3/library/dataclasses.html>`_ to
 handle the data and `TinyDB <https://tinydb.readthedocs.io/en/latest/>`_ to load them from raws.
@@ -20,7 +20,6 @@ handle the data and `TinyDB <https://tinydb.readthedocs.io/en/latest/>`_ to load
 	:caption: Tutorial
 
 	tutorial/index
-
 
 .. toctree::
 	:maxdepth: 4

@@ -8,4 +8,4 @@ class JsonDB(BaseDB):
         return self.base_read(JSONStorage.read, False)
 
     def write(self, data):
-        self.base_write(data)
+        self.base_write(JSONStorage.write, data, False)

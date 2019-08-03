@@ -7,7 +7,11 @@ from .data_core_bases import DataModel
 from .data_core_bases import DataTemplate
 from .data_core_bases import BaseData
 from .__version__ import __version__
-from .storages import auto_convert_to_pathlib
+
+try:
+    from .storages import auto_convert_to_pathlib
+except ModuleNotFoundError: # pragma: no cover
+    print("Tiny Db could not be found")
 
 from .custom_exceptions import (PCDDataCoreIsNotUnique, PCDInvalidPathType, PCDTypeError,
                                 PCDFolderNotFound)
@@ -50,7 +54,7 @@ class DataCore(DataModel, DataTemplate):
             #pylint: disable=unsupported-assignment-operation
             data_core[name] = self
 
-        elif name and is_dict and name not in data_core.keys():
+        elif name and is_dict and name in data_core.keys():
             raise PCDDataCoreIsNotUnique(f"A data_core of the name {name} already exists")
 
         elif data_core is None:
@@ -74,11 +78,11 @@ class DataCore(DataModel, DataTemplate):
         :param str models_folder: Name of the models folder.
         :param templates_folder: Name of the templates folder.
         :type templates_folder: bool or str
-        :param raw_models_folder: Name of the raws that are related to the models. Default is \
-        'models_folder' param.
+        :param raw_models_folder: Name of the raws that are related to the models. Default is
+                                  'models_folder' param.
         :type raw_models_folder: str or bool
-        :param raw_templates_folder: Name of the raws that are related to the templates. Default \
-        is the 'templates_folder' param
+        :param raw_templates_folder: Name of the raws that are related to the templates. Default is
+                                     the 'templates_folder' param
         :type raw_templates_folder: str or bool
         :raise PCDFolderNotFound: If any of the folders are invalid.
         """

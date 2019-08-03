@@ -7,7 +7,8 @@ import pprint
 import pytest
 from panda_core_data import DataCore
 from panda_core_data.custom_exceptions import (PCDFolderNotFound, PCDInvalidBaseData, PCDTypeError,
-                                               PCDDataCoreIsNotUnique, PCDInvalidPathType)
+                                               PCDDataCoreIsNotUnique, PCDInvalidPathType,
+                                               PCDDuplicatedModuleName)
 from panda_core_data.data_core_bases.base_data import BaseData
 from . import (MODEL_TYPE_NAME, MODEL_FILE, TEMPLATE_FILE)
 
@@ -15,11 +16,16 @@ from . import (MODEL_TYPE_NAME, MODEL_FILE, TEMPLATE_FILE)
 class TestGeneral(object):
     @staticmethod
     def test_exceptions(tmpdir):
-        data_core = DataCore(name="test_exceptions")
+        core_name = "general_test_exceptions"
+        data_core = DataCore(name=core_name)
+
         with pytest.raises(PCDInvalidBaseData):
             #pylint: disable=unused-variable
             class DataTest(BaseData):
                 pass
+
+        with pytest.raises(PCDDataCoreIsNotUnique):
+            DataCore(name=core_name)
 
         with pytest.raises(PCDTypeError):
             mods_dir = tmpdir.mkdir("mods")
@@ -36,19 +42,23 @@ class TestGeneral(object):
     def test_folders_exceptions(file_structure):
         pwetty = pprint.PrettyPrinter()
         pwetty.pprint(file_structure)
-        data_core = DataCore(name="test_folders_exceptions")
+        core_name = "test_folders_exceptions"
+        data_core = DataCore(name=core_name)
 
-        #===========================================================================================
-        # file_structure["model_raw_dir"].join(f"{MODEL_TYPE_NAME}.yaml").write(YAML_CONTENT)
-        # file_structure["raw_templates_dir"].join(f"{MODEL_TYPE_NAME}.yaml").write(YAML_CONTENT)
-        #===========================================================================================
+        model_content = MODEL_FILE.replace("CORE_NAME", core_name)
+        template_content = TEMPLATE_FILE.replace("CORE_NAME", core_name)
 
-        file_structure["models_dir"].join(f"{MODEL_TYPE_NAME}.py").write(MODEL_FILE)
-        file_structure["templates_dir"].join(f"{MODEL_TYPE_NAME}.py").write(TEMPLATE_FILE)
+        file_structure["models_dir"].join(f"{MODEL_TYPE_NAME}.py").write(model_content)
+        file_structure["templates_dir"].join(f"{MODEL_TYPE_NAME}.py").write(template_content)
 
         mods_dir_path = str(file_structure["mods_dir"].realpath())
         with pytest.raises(PCDFolderNotFound):
             data_core("invalid")
+
+        with pytest.raises(PCDDuplicatedModuleName):
+            file_structure["models_dir"].join(f"test.py").write(model_content)
+            file_structure["templates_dir"].join(f"test.py").write(template_content)
+            data_core(mods_dir_path)
 
         with pytest.raises(PCDFolderNotFound):
             data_core(mods_dir_path, core_mod_folder="invalid")

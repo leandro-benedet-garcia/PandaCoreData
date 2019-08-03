@@ -33,14 +33,14 @@ class DataType(TinyDB):
 
     def __new__(cls, *_, db_file=False, **__):
         """
-        Method that handles the instancing of the models and templates, this is necessary because \
-        dataclasses create a custom __init__ method. Which we doesn't use at all if a raw file is \
+        Method that handles the instancing of the models and templates, this is necessary because
+        dataclasses create a custom __init__ method. Which we doesn't use at all if a raw file is
         supplied.
 
         :param cls: the type to be instanced
         :type cls: Model or Template
-        :param str path: path to the raw file to be loaded, if False, the class will be instanced \
-        like a normal dataclass
+        :param str path: path to the raw file to be loaded, if False, the class will be instanced
+                         like a normal dataclass
         """
         if db_file and cls.dataclass_args['init']:
             # This method is here to replace the default dataclass
@@ -114,8 +114,8 @@ class DataType(TinyDB):
     @staticmethod
     def _add_into(data_type, data_type_dict, **kwargs):
         """
-        You can use the prefix `dataclass_` with a dataclass parameter to configure it. They can \
-        be found in this link: \
+        You can use the prefix `dataclass_` with a dataclass parameter to configure it. They can be
+        found in this link:
         https://docs.python.org/3/library/dataclasses.html#dataclasses.dataclass
 
         For example:
@@ -200,8 +200,8 @@ class DataType(TinyDB):
         Method that load raw files and assign each field to an attribute.
 
         :param str db_file: Path to a raw file
-        :param tinydb.storages.Storage storage: storage class to be used, it needs to \
-        inherit :class:`tinydb.storages.Storage`
+        :param tinydb.storages.Storage storage: storage class to be used, it needs to inherit
+                                                :class:`~tinydb.storages.Storage`
         :param str default_table: default main field in the raw file.
         """
         check_if_valid_instance(self, DataType)
@@ -228,6 +228,9 @@ class DataType(TinyDB):
             #    self.parents.update(self.load_inner_dependencies(dependency))
 
             self.parents[current_dependency] = dependency
+
+    def save_to_file(self):
+        print()
 
     #===============================================================================================
     # def get(self, *arg, **kwargs):
