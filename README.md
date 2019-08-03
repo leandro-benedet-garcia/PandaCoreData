@@ -12,8 +12,8 @@ is commonly used to hold data, for now the library supports `yaml` and `json`.
 The library might have modding in mind, however it pretty much be used for any sort of software or
 game engine that uses python.
 
-Internally the library use `dataclasses <https://docs.python.org/3/library/dataclasses.html>`_ to
-handle the data and `TinyDB <https://tinydb.readthedocs.io/en/latest/>`_ to load them from raws.
+Internally the library use [dataclasses](https://docs.python.org/3/library/dataclasses.html>) to
+handle the data and [TinyDB](https://tinydb.readthedocs.io/en/latest/) to load them from raws.
 
 Thanks for your interest in our package! But for now our things are still a bit of a todo. But, you
 can check a basic api documentation here: https://pandacoredata.readthedocs.io/
