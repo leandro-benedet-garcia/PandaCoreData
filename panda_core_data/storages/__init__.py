@@ -1,8 +1,11 @@
 from pathlib import Path
 
-from .base_db import available_storages
-from .json_db import JsonDB
-from .yaml_db import YamlDB
+try:
+    from .base_db import available_storages
+    from .json_db import JsonDB
+    from .yaml_db import YamlDB
+except ModuleNotFoundError: # pragma: no cover
+    print("Tiny Db could not be found")
 
 
 from ..custom_exceptions import PCDFolderNotFound, PCDFileNotFound, PCDRawFileNotSupported
