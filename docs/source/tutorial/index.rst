@@ -143,7 +143,6 @@ To load the raw you can do like this:
 
 .. code:: python
 
-	# or .json extension if you prefer
     copper = Items.instance_from_raw("/tutorial/mods/core/raws/models/items/copper.yaml")
 
 Needless to say you need to fix the path to the file. Because I'm not in your computer and I don't
