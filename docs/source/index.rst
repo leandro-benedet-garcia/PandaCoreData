@@ -27,6 +27,7 @@ handle the data and `TinyDB <https://tinydb.readthedocs.io/en/latest/>`_ to load
 	:caption: API
 
 	api/*
+	changelogs
 
 
 Indices and tables
