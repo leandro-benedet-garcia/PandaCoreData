@@ -4,8 +4,12 @@ try:
     from .base_db import available_storages
     from .json_db import JsonDB
     from .yaml_db import YamlDB
+# The setup tries to import TinyDB, so we have to ignore the import error
 except ModuleNotFoundError: # pragma: no cover
     print("Tiny Db could not be found")
+# I did some testing and yaml doesn't work with python.net
+except TypeError: # pragma: no cover
+    print("Yaml might be not supported")
 
 
 from ..custom_exceptions import PCDInvalidPath, PCDRawFileNotSupported

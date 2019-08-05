@@ -109,6 +109,10 @@ class DataType(TinyDB):
         if isinstance(data_core, dict) and core_name:
             return data_core[core_name]
 
+        # This return statement is necessary, however, for some reason the coverage doesn't detect
+        # it
+        return data_core # pragma: no cover
+
     @staticmethod
     def _add_into(data_type, data_type_dict, **kwargs):
         """

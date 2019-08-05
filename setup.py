@@ -42,7 +42,7 @@ setuptools.setup(
     python_requires=">=3.7",
     url="https://github.com/Cerberus1746/PandaCoreData",
     tests_require=TEST_PACKAGES,
-    packages=["panda_core_data",],
+    packages=["panda_core_data", "panda_core_data.data_core_bases", "panda_core_data.storages"],
     setup_requires=['pytest-runner'],
     scripts=['scripts/panda_core_data_commands.py'],
     extras_require={
