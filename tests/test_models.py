@@ -8,7 +8,7 @@ from dataclasses import fields, dataclass
 import pytest
 
 from panda_core_data import data_core, DataCore
-from panda_core_data.custom_exceptions import (PCDDuplicatedTypeName, PCDFileNotFound, PCDTypeError)
+from panda_core_data.custom_exceptions import (PCDDuplicatedTypeName, PCDInvalidPath, PCDTypeError)
 
 from panda_core_data.model import Model, Template
 
@@ -192,7 +192,7 @@ class TestModels(object):
         with pytest.raises(PCDTypeError):
             data_core.get_model_type("invalid")
 
-        with pytest.raises(PCDFileNotFound):
+        with pytest.raises(PCDInvalidPath):
             model(db_file="invalid")
 
         #pylint: disable=unused-variable

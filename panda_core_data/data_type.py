@@ -5,7 +5,7 @@ This is the heart of Models and Templates
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 from inspect import signature
-from dataclasses import dataclass, _process_class
+from dataclasses import dataclass, _process_class, fields
 
 from tinydb import TinyDB
 from tinydb.queries import Query
@@ -83,9 +83,9 @@ class DataType(TinyDB):
         else:
             return_value.append(f"DataType {self.data_name}:")
         return_value.append("\tFields:")
-        fields = [f"\t\t{field_name}({field_type.__name__}) = {getattr(self, field_name)}"
-                  for field_name, field_type in self.__annotations__.items()]
-        return_value.append('\n'.join(fields))
+        fields_list = [f"\t\t{field_name}({field_type.__name__}) = {getattr(self, field_name)}"
+                       for field_name, field_type in self.__annotations__.items()]
+        return_value.append('\n'.join(fields_list))
 
         #if any(self.parents):
         #    checked_parents = [self.data_name,]
@@ -108,8 +108,6 @@ class DataType(TinyDB):
 
         if isinstance(data_core, dict) and core_name:
             return data_core[core_name]
-
-        return data_core
 
     @staticmethod
     def _add_into(data_type, data_type_dict, **kwargs):
@@ -141,7 +139,7 @@ class DataType(TinyDB):
         from .data_core_bases import GroupWrapper
         data_type.dataclass_args = {}
 
-        if "dataclass_repr" in kwargs:
+        if "dataclass_repr" in kwargs:  # pragma: no cover
             PCDTypeError("'repr' is always False with Data Types")
 
         # Let's extract the dataclass parameters from kwarg
@@ -206,7 +204,7 @@ class DataType(TinyDB):
         """
         check_if_valid_instance(self, DataType)
 
-        db_file = auto_convert_to_pathlib(db_file, False)
+        db_file = auto_convert_to_pathlib(db_file)
         extension = get_extension(db_file)
         storage = get_storage_from_extension(extension)
 
@@ -230,7 +228,11 @@ class DataType(TinyDB):
             self.parents[current_dependency] = dependency
 
     def save_to_file(self):
-        print()
+        to_write = {self.DEFAULT_TABLE: []}
+        for the_field in fields(self):
+            to_write[self.DEFAULT_TABLE].append({the_field.name: getattr(self, the_field.name)})
+
+        self._storage.write(to_write)
 
     #===============================================================================================
     # def get(self, *arg, **kwargs):

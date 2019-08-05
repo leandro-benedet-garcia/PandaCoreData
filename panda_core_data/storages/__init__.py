@@ -8,7 +8,7 @@ except ModuleNotFoundError: # pragma: no cover
     print("Tiny Db could not be found")
 
 
-from ..custom_exceptions import PCDFolderNotFound, PCDFileNotFound, PCDRawFileNotSupported
+from ..custom_exceptions import PCDInvalidPath, PCDRawFileNotSupported
 
 def get_raw_extensions():
     """
@@ -26,8 +26,12 @@ def get_extension(path):
     """
     if isinstance(path, Path):
         extension = path.suffix
-    elif "\\" in extension or "/" in extension or "." in extension:
-        extension = auto_convert_to_pathlib(extension, False).suffix
+    else:
+        path = str(path)
+        if "\\" in path or "/" in path or "." in path:
+            extension = auto_convert_to_pathlib(path).suffix
+        else:
+            extension = path
 
     return extension.replace(".", "")
 
@@ -45,16 +49,18 @@ def get_storage_from_extension(extension):
     raise PCDRawFileNotSupported(f"The extension {extension} is not supported for raws, the "
                                  f"available extensions are {get_raw_extensions()}")
 
-def raw_glob_iterator(path):
+def raw_glob_iterator(path, excluded_ext=False):
     """
     Iterate along the path yielding the raw file.
 
     :yields :class:`~pathlib.Path`: The file path
     """
-    path = auto_convert_to_pathlib(path, True)
+    path = auto_convert_to_pathlib(path)
+
     for ext in get_raw_extensions():
         for file in path.glob(f'*.{ext}'):
-            yield file
+            if (not excluded_ext) or (ext not in excluded_ext):
+                yield file
 
 def is_excluded_extension(path, exclude_ext):
     """
@@ -69,24 +75,21 @@ def is_excluded_extension(path, exclude_ext):
         return True
     return False
 
-def auto_convert_to_pathlib(path, is_folder):
+def auto_convert_to_pathlib(path):
     """
     Check if the path is valid and automatically convert it into a Path object
 
     :param path: source folder
     :type path: str or :class:`~pathlib.Path`
-    :param bool is_folder: If the path should be from a folder or file
     :return: The Path object
     :rtype: :class:`~pathlib.Path`
     :raise PCDFolderNotFound: If the folder is invalid
-    :raise PCDFileNotFound: If the file is invalid
+    :raise PCDInvalidPath: If the file is invalid
     """
     if not isinstance(path, Path):
         path = Path(path)
 
-    if is_folder and not path.is_dir():
-        raise PCDFolderNotFound(f"The directory {path} could not be found.")
-    elif not is_folder and not path.is_file():
-        raise PCDFileNotFound(f"The file {path} could not be found.")
+    if path.is_file() or path.is_dir():
+        return path
 
-    return path
+    raise PCDInvalidPath(f"The file {path} could not be found.")

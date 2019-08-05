@@ -1,8 +1,6 @@
 import os
 from tinydb.storages import MemoryStorage, JSONStorage
 
-from ..custom_exceptions import PCDInvalidRaw
-
 
 #pylint: disable=invalid-name
 available_storages = []
@@ -92,9 +90,6 @@ class BaseDB(JSONStorage, MemoryStorage):
             else:
                 data = load_method(self)
 
-            if not any(data):
-                raise PCDInvalidRaw(f"the raw {self.path} is invalid or empty")
-
             desired_data = {}
             for table, table_items in data.items():
                 desired_data[table] = {}
@@ -119,4 +114,4 @@ class BaseDB(JSONStorage, MemoryStorage):
             os.fsync(self._handle.fileno())
             self._handle.truncate()
         else:
-            write_method(data, **self.kwargs)
+            write_method(self, data, **self.kwargs)

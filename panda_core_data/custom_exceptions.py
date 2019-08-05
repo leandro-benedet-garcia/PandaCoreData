@@ -15,13 +15,10 @@ class PCDDuplicatedTypeName(Exception):
     :class:`~panda_core_data.models.Template` Type already exists with the same name.
     """
 
-class PCDFolderNotFound(Exception):
-    """Exception raised if the folder is invalid."""
-
-class PCDFileNotFound(PCDFolderNotFound):
+class PCDInvalidPath(Exception):
     """Exception raised if the file is invalid."""
 
-class PCDFolderIsEmpty(PCDFolderNotFound):
+class PCDFolderIsEmpty(PCDInvalidPath):
     """Exception raised if the folder is empty."""
 
 class PCDDataCoreIsNotUnique(Exception):
@@ -37,7 +34,7 @@ class PCDTypeError(TypeError):
     """Exception raised if a invalid type was found."""
 
 class PCDInvalidPathType(KeyError):
-    """Exception raised if a invalid folder type was requested."""
+    """Exception raised if a invalid path type was requested."""
 
 class PCDInvalidBaseData(TypeError):
     """Exception raised if a base doesn't have a method."""

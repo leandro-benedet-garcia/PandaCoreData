@@ -102,7 +102,7 @@ class BaseData(object):
         :type path: Path or str
         :return module: Returns the imported module.
         """
-        module_full_path = auto_convert_to_pathlib(path, False)
+        module_full_path = auto_convert_to_pathlib(path)
         module_name = module_full_path.stem
         module_path = str(module_full_path.parent)
 
@@ -116,7 +116,7 @@ class BaseData(object):
             imported_module = import_module(module_name)
             IMPORTED_DATA_MODULES[module_name] = imported_module
             return imported_module
-        except ModuleNotFoundError as module_error:
+        except ModuleNotFoundError as module_error: # pragma: no cover
             raise ModuleNotFoundError(f"{module_error} with the base_path '{path}' sys.path "
                                       f"'{sys.path}'")
 
@@ -129,7 +129,7 @@ class BaseData(object):
         :return list(module): Returns the loaded modules.
         """
         added_modules = []
-        path = auto_convert_to_pathlib(path, True)
+        path = auto_convert_to_pathlib(path)
 
         for py_file in iglob(join(path, '*.py')):
             current_module = self.add_module(py_file)
@@ -155,7 +155,7 @@ class BaseData(object):
 
     @staticmethod
     def instance_data(data_name, get_data_type, path, multiple_instances, **kwargs):
-        path = auto_convert_to_pathlib(path, False)
+        path = auto_convert_to_pathlib(path)
         data_type = get_data_type(data_name, **kwargs)
 
         instanced = data_type.instance_from_raw(path)
@@ -168,7 +168,7 @@ class BaseData(object):
         return instanced
 
     def folder_contents(self, path):
-        root_data = auto_convert_to_pathlib(path, True)
+        root_data = auto_convert_to_pathlib(path)
         folder_contents = list(root_data.iterdir())
 
         if not any(folder_contents):

@@ -14,7 +14,7 @@ except ModuleNotFoundError: # pragma: no cover
     print("Tiny Db could not be found")
 
 from .custom_exceptions import (PCDDataCoreIsNotUnique, PCDInvalidPathType, PCDTypeError,
-                                PCDFolderNotFound)
+                                PCDInvalidPath)
 
 #pylint: disable=invalid-name
 data_core = None
@@ -90,9 +90,9 @@ class DataCore(DataModel, DataTemplate):
         # Extract params from kwarg
         #===========================================================================================
         try:
-            mods_path = auto_convert_to_pathlib(mods_path, True)
-        except PCDFolderNotFound as invalid_path:
-            raise PCDFolderNotFound(f"{invalid_path} This path must be absolute.")
+            mods_path = auto_convert_to_pathlib(mods_path)
+        except PCDInvalidPath as invalid_path:
+            raise PCDInvalidPath(f"{invalid_path} This path must be absolute.")
 
         self.excluded_extensions = kwargs.pop("excluded_extensions", self.excluded_extensions)
         core_mod_folder = kwargs.pop("core_mod_folder", "core")
@@ -110,8 +110,8 @@ class DataCore(DataModel, DataTemplate):
         # Check paths availability
         #===========================================================================================
 
-        core_folder = auto_convert_to_pathlib(join(mods_path, core_mod_folder), True)
-        raws_folder = auto_convert_to_pathlib(join(core_folder, raws_folder), True)
+        core_folder = auto_convert_to_pathlib(join(mods_path, core_mod_folder))
+        raws_folder = auto_convert_to_pathlib(join(core_folder, raws_folder))
 
         self.folders["models"] = join(core_folder, models_folder)
         self.folders["raw_models"] = join(raws_folder, raw_models_folder)
@@ -122,12 +122,12 @@ class DataCore(DataModel, DataTemplate):
 
         for param_name, path in self.folders.items():
             try:
-                path = auto_convert_to_pathlib(path, True)
+                path = auto_convert_to_pathlib(path)
                 self.folders[param_name] = path
-            except PCDFolderNotFound as invalid_path:
-                raise PCDFolderNotFound(f"{invalid_path} It must be relative from the core mod "
-                                        f"path which is set to {core_folder}' or the 'raw_folder' "
-                                        f"that is '{raws_folder}'.")
+            except PCDInvalidPath as invalid_path:
+                raise PCDInvalidPath(f"{invalid_path} It must be relative from the core mod "
+                                     f"path which is set to {core_folder}' or the 'raw_folder' "
+                                     f"that is '{raws_folder}'.")
 
         # Import models and templates
         self.recursively_add_module(self.get_folder("models"))

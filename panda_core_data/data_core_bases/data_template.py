@@ -40,7 +40,7 @@ class DataTemplate(BaseData):
 
     def recursively_instance_template(self, path, *args, **kwargs):
         instanced_data = []
-        for raw_file in raw_glob_iterator(path):
+        for raw_file in raw_glob_iterator(path, self.excluded_extensions):
             raw_data_name = Path(raw_file).stem
             instanced = self.instance_template(raw_data_name, raw_file, *args, **kwargs)
             instanced_data.append(instanced)
