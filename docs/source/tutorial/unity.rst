@@ -113,7 +113,7 @@ And here's the final working example, the results will be the same as the :ref:`
 but this file will need to be inside the *Assets* folder, outside *StreamingAssets*
 folder. For convenience sake, let's call it *main.cs*
 
-.. code:: guess
+.. code::
 
     using UnityEngine;
 	using Python.Runtime;
