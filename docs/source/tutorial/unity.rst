@@ -113,51 +113,51 @@ And here's the final working example, the results will be the same as the :ref:`
 but this file will need to be inside the *Assets* folder, outside *StreamingAssets*
 folder. For convenience sake, let's call it *main.cs*
 
-.. code::
+.. code:: cpp
 
     using UnityEngine;
-	using Python.Runtime;
-	using System.IO;
-	using System.Collections.Generic;
+    using Python.Runtime;
+    using System.IO;
+    using System.Collections.Generic;
 
-	namespace PythonTest {
-	    public class PythonTest : MonoBehaviour {
-	        void Start() {
-	            using(Py.GIL()) {
-	                // Let's import sys
-	                dynamic py_sys = Py.Import("sys");
+    namespace PythonTest {
+        public class PythonTest : MonoBehaviour {
+            void Start() {
+                using(Py.GIL()) {
+                    // Let's import sys
+                    dynamic py_sys = Py.Import("sys");
 
-	                // We need this so we add the python modules from the streaming assets.
-	                // Otherwise the module won't load.
-	                string site_pkg = "Lib\\site-packages";
-	                py_sys.path.insert(0, Path.Combine(Application.streamingAssetsPath, site_pkg));
+                    // We need this so we add the python modules from the streaming assets.
+                    // Otherwise the module won't load.
+                    string site_pkg = "Lib\\site-packages";
+                    py_sys.path.insert(0, Path.Combine(Application.streamingAssetsPath, site_pkg));
 
-	                // Now we can import all necesary modules for the example.
-	                dynamic py_panda_core_data = Py.Import("panda_core_data");
-	                dynamic py_dataclasses = Py.Import("dataclasses");
-	                dynamic py_builtin = Py.Import("builtins");
+                    // Now we can import all necesary modules for the example.
+                    dynamic py_panda_core_data = Py.Import("panda_core_data");
+                    dynamic py_dataclasses = Py.Import("dataclasses");
+                    dynamic py_builtin = Py.Import("builtins");
 
-	                // Now we get the mods folder from streaming assets
-	                string mods_folder = Path.Combine(Application.streamingAssetsPath, "mods");
+                    // Now we get the mods folder from streaming assets
+                    string mods_folder = Path.Combine(Application.streamingAssetsPath, "mods");
 
-	                // And now we can use the data_core just like we do in python.
-	                // List type is automatically converted to python equivalent with Pyton.Net
-	                py_panda_core_data.data_core(mods_folder, templates_folder: false,
-	                                             excluded_extensions: new List<string>(){"meta"});
+                    // And now we can use the data_core just like we do in python.
+                    // List type is automatically converted to python equivalent with Pyton.Net
+                    py_panda_core_data.data_core(mods_folder, templates_folder: false,
+                                                 excluded_extensions: new List<string>(){"meta"});
 
-	                // Now we iterate along all model instances
-	                dynamic item_model = py_panda_core_data.data_core.get_model_type("items");
-	                foreach(dynamic instance in item_model) {
-	                    // And we can iterate along all fields
-	                    foreach(dynamic field in py_dataclasses.fields(instance)) {
-	                        // And show the field name and field value
-	                        Debug.Log($"{field.name}: {py_builtin.getattr(instance, field.name)}");
-	                    }
-	                }
-	            }
-	        }
-	    }
-	}
+                    // Now we iterate along all model instances
+                    dynamic item_model = py_panda_core_data.data_core.get_model_type("items");
+                    foreach(dynamic instance in item_model) {
+                        // And we can iterate along all fields
+                        foreach(dynamic field in py_dataclasses.fields(instance)) {
+                            // And show the field name and field value
+                            Debug.Log($"{field.name}: {py_builtin.getattr(instance, field.name)}");
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 Then attatch this script to the camera or any object that you prefer. Then all you need to do is
 hit play or build the project if you want.
