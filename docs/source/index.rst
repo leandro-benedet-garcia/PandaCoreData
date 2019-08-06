@@ -19,7 +19,8 @@ handle the data and `TinyDB <https://tinydb.readthedocs.io/en/latest/>`_ to load
 	:glob:
 	:caption: Tutorial
 
-	tutorial/index
+	tutorial/getting_started
+	tutorial/unity
 
 .. toctree::
 	:maxdepth: 4

@@ -1,5 +1,3 @@
-.. contents ::
-
 ################
 Getting Started
 ################
@@ -154,11 +152,11 @@ because, of course, who would still use a disk (me). It can be inside the folder
 you'd like.
 
 But guess what, we don't need to worry to call every single raw or even to import our model inside
-our game, because we have:
+our game, because we:
 
-***********
-Data Core
-***********
+****************
+Using Data Core
+****************
 :class:`~panda_core_data.DataCore` is the class we use to access all the types, instances and data.
 It's use is (hopefully) simple. Let's edit the file `/tutorial/main.py` to this:
 
