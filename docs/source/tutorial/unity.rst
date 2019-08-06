@@ -28,8 +28,7 @@ execute .net framework 4.x.
 
 So, create a new Unity project as normal, for learning purposes let's name the project *core_data*.
 Then set the API compatibility to framework 4.x you can read how to in this link:
-https://docs.microsoft.com/en-us/visualstudio/cross-platform/unity-scripting-upgrade?view=vs-2019\
-#enabling-the-net-4x-scripting-runtime-in-unity
+https://docs.microsoft.com/en-us/visualstudio/cross-platform/unity-scripting-upgrade?view=vs-2019#enabling-the-net-4x-scripting-runtime-in-unity
 which will inform a couple more things about the difference between the versions.
 
 .. note::
