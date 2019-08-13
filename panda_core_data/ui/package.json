@@ -1,0 +1,53 @@
+{
+    "name": "panda-core-data",
+    "version": "0.0.4dev0",
+    "description": "Data handling and mod manager for games and software in general",
+    "main": "panda_core_data/__init__.py",
+    "homepage": "https://github.com/Cerberus1746/PandaCoreData#readme",
+    "author": "Leandro (Cerberus1746) Benedet Garcia",
+    "license": "SEE LICENSE IN LICENSE",
+    "directories": {
+        "doc": "docs",
+        "example": "examples",
+        "test": "tests"
+    },
+    "scripts": {
+        "build": "rollup --config",
+        "watch": "rollup --config --watch"
+    },
+    "repository": {
+        "type": "git",
+        "url": "github:Cerberus1746/PandaCoreData"
+    },
+    "keywords": [
+        "data",
+        "modding",
+        "json",
+        "yaml",
+        "game",
+        "python"
+    ],
+    "bugs": {
+        "url": "https://github.com/Cerberus1746/PandaCoreData/issues"
+    },
+    "devDependencies": {
+        "bootstrap": "^4.3.1",
+        "bootstrap-vue": "^2.0.0-rc.28",
+        "coffeescript": "^2.4.1",
+        "fs-extra": "^8.1.0",
+        "get-installed-path": "^4.0.8",
+        "popper.js": "^1.15.0",
+        "prismjs": "^1.17.1",
+        "rollup": "^1.19.4",
+        "rollup-plugin-alias": "^1.5.2",
+        "rollup-plugin-coffee-script": "^2.0.0",
+        "rollup-plugin-commonjs": "^10.0.2",
+        "rollup-plugin-copy": "^3.1.0",
+        "rollup-plugin-node-resolve": "^5.2.0",
+        "rollup-plugin-replace": "^2.2.0",
+        "rollup-plugin-sass": "^1.2.2",
+        "vue": "^2.6.10",
+        "vue-code-highlight": "^0.7.2",
+        "vue-prism-editor": "^0.3.0"
+    }
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta content="width=device-width,initial-scale=1" name="viewport" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <link type="text/css" rel="stylesheet" href="/bundle.css" />
+        {% block head %}
+        {% endblock %}
+    </head>
+    <body>
+        <b-container id="app" class="h-100" fluid>
+            <b-row class="h-100">
+                <b-col id="sidebar" class="h-100" cols="2">
+                    {% include "sidebar.html" %}
+                </b-col>
+                <b-col>
+                    {% include "main_content.html" %}
+                </b-col>
+            </b-row>
+        </b-container>
+    <script src="/bundle.js"></script>
+    </body>
+</html>
