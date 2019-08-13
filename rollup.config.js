@@ -26,9 +26,9 @@ function copy_file(options) {
 }
 
 export default {
-    input: 'js_source/main.coffee',
+    input: 'panda_core_data/ui/js_source/main.coffee',
     output: {
-        file: 'bundle.js',
+        file: 'panda_core_data/ui/bundle.js',
         format: 'iife'
     },
     plugins: [
@@ -38,7 +38,7 @@ export default {
         resolve({extensions: available_extensions}),
         commonjs({extensions: available_extensions}),
         replace({'process.env.NODE_ENV': JSON.stringify('development')}),
-        copy_file({src: prism_path, dest: 'css_libs/prism_themes'}),
-        copy_file({src: prism_editor_path, dest: 'css_libs/VuePrismEditor.css'})
+        copy_file({src: prism_path, dest: 'panda_core_data/ui/css_libs/prism_themes'}),
+        copy_file({src: prism_editor_path, dest: 'panda_core_data/ui/css_libs/VuePrismEditor.css'})
       ]
 };

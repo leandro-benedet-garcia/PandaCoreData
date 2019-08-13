@@ -1,6 +1,6 @@
 {
     "name": "panda-core-data",
-    "version": "0.0.4dev0",
+    "version": "0.0.4",
     "description": "Data handling and mod manager for games and software in general",
     "main": "panda_core_data/__init__.py",
     "homepage": "https://github.com/Cerberus1746/PandaCoreData#readme",

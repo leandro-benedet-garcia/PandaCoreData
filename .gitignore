@@ -2,17 +2,18 @@
 /.pytest_cache/
 /build/
 /dist/
-/panda_core_data/ui/node_modules
+/node_modules
 /panda_core_data.egg-info/
 /panda_core_data_cerberus1746.egg-info/
 /.settings/
 /docs/build/
+/htmlcov/
 
 *.pyc
 .coverage
 .gitignore
 .project
 .pydevproject
-/Pipfile
-/Pipfile.lock
-/htmlcov/
+Pipfile
+Pipfile.lock
+package-lock.json
