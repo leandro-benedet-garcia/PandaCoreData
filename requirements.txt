@@ -1,2 +1,4 @@
 tinydb
 pyyaml
+cefpython3
+Jinja2

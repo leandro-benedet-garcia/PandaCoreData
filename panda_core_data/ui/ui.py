@@ -1,5 +1,5 @@
 import base64
-import cefpython3.cefpython_py37 as cef
+from cefpython3 import cefpython as cef
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 MIME_PREPEND = "data:"
