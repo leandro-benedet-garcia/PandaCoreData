@@ -5,4 +5,7 @@ import BootstrapVue from 'bootstrap-vue'
 import "prismjs"
 import VuePrismEditor from "vue-prism-editor"
 
-export default {Vue, BootstrapVue, VuePrismEditor}
+Vue.use(BootstrapVue)
+Vue.component("prism-editor", VuePrismEditor)
+
+export default { Vue }
