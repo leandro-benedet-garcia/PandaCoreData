@@ -72,3 +72,9 @@ And then generate the docs with the command:
 python setup.py build_sphinx
 ```
 The docs will be located by default inside the directory `docs/build/html`
+
+Security contact information
+=============================
+To report a security vulnerability, please use the 
+[Tidelift security contact](https://tidelift.com/security). Tidelift 
+will coordinate the fix and disclosure.
