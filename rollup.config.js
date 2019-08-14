@@ -25,11 +25,12 @@ function copy_file(options) {
     };
 }
 
-export default {
-    input: 'panda_core_data/ui/js_source/main.coffee',
+export default [{
+    input: 'panda_core_data/ui/js_source/libraries.coffee',
     output: {
-        file: 'panda_core_data/ui/bundle.js',
-        format: 'iife'
+        file: 'panda_core_data/ui/libraries.js',
+        format: 'iife',
+        name: 'libraries'
     },
     plugins: [
         coffeescript(),
@@ -41,4 +42,18 @@ export default {
         copy_file({src: prism_path, dest: 'panda_core_data/ui/css_libs/prism_themes'}),
         copy_file({src: prism_editor_path, dest: 'panda_core_data/ui/css_libs/VuePrismEditor.css'})
       ]
-};
+},
+{
+    input: 'panda_core_data/ui/js_source/main.coffee',
+    output: {
+        file: 'panda_core_data/ui/main.js',
+        format: 'iife',
+        name: 'main'
+    },
+    plugins: [
+        coffeescript(),
+        sass({output: true, insert: false}),
+        resolve({extensions: available_extensions}),
+        commonjs({extensions: available_extensions})
+      ]
+}];

@@ -1,6 +1,4 @@
 @charset "UTF-8";
-@import url("/css_libs/prism_themes/prism.css");
-@import url("/css_libs/VuePrismEditor.css");
 /*!
  * Bootstrap v4.3.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors
@@ -11288,14 +11286,4 @@ input[type=color].form-control:disabled {
 .tooltip.b-tooltip-dark .tooltip-inner {
   color: #fff;
   background-color: #343a40;
-}
-
-body, html {
-  height: 100%;
-}
-
-#sidebar {
-  background-color: #000;
-  color: #FFF;
-  height: 100%;
 }
