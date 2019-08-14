@@ -15,3 +15,4 @@
 /Pipfile
 /Pipfile.lock
 /htmlcov/
+/node_modules/
