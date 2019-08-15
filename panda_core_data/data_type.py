@@ -222,7 +222,7 @@ class DataType(TinyDB):
         return self._table.all(*arg, **kwargs)
 
     def add_dependencies(self):
-        """add all dependencies for the model"""
+        """Add all dependencies for the model"""
         for current_dependency in self.dependencies:
             dependency = self.data_core.get_template_type(current_dependency)
             dependency = dependency.instanced()
@@ -232,6 +232,7 @@ class DataType(TinyDB):
             self.parents[current_dependency] = dependency
 
     def save_to_file(self):
+        """Save fields instance into the raw"""
         to_write = {self.DEFAULT_TABLE: []}
         for the_field in fields(self):
             to_write[self.DEFAULT_TABLE].append({the_field.name: getattr(self, the_field.name)})

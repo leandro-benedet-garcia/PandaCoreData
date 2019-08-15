@@ -55,9 +55,9 @@ class BaseData(object):
         This function checks if a method is lacking inside any class that inherits this, and also
         automatically creates docstrings into those methods based on the original method.
 
-        :param DataType cls: Child class
+        :param cls: Child class
+        :type cls: BaseData
         """
-
         # The only class that don't go trough the check is DataCore
         if cls.__name__ == "DataCore":
             return
@@ -88,9 +88,10 @@ class BaseData(object):
     @staticmethod
     def all_datas():
         """
-        Get all :class:`DataType` types
+        Get all :class:`~panda_core_data.model.DataType` types
 
-        :return list(DataType): return a list of data types.
+        :return: return a list of data types.
+        :rtype: list[:class:`~panda_core_data.model.DataType`]
         """
 
     def add_module(self, path):
@@ -123,7 +124,8 @@ class BaseData(object):
 
     def recursively_add_module(self, path):
         """
-        Recursively add a module with :class:`DataType` from the supplied path.
+        Recursively add a module with :class:`~panda_core_data.model.DataType` from the supplied
+        path.
 
         :param str path: Path to the data module
         :return list(module): Returns the loaded modules.
@@ -140,11 +142,12 @@ class BaseData(object):
     @staticmethod
     def get_data_type(data_name, data_dict, default=None):
         """
-        Get Data type from a list of all :class:`DataType` types.
+        Get Data type from a list of all :class:`~panda_core_data.model.DataType` types.
 
         :param str data_name: The name of the DataType
         :param bool default: Default value to be returned if the data type couldn't be found.
-        :return DataType: the :class:`DataType`
+        :return: the :class:`~panda_core_data.model.DataType`
+        :rtype: :class:`~panda_core_data.model.DataType`
         """
         data_type = data_dict.get(data_name, default)
         if not data_type and default is None:
@@ -155,6 +158,12 @@ class BaseData(object):
 
     @staticmethod
     def instance_data(data_name, get_data_type, path, multiple_instances, **kwargs):
+        """
+        Create a new instance of a :class:`~panda_core_data.model.DataType`
+
+        :param str data_type_name: name of the DataType
+        :param str path: path to the raw file
+        """
         path = auto_convert_to_pathlib(path)
         data_type = get_data_type(data_name, **kwargs)
 
@@ -179,8 +188,10 @@ class BaseData(object):
     @staticmethod
     def recursively_instance_data():
         """
-        Instance :class:`DataType` recursively based on the raws inside the folders.
+        Instance :class:`~panda_core_data.model.DataType` recursively based on the raws inside the
+        folders.
 
         :param str path: Starting path to search for raws.
-        :return list(DataType): returns all the instanced data from the path.
+        :return: returns all the instanced data from the path.
+        :rtype: list(:class:`~panda_core_data.model.DataType`)
         """
