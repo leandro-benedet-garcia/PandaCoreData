@@ -12,7 +12,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath('../../src'))
 
 from panda_core_data.__version__ import __version__
 # -- Project information -----------------------------------------------------
