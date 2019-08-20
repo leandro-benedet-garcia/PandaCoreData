@@ -64,7 +64,8 @@ cd PandaCoreData
 
 Now, if you want to just run the tests to test your changes, you can run:
 ```
-python setup.py test
+pip install tox
+tox
 ```
 If you want to generate docs, you can install all dependencies with:
 ```

@@ -1,6 +1,16 @@
 Change Logs
 ============
 
+0.0.4
+######
+Added
+^^^^^^
+- Support for tox
+
+Changed
+^^^^^^^^
+- Fixed the installer to behave better, which could derp while reading some files.
+
 0.0.3
 ######
 
