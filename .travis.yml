@@ -35,7 +35,7 @@ matrix:
     - "3.8-dev"
     script:
     - "pip install -e .[tests]"
-    - "coverage run --source=panda_core_data setup.py pytest"
+    - "coverage run --source=panda_core_data setup.py pytest --addopts --pylint"
 
   - name: "Python Nightly"
     dist: "xenial"
@@ -43,4 +43,4 @@ matrix:
     - "nightly"
     script:
     - "pip install -e .[tests]"
-    - "coverage run --source=panda_core_data setup.py pytest"
+    - "coverage run --source=panda_core_data setup.py pytest --addopts --pylint"
