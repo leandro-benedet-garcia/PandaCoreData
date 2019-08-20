@@ -8,10 +8,7 @@ from .data_core_bases import DataTemplate
 from .data_core_bases import BaseData
 from .__version__ import __version__
 
-try:
-    from .storages import auto_convert_to_pathlib
-except ModuleNotFoundError: # pragma: no cover
-    print("Tiny Db could not be found")
+from .storages import auto_convert_to_pathlib
 
 from .custom_exceptions import (PCDDataCoreIsNotUnique, PCDInvalidPathType, PCDTypeError,
                                 PCDInvalidPath)

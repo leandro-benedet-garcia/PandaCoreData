@@ -1,33 +1,54 @@
 '''
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
-try:
-    from sphinx.setup_command import BuildDoc
-    SPHINX_LOADED = True
-except(ModuleNotFoundError, ImportError):
-    SPHINX_LOADED = False
+import os
+import sys
+import re
 
 import setuptools
-from panda_core_data.__version__ import __version__
-if SPHINX_LOADED:
-    CMDCLASS = {'build_sphinx': BuildDoc}
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(CURRENT_DIR, "src"))
+
+try:
+    #pylint: disable=import-error
+    from sphinx.setup_command import BuildDoc  # @UnresolvedImport
+    SPHINX_LOADED = True
+except ImportError:
+    SPHINX_LOADED = False
 
 NAME = 'panda_core_data'
 
-with open("README.md", "r") as fh:
-    LONG_DESCRIPTION = fh.read()
 
-with open("LICENSE", "r") as fh:
-    LICENSE = fh.read()
+def open_file(file_name):
+    with open(file_name, "r") as file_handle:
+        return file_handle.read()
 
-with open("requirements.txt", "r") as fh:
-    REQUIREMENTS = fh.read().strip().split("\n")
 
-with open("requirements-tests.txt", "r") as fh:
-    TEST_PACKAGES = fh.read().strip().split("\n")
+def stripped_file(file_name):
+    return open_file(file_name).strip().split("\n")
 
-with open("requirements-docs.txt", "r") as fh:
-    REQUIREMENTS_DOCS = fh.read().strip().split("\n")
+
+def find_version():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    version_file = open_file(os.path.join(current_dir, "src", NAME, "__version__.py"))
+    version_match = re.search(r"^__version__\s*=\s*['\"]([^'\"]*)['\"]", version_file)
+    if version_match:
+        return version_match.group(1)
+
+
+if SPHINX_LOADED:
+    CMDCLASS = {'build_sphinx': BuildDoc}
+
+__version__ = find_version()
+
+
+LONG_DESCRIPTION = open_file("README.md")
+LICENSE = open_file("LICENSE")
+
+REQUIREMENTS = stripped_file("requirements.txt")
+TEST_PACKAGES = stripped_file("requirements-tests.txt")
+REQUIREMENTS_DOCS = stripped_file("requirements-docs.txt")
 
 setuptools.setup(
     name=NAME,
@@ -35,23 +56,22 @@ setuptools.setup(
     cmdclass=CMDCLASS if SPHINX_LOADED else {},
     author="Leandro (Cerberus1746) Benedet Garcia",
     author_email="leandro.benedet.garcia@gmail.com",
-    description="Data management system with modding and Panda3D engine in mind.",
+    description="Data management system using plain text files like json and yaml.",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
     license="MIT License",
     python_requires=">=3.7",
     url="https://github.com/Cerberus1746/PandaCoreData",
-    tests_require=TEST_PACKAGES,
-    packages=["panda_core_data", "panda_core_data.data_core_bases", "panda_core_data.storages"],
-    setup_requires=['pytest-runner'],
-    scripts=['scripts/panda_core_data_commands.py'],
+    tests_require=["pytest-runner"],
+    packages=["src/" + NAME,],
+    setup_requires=REQUIREMENTS,
     extras_require={
         'tests': TEST_PACKAGES,
         'docs': REQUIREMENTS_DOCS
     },
     install_requires=REQUIREMENTS,
+    include_package_data=True,
     classifiers=[
-        "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: Implementation :: CPython",
@@ -64,7 +84,6 @@ setuptools.setup(
 
         "Intended Audience :: Developers",
 
-        "Topic :: Games/Entertainment",
         "Topic :: Software Development",
         "Topic :: Software Development :: Libraries",
         "Topic :: Utilities",

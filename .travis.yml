@@ -2,13 +2,13 @@
 dist: "xenial"
 language: "python"
 before_install:
-- "pip install python-coveralls"
+    - "pip install python-coveralls tox-travis"
 
 install:
-- "python setup.py install"
+    - "python setup.py install"
 
 after_success:
-- "coveralls"
+    - "coveralls"
 
 deploy:
   provider: "pypi"
@@ -27,7 +27,7 @@ matrix:
     python:
     - "3.7"
     script:
-    - "coverage run --source=panda_core_data setup.py pytest --addopts --pylint"
+    - "tox"
 
   - name: "Python 3.8"
     dist: "xenial"
