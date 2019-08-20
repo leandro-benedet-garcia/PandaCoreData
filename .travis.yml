@@ -34,6 +34,7 @@ matrix:
     python:
     - "3.8-dev"
     script:
+    - "pip install -e .[tests]"
     - "coverage run --source=panda_core_data setup.py pytest"
 
   - name: "Python Nightly"
@@ -41,4 +42,5 @@ matrix:
     python:
     - "nightly"
     script:
+    - "pip install -e .[tests]"
     - "coverage run --source=panda_core_data setup.py pytest"
