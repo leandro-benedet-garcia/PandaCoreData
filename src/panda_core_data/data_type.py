@@ -14,6 +14,7 @@ from .storages import auto_convert_to_pathlib, get_storage_from_extension, get_e
 from .custom_exceptions import PCDDuplicatedTypeName, PCDTypeError
 from .utils import check_if_valid_instance
 
+
 class DataType(TinyDB):
     """
     Base for all the model types, be it template or model
@@ -42,16 +43,33 @@ class DataType(TinyDB):
         :param str path: path to the raw file to be loaded, if False, the class will be instanced
                          like a normal dataclass
         """
-        if db_file and cls.dataclass_args['init']:
-            # This method is here to replace the default dataclass
-            def custom_init(self, db_file, *init_args, default_table=DataType.DEFAULT_TABLE,
-                            **init_kwargs):
-                self.load_db(db_file, *init_args, default_table=default_table, **init_kwargs)
+        from .model import Model
+
+        if not hasattr(cls, "original_init"):
+            cls.original_init = None
+
+        if cls.dataclass_args['init'] and cls.original_init is None:
+            def with_old_init(self, *init_args, db_file=None, default_table=DataType.DEFAULT_TABLE,
+                              **init_kwargs):
+
+                if db_file:
+                    self.load_db(db_file, *init_args, default_table=default_table, **init_kwargs)
+                elif self.original_init is not None:
+                    self.original_init(*init_args, **init_kwargs)
+
+                if isinstance(self, Model):
+                    self.wrapper.instances.append(instanced)
+                else:
+                    self.wrapper.instances = instanced
+
 
                 if hasattr(self, "__post_init__"):
                     return self.__post_init__(*init_args, **init_kwargs)
 
-            cls.__init__ = custom_init
+            #pylint: disable=comparison-with-callable
+            if hasattr(cls, "__init__") and cls.__init__ != with_old_init:
+                cls.original_init = cls.__init__
+                cls.__init__ = with_old_init
 
         instanced = object.__new__(cls)
 
@@ -59,13 +77,13 @@ class DataType(TinyDB):
 
         return instanced
 
-    def __getattr__(self, name):
+    def __getattr__(self, attr_name):
         """
         This is here just to make this method back to the default that was overwritten by TinyDB
 
         :param str name: name of the attribute to get
         """
-        raise AttributeError(f"type object '{type(self).__name__}' has no attribute '{name}'")
+        raise AttributeError(f"type object '{type(self).__name__}' has no attribute '{attr_name}'")
 
     def __setattr__(self, attr_name, value):
         """
@@ -83,8 +101,10 @@ class DataType(TinyDB):
         else:
             return_value.append(f"DataType {self.data_name}:")
         return_value.append("\tFields:")
-        fields_list = [f"\t\t{field_name}({field_type.__name__}) = {getattr(self, field_name)}"
-                       for field_name, field_type in self.__annotations__.items()]
+        fields_list = [
+            f"\t\t{current_field.name}({current_field.type}) = {getattr(self, current_field.name)}"
+            for current_field in fields(self)
+        ]
         return_value.append('\n'.join(fields_list))
 
         #if any(self.parents):

@@ -1,6 +1,18 @@
 Change Logs
 ============
 
+0.0.5
+######
+Changed
+^^^^^^^^
+- Everytime a :class:`~panda_core_data.data_type.DataType` is instanced, it will be added to the
+  attatched :class:`~panda_core_data.DataCore`. The behaviour was that the instance would be added
+  only by calling :meth:`~panda_core_data.data_core_bases.data_model.DataModel.instance_model` and
+  :meth:`~panda_core_data.data_core_bases.data_template.DataTemplate.instance_template`. Also tests
+  were changed to make sure it happens.
+- All exceptions now inherit :class:`~panda_core_data.custom_exceptions.PCDException`.
+- :meth:`~object.__init__` methods are not overwritten anymore.
+
 0.0.4
 ######
 Added

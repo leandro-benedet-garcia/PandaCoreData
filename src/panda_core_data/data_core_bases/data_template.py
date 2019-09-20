@@ -36,7 +36,7 @@ class DataTemplate(BaseData):
         return self.get_data_type(template_name, self.all_key_value_templates, **kwargs)
 
     def instance_template(self, data_type_name, path, **kwargs) -> "Template":
-        return self.instance_data(data_type_name, self.get_template_type, path, False, **kwargs)
+        return self.instance_data(data_type_name, self.get_template_type, path, **kwargs)
 
     def recursively_instance_template(self, path, *args, **kwargs):
         instanced_data = []

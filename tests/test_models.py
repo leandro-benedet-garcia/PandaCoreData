@@ -37,10 +37,10 @@ class TestModels(object):
     @staticmethod
     def test_repr():
         DataCore(name="test_repr")  # @UnusedVariable
-        class TemplateRepr(Template, core_name="test_repr"):
+        class TemplateRepr(Template, data_name="template_repr", core_name="test_repr"):
             name: str
 
-        class ModelRepr(Model, core_name="test_repr", data_name="model"):
+        class ModelRepr(Model, core_name="test_repr"):
             name: str
 
         print(repr(TemplateRepr("Test")))
@@ -67,24 +67,24 @@ class TestModels(object):
         assert model != second_model != model_with_init
 
     @staticmethod
-    def test_direct_instance_dataclass(model, template):
-        model_type = data_core.get_model_type(MODEL_TYPE_NAME)
-        instanced = model_type(DEFAULT_TEST_FIELD_CONTENT)
+    def test_direct_instance_dataclass():
+        current_core = DataCore(name="direct_instance")
+        class TemplateDirectInstance(Template, core_name="direct_instance"):
+            name: str
 
-        assert isinstance(instanced, model), INSTANCE_ERROR
+        class ModelDirectInstance(Model, core_name="direct_instance"):
+            name: str
+
+        instanced = ModelDirectInstance(DEFAULT_TEST_FIELD_CONTENT)
+
+        assert isinstance(instanced, ModelDirectInstance), INSTANCE_ERROR
         assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
+        assert instanced in current_core.all_model_instances
 
-        instanced = model_type(name=DEFAULT_TEST_FIELD_CONTENT)
-        assert instanced.name == DEFAULT_TEST_FIELD_CONTENT
+        instanced = TemplateDirectInstance(DEFAULT_TEST_FIELD_CONTENT)
 
-        template_type = data_core.get_template_type(MODEL_TYPE_NAME)
-        instanced = template_type(DEFAULT_TEST_FIELD_CONTENT)
-
-        assert isinstance(instanced, template), INSTANCE_ERROR
+        assert isinstance(instanced, TemplateDirectInstance), INSTANCE_ERROR
         assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
-
-        instanced = template_type(name=DEFAULT_TEST_FIELD_CONTENT)
-        assert instanced.name == DEFAULT_TEST_FIELD_CONTENT
 
     @staticmethod
     def test_dataclass_with_init(model_with_init):
@@ -93,6 +93,7 @@ class TestModels(object):
 
         assert isinstance(instanced, model_with_init), INSTANCE_ERROR
         assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
+        assert instanced in data_core.all_model_instances
 
     @staticmethod
     def test_load_from_file(tmpdir, model):
@@ -105,6 +106,7 @@ class TestModels(object):
         instanced = model(db_file=yaml_file_path)
         assert isinstance(instanced, model), INSTANCE_ERROR
         assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
+        assert instanced in data_core.all_model_instances
 
 
     def test_post_init_with_file(self, tmpdir):
@@ -138,10 +140,12 @@ class TestModels(object):
         instanced = model_class(db_file=yaml_file_path)
         assert isinstance(instanced, model_class), INSTANCE_ERROR
         assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == "another_content"
+        assert instanced in data_core.all_model_instances
 
         instanced = template_class(db_file=yaml_file_path)
         assert isinstance(instanced, template_class), INSTANCE_ERROR
         assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == "another_content"
+        assert instanced in data_core.all_template_instances
 
     @staticmethod
     def test_type_getters(model, template):

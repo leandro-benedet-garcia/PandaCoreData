@@ -35,7 +35,7 @@ class DataModel(BaseData):
                 yield current_instance
 
     def instance_model(self, data_type_name, path, **kwargs):
-        return self.instance_data(data_type_name, self.get_model_type, path, True, **kwargs)
+        return self.instance_data(data_type_name, self.get_model_type, path, **kwargs)
 
     def get_model_type(self, model_name: str, **kwargs):
         return self.get_data_type(model_name, self.all_model_types, **kwargs)

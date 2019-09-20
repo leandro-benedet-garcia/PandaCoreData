@@ -157,7 +157,7 @@ class BaseData(object):
         return data_type
 
     @staticmethod
-    def instance_data(data_name, get_data_type, path, multiple_instances, **kwargs):
+    def instance_data(data_name, get_data_type, path, **kwargs):
         """
         Create a new instance of a :class:`~panda_core_data.model.DataType`
 
@@ -169,10 +169,6 @@ class BaseData(object):
 
         instanced = data_type.instance_from_raw(path)
         instanced.raws.append(path)
-        if multiple_instances:
-            data_type.wrapper.instances.append(instanced)
-        else:
-            data_type.wrapper.instances = instanced
 
         return instanced
 

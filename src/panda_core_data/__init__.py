@@ -2,19 +2,25 @@
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 from os.path import isdir, join
+from typing import Union, Mapping, Iterable
 
-from .data_core_bases import DataModel
-from .data_core_bases import DataTemplate
-from .data_core_bases import BaseData
 from .__version__ import __version__
-
-from .storages import auto_convert_to_pathlib
-
 from .custom_exceptions import (PCDDataCoreIsNotUnique, PCDInvalidPathType, PCDTypeError,
                                 PCDInvalidPath)
+from .data_core_bases import BaseData
+from .data_core_bases import DataModel
+from .data_core_bases import DataTemplate
+from .storages import auto_convert_to_pathlib
+
 
 #pylint: disable=invalid-name
 data_core = None
+
+JsonValue = Union[int, str]
+JsonMapping = Mapping[str, JsonValue]
+JsonTypes = Union[JsonMapping, int, str]
+JsonIterable = Iterable[JsonTypes]
+JsonInput = Union[str, JsonMapping, JsonIterable]
 
 class DataCore(DataModel, DataTemplate):
     """Class where everything is kept."""
@@ -146,5 +152,6 @@ class DataCore(DataModel, DataTemplate):
             raise PCDInvalidPathType(f"The folder type {folder_type} could not be found. The "
                                      f"valid folder types are {list(self.folders.keys())}")
 
-__all__ = ["data_core", "DataCore", "DataModel", "DataTemplate", "BaseData"]
 DataCore()
+__all__ = ["data_core", "DataCore", "DataModel", "DataTemplate", "BaseData", "JsonValue",
+           "JsonMapping", "JsonTypes", "JsonIterable", "JsonInput"]
