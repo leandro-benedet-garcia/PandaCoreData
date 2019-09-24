@@ -1,9 +1,14 @@
 '''
 :created: 2019-07-22
-
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 from pathlib import Path
+from typing import Tuple, Iterator, List
+
+#pylint: disable=unused-import
+import panda_core_data
+# pylint: disable=unused-import
+import panda_core_data.model
 
 from ..storages import raw_glob_iterator
 from .base_data import BaseData, Group
@@ -19,11 +24,12 @@ class DataTemplate(BaseData):
         super().__init__(*args, **kwargs)
 
     @property
-    def all_templates(self):
-        return list(self.all_key_value_templates.values())
+    def all_templates(self) -> Tuple['panda_core_data.model.Template']:
+        return tuple(self.all_key_value_templates.values())
 
     @property
-    def all_template_instances(self):
+    def all_template_instances(self
+                               ) -> Iterator['panda_core_data.model.Template']:
         """
         Gets all the template instances
 
@@ -32,17 +38,32 @@ class DataTemplate(BaseData):
         for template_type in self.all_templates:
             yield template_type.instanced()
 
-    def get_template_type(self, template_name, **kwargs):
-        return self.get_data_type(template_name, self.all_key_value_templates, **kwargs)
+    def get_template_type(self, template_name: str, **kwargs
+                          ) -> 'panda_core_data.model.Template':
+        return self.get_data_type(
+            template_name,
+            self.all_key_value_templates,
+            **kwargs)
 
-    def instance_template(self, data_type_name, path, **kwargs) -> "Template":
-        return self.instance_data(data_type_name, self.get_template_type, path, **kwargs)
+    def instance_template(self, data_type_name: str,
+                          path: 'panda_core_data.PathType', **kwargs
+                          ) -> 'panda_core_data.model.Template':
+        return self.instance_data(
+            data_type_name,
+            self.get_template_type,
+            path,
+            **kwargs)
 
-    def recursively_instance_template(self, path, *args, **kwargs):
+    def recursively_instance_template(
+            self,
+            path: 'panda_core_data.PathType',
+            *args,
+            **kwargs) -> List['panda_core_data.model.Template']:
         instanced_data = []
         for raw_file in raw_glob_iterator(path, self.excluded_extensions):
             raw_data_name = Path(raw_file).stem
-            instanced = self.instance_template(raw_data_name, raw_file, *args, **kwargs)
+            instanced = self.instance_template(
+                raw_data_name, raw_file, *args, **kwargs)
             instanced_data.append(instanced)
 
         return instanced_data

@@ -1,6 +1,10 @@
 """Module that deals with parsing yaml files using pyyaml"""
 from tinydb.database import Document
 import yaml
+
+#pylint: disable=unused-import
+import panda_core_data.storages
+
 from .base_db import BaseDB
 
 
@@ -15,9 +19,10 @@ class YamlDB(BaseDB):
         :param path str: path pointing to a yaml file
         """
         super().__init__(*args, **kwargs)
-        yaml.add_representer(Document, lambda dumper, data: dumper.represent_data(dict(data)))
+        yaml.add_representer(Document, lambda dumper, data:
+                             dumper.represent_data(dict(data)))
 
-    def read(self):
+    def read(self) -> 'panda_core_data.storages.DataDict':
         """Method used by TinyDB to read the file"""
         return self.base_read(yaml.safe_load, True)
 

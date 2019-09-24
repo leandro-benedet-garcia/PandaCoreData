@@ -1,16 +1,20 @@
 import os
+from typing import Dict, List, Optional, Union, Callable
+
 from tinydb.storages import MemoryStorage, JSONStorage
 
+#pylint: disable=unused-import
+import panda_core_data.storages
 
-#pylint: disable=invalid-name
-available_storages = []
 
 class BaseDB(JSONStorage, MemoryStorage):
     """
-    Base storage class that reads which extensions are available to feed the path handling functions
+    Base storage class that reads which extensions are available to feed the
+    path handling functions
 
-    To create a new storage, you will need to inherit this class, create a `extensions` variable
-    containing a list of extensions the storage will support for example:
+    To create a new storage, you will need to inherit this class, create a
+    `extensions` variable containing a list of extensions the storage will
+    support for example:
 
     .. code:: python
 
@@ -18,15 +22,15 @@ class BaseDB(JSONStorage, MemoryStorage):
 
     then implement a `read` and `write` method using the methods
     :meth:`~panda_core_data.storages.base_db.BaseDB.base_read` and
-    :meth:`~panda_core_data.storages.base_db.BaseDB.base_write` all you need to do is follow the
-    instructions contained in them
+    :meth:`~panda_core_data.storages.base_db.BaseDB.base_write` all you need to
+    do is follow the instructions contained in them
     """
     extensions = False
 
-    def __init_subclass__(cls):  # @NoSelf
+    def __init_subclass__(cls):
         """
-        Automatically generate an extension list containing the available raw extensions available
-        together with their storage.
+        Automatically generate an extension list containing the available raw
+        extensions available together with their storage.
         """
         available_storages.append({
             "name": cls.__name__,
@@ -34,7 +38,7 @@ class BaseDB(JSONStorage, MemoryStorage):
             "storage": cls,
         })
 
-    def __init__(self, path, **kwargs):
+    def __init__(self, path: str, **kwargs):
         """
         Create a new instance.
 
@@ -44,21 +48,24 @@ class BaseDB(JSONStorage, MemoryStorage):
         MemoryStorage.__init__(self)
         JSONStorage.__init__(self, path, **kwargs)
 
-    def base_read(self, load_method, use_handle):
+    def base_read(self, load_method: Callable,
+                  use_handle: bool) -> 'panda_core_data.storages.DataDict':
         """
-        Base method used by children classes to read the file and transforms the string into a
-        list of dictionaries, a good example of this method is the built in python
-        :func:`json.load` however, since it needs a string as an input (or handler) you would need
-        to set the parameter use_handler so the string, which is the contents of the raw file, will
-        be passed to that method. For example the read method of our yaml parser:
+        Base method used by children classes to read the file and transforms
+        the string into a list of dictionaries, a good example of this method
+        is the built in python :func:`json.load` however, since it needs a
+        string as an input (or handler) you would need to set the parameter
+        use_handler so the string, which is the contents of the raw file, will
+        be passed to that method. For example the read method of our yaml
+        parser:
 
         .. code:: python
 
             def read(self):
                 return self.base_read(yaml.safe_load, True)
 
-        And since the function :func:`yaml.safe_load` needs a string as an input, we set use_handle
-        to True.
+        And since the function :func:`yaml.safe_load` needs a string as an
+        input, we set use_handle to True.
 
         An example of list of dictionaries would be like this:
 
@@ -75,14 +82,17 @@ class BaseDB(JSONStorage, MemoryStorage):
                 },
             ]}
 
-        The dict keys are fields of a :mod:`~dataclasses.dataclass` and the value, well, values.
+        The dict keys are fields of a :mod:`~dataclasses.dataclass` and the
+        value, well, values.
 
-        :param load_method: method used to transform the raw file into a list of dictionaries.
-        :type load_method: :class:`function`
-        :param bool use_handle: TinyDB offers a handle (More specifically, the handle of the class
-                                :class:`~tinydb.storages.JSONStorage`) to load the file and turn
-                                into a string automatically if you'd like to use it, just set this
-                                parameter to True.
+        :param load_method: method used to transform the raw file into a list
+                            of dictionaries.
+        :param use_handle: TinyDB offers a handle (More specifically, the
+                           handle of the class
+                           :class:`~tinydb.storages.JSONStorage`) to load the
+                           file and turn into a string automatically if you'd
+                           like to use it, just set this parameter to True.
+        :return: The generated data.
         """
         if not self.memory:
             if use_handle:
@@ -99,12 +109,15 @@ class BaseDB(JSONStorage, MemoryStorage):
 
         return self.memory
 
-    def base_write(self, write_method, data, use_handle):
+    def base_write(self, write_method: Callable,
+                   data: "panda_core_data.storages.DataDict",
+                   use_handle: bool):
         """
         Transforms the data dictionary to a raw representation.
 
+        :param write_method: method used to transform the raw file into a list
+                             of dictionaries.
         :param data: data dictionary.
-        :type data: dict(str, object)
         """
         if use_handle:
             self._handle.seek(0)
@@ -115,3 +128,8 @@ class BaseDB(JSONStorage, MemoryStorage):
             self._handle.truncate()
         else:
             write_method(self, data, **self.kwargs)
+
+
+#pylint: disable=invalid-name
+available_storages: Optional[List[Dict[str, Union[str, BaseDB]]]] = []
+"List of available storages"

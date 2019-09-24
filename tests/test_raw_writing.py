@@ -6,9 +6,12 @@
 from panda_core_data import DataCore
 from panda_core_data.model import Model
 
-class TestGeneral(object):
+
+class TestGeneral():
     #pylint: disable=unused-argument
-    def writing_method_test(self, file_structure, data_core, raw_file, extension):
+    @staticmethod
+    def writing_method_test(file_structure, data_core, raw_file,
+                            extension):
         model_raw = file_structure["model_raw_dir"].join(f"test.{extension}")
         model_raw.write(raw_file)
 

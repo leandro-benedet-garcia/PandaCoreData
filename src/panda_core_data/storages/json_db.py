@@ -1,10 +1,15 @@
 from tinydb.storages import JSONStorage
+
+#pylint: disable=unused-import
+import panda_core_data.storages
+
 from .base_db import BaseDB
 
-class JsonDB(BaseDB):
-    extensions = ["json",]
 
-    def read(self):
+class JsonDB(BaseDB):
+    extensions = ["json", ]
+
+    def read(self) -> 'panda_core_data.storages.DataDict':
         return self.base_read(JSONStorage.read, False)
 
     def write(self, data):

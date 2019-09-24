@@ -1,15 +1,16 @@
 import pytest
 
 from panda_core_data.model import Model, Template
-#pylint: disable=unused-import
-from . import (MODEL_TYPE_NAME, MODEL_WITH_INIT_NAME, DEFAULT_TEST_FIELD_CONTENT,
-               SECOND_MODEL_TYPE_NAME)
 
-#pylint: disable=invalid-name
+#pylint: disable=unused-import
+from . import (MODEL_TYPE_NAME, MODEL_WITH_INIT_NAME,
+               DEFAULT_TEST_FIELD_CONTENT, SECOND_MODEL_TYPE_NAME)
+
+
+#pylint: disable=invalid-name,unused-import
 type_name = ""
 def create_test_model(model_name):
-    #pylint: disable=redefined-outer-name
-    #pylint: disable=unused-variable
+    #pylint: disable=unused-variable,redefined-outer-name
     type_name = model_name
     class TestModel(Model, data_name=type_name, replace=True):
         name: str
@@ -22,7 +23,8 @@ def model():
 
 @pytest.fixture
 def model_with_init():
-    class TestModelWithInit(Model, data_name=MODEL_WITH_INIT_NAME, replace=True):
+    class TestModelWithInit(Model, data_name=MODEL_WITH_INIT_NAME,
+                            replace=True):
         name: str
 
         #pylint: disable=super-init-not-called
@@ -37,8 +39,7 @@ def second_model():
     return create_test_model(SECOND_MODEL_TYPE_NAME)
 
 def create_test_template(template_name):
-    #pylint: disable=redefined-outer-name
-    #pylint: disable=unused-variable
+    #pylint: disable=unused-variable,redefined-outer-name
     type_name = template_name
     class TestTemplate(Template, data_name=type_name, replace=True):
         name: str
@@ -68,7 +69,11 @@ def file_structure(tmpdir):
     return_dict["templates_dir"] = core_dir.mkdir("templates")
 
     return_dict["root_model_raw_dir"] = raws_dir.mkdir("models")
-    return_dict["model_raw_dir"] = return_dict["root_model_raw_dir"].mkdir(MODEL_TYPE_NAME)
-    return_dict["raw_templates_dir"] = return_dict["raws_dir"].mkdir("templates")
+
+    model_raw_dir = return_dict["root_model_raw_dir"].mkdir(MODEL_TYPE_NAME)
+    raw_templates_dir = return_dict["raws_dir"].mkdir("templates")
+
+    return_dict["model_raw_dir"] = model_raw_dir
+    return_dict["raw_templates_dir"] = raw_templates_dir
 
     return return_dict

@@ -1,7 +1,8 @@
 from os.path import join, abspath, dirname
 
 def read_and_replace(file_name):
-    with open(join(abspath(dirname(__file__)), "raw_files", file_name), "r") as file_rh:
+    full_path = join(abspath(dirname(__file__)), "raw_files", file_name)
+    with open(full_path, "r") as file_rh:
         file_contents = str(file_rh.read())
         for var_name, value in globals().items():
             if value and isinstance(value, str):
@@ -18,7 +19,8 @@ CREATION_TEST_NAME = "creation_test_name"
 DEFAULT_TEST_FIELD_NAME = "name"
 DEFAULT_TEST_FIELD_CONTENT = "name_content"
 
-INSTANCE_ERROR = "The class wansn't instanced correctly, check __new__ in ModelMixin class"
+INSTANCE_ERROR = "The class wansn't instanced correctly, check __new__ in"\
+                 "ModelMixin class"
 
 YAML_CONTENT = read_and_replace("test.yaml")
 JSON_CONTENT = read_and_replace("test.json")

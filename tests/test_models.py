@@ -8,14 +8,17 @@ from dataclasses import fields, dataclass
 import pytest
 
 from panda_core_data import data_core, DataCore
-from panda_core_data.custom_exceptions import (PCDDuplicatedTypeName, PCDInvalidPath, PCDTypeError)
+from panda_core_data.custom_exceptions import (PCDDuplicatedTypeName,
+                                               PCDInvalidPath, PCDTypeError,
+                                               PCDNeedsToBeInherited)
 
 from panda_core_data.model import Model, Template
 
-from . import (DEFAULT_TEST_FIELD_CONTENT, DEFAULT_TEST_FIELD_NAME, INSTANCE_ERROR, MODEL_TYPE_NAME,
-               MODEL_WITH_INIT_NAME, YAML_CONTENT)
+from . import (DEFAULT_TEST_FIELD_CONTENT, DEFAULT_TEST_FIELD_NAME,
+               INSTANCE_ERROR, MODEL_TYPE_NAME, MODEL_WITH_INIT_NAME,
+               YAML_CONTENT)
 
-class TestModels(object):
+class TestModels():
     @staticmethod
     def test_check_compatibility():
         class TemplateWithoutDataClass(Template):
@@ -25,19 +28,20 @@ class TestModels(object):
             name: str
 
         @dataclass
-        class WithDataClass(object):
+        class WithDataClass():
             name: str
 
-        for template_data, model_data, with_data in zip(fields(TemplateWithoutDataClass),
-                                                        fields(ModelWithoutDataClass),
-                                                        fields(WithDataClass)):
+        zipped = zip(fields(TemplateWithoutDataClass),
+                     fields(ModelWithoutDataClass), fields(WithDataClass))
+        for template_data, model_data, with_data in zipped:
             assert template_data.name == model_data.name == with_data.name
             assert template_data.type == model_data.type == with_data.type
 
     @staticmethod
     def test_repr():
-        DataCore(name="test_repr")  # @UnusedVariable
-        class TemplateRepr(Template, data_name="template_repr", core_name="test_repr"):
+        DataCore(name="test_repr")
+        class TemplateRepr(Template, data_name="template_repr",
+                           core_name="test_repr"):
             name: str
 
         class ModelRepr(Model, core_name="test_repr"):
@@ -62,7 +66,8 @@ class TestModels(object):
         assert second_template in data_core.all_templates
 
     @staticmethod
-    def test_check_if_unequal(model, second_model, model_with_init, template, second_template):
+    def test_check_if_unequal(model, second_model, model_with_init, template,
+                              second_template):
         assert template != second_template
         assert model != second_model != model_with_init
 
@@ -78,13 +83,16 @@ class TestModels(object):
         instanced = ModelDirectInstance(DEFAULT_TEST_FIELD_CONTENT)
 
         assert isinstance(instanced, ModelDirectInstance), INSTANCE_ERROR
-        assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
+        assert instanced
+        assert getattr(instanced,
+                       DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
         assert instanced in current_core.all_model_instances
 
         instanced = TemplateDirectInstance(DEFAULT_TEST_FIELD_CONTENT)
 
         assert isinstance(instanced, TemplateDirectInstance), INSTANCE_ERROR
-        assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
+        assert getattr(instanced,
+                       DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
 
     @staticmethod
     def test_dataclass_with_init(model_with_init):
@@ -92,7 +100,8 @@ class TestModels(object):
         instanced = model_type()
 
         assert isinstance(instanced, model_with_init), INSTANCE_ERROR
-        assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
+        assert getattr(instanced,
+                       DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
         assert instanced in data_core.all_model_instances
 
     @staticmethod
@@ -105,7 +114,8 @@ class TestModels(object):
 
         instanced = model(db_file=yaml_file_path)
         assert isinstance(instanced, model), INSTANCE_ERROR
-        assert getattr(instanced, DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
+        assert getattr(instanced,
+                       DEFAULT_TEST_FIELD_NAME) == DEFAULT_TEST_FIELD_CONTENT
         assert instanced in data_core.all_model_instances
 
 
@@ -116,7 +126,8 @@ class TestModels(object):
 
             def __post_init__(self):
                 default_field = DEFAULT_TEST_FIELD_NAME
-                assert getattr(self, default_field) == DEFAULT_TEST_FIELD_CONTENT
+                assert getattr(self,
+                               default_field) == DEFAULT_TEST_FIELD_CONTENT
                 self.name = "another_content"
 
         #pylint: disable=unused-variable
@@ -125,7 +136,8 @@ class TestModels(object):
 
             def __post_init__(self):
                 default_field = DEFAULT_TEST_FIELD_NAME
-                assert getattr(self, default_field) == DEFAULT_TEST_FIELD_CONTENT
+                assert getattr(self,
+                               default_field) == DEFAULT_TEST_FIELD_CONTENT
                 self.name = "another_content"
 
         model_class = data_core.get_model_type("TestModelWithPostInit")
@@ -175,14 +187,17 @@ class TestModels(object):
         with pytest.raises(PCDTypeError):
             data_core.get_template_type("invalid")
 
-        #===========================================================================================
+        #=======================================================================
         # Model tests are below
-        #===========================================================================================
+        #=======================================================================
         with pytest.raises(PCDTypeError):
             class NoInstanceModel(Model):
                 name: str
 
             NoInstanceModel.load_db(NoInstanceModel, "")
+
+        with pytest.raises(PCDNeedsToBeInherited):
+            Template()
 
         with pytest.raises(PCDDuplicatedTypeName):
             #pylint: disable=unused-variable
@@ -200,6 +215,6 @@ class TestModels(object):
             model(db_file="invalid")
 
         #pylint: disable=unused-variable
-        with pytest.raises(PCDDuplicatedTypeName):  # @UndefinedVariable
+        with pytest.raises(PCDDuplicatedTypeName):
             class TestModel(Model, data_name=MODEL_TYPE_NAME):
                 name: str

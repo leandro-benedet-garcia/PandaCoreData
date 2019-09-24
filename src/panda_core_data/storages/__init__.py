@@ -1,29 +1,37 @@
 from pathlib import Path
+from typing import List, Dict, Any, Iterator
+
+import panda_core_data
+from ..custom_exceptions import PCDInvalidPath, PCDRawFileNotSupported
+
 
 try:
     from .base_db import available_storages
     from .json_db import JsonDB
     from .yaml_db import YamlDB
 # I did some testing and yaml doesn't work with python.net
-except TypeError: # pragma: no cover
+except TypeError:  # pragma: no cover
     print("Yaml might be not supported")
 
 
-from ..custom_exceptions import PCDInvalidPath, PCDRawFileNotSupported
+DataDict = List[Dict[str, Any]]
 
-def get_raw_extensions():
+def get_raw_extensions() -> List[str]:
     """
     Get all available extensions the package supports
 
-    :return list(str): A list of available extensions
+    :return: A list of available extensions
     """
-    return [ext for ext_dict in available_storages for ext in ext_dict['extensions']]
+    return [ext for ext_dict in available_storages
+            for ext in ext_dict['extensions']]
 
-def get_extension(path):
+
+def get_extension(path: 'panda_core_data.PathType') -> str:
     """
     Get file extension from the path
 
-    :return str: The file extension
+    :param path: path to a file or extension
+    :return: The file extension
     """
     if isinstance(path, Path):
         extension = path.suffix
@@ -36,25 +44,28 @@ def get_extension(path):
 
     return extension.replace(".", "")
 
-def get_storage_from_extension(extension):
+
+def get_storage_from_extension(extension: str) -> "tinydb.storages.Storage":
     """
     Returns the storage based on the file extension
 
     :return: Returns a storage object that handles the raw file
-    :rtype: :class:`~tinydb.storages.Storage`
     """
     for storage_dict in available_storages:
         if extension in storage_dict["extensions"]:
             return storage_dict["storage"]
 
-    raise PCDRawFileNotSupported(f"The extension {extension} is not supported for raws, the "
-                                 f"available extensions are {get_raw_extensions()}")
+    raise PCDRawFileNotSupported(f"The extension {extension} is not supported "
+                                 "for raws, the  available extensions are " +
+                                 str(get_raw_extensions()))
 
-def raw_glob_iterator(path, excluded_ext=False):
+
+def raw_glob_iterator(path: 'panda_core_data.PathType',
+                      excluded_ext: bool = False) -> Iterator[Path]:
     """
     Iterate along the path yielding the raw file.
 
-    :yields :class:`~pathlib.Path`: The file path
+    :yields: The file
     """
     path = auto_convert_to_pathlib(path)
 
@@ -63,28 +74,27 @@ def raw_glob_iterator(path, excluded_ext=False):
             if (not excluded_ext) or (ext not in excluded_ext):
                 yield file
 
-def is_excluded_extension(path, exclude_ext):
+
+def is_excluded_extension(path: 'panda_core_data.PathType',
+                          exclude_ext: List[str]) -> bool:
     """
     Check if the file has an ignored extension
 
     :param path: source folder
-    :type path: str or :class:`~pathlib.Path`
-    :param list(str) exclude_ext: If the path should be from a folder or file
-    :return bool: returns True if it's a excluded extension, False otherwise
+    :param exclude_ext: If the path should be from a folder or file
+    :return: returns True if it's a excluded extension, False otherwise
     """
     if exclude_ext and get_extension(path) in exclude_ext:
         return True
     return False
 
-def auto_convert_to_pathlib(path):
+
+def auto_convert_to_pathlib(path: 'panda_core_data.PathType') -> Path:
     """
     Check if the path is valid and automatically convert it into a Path object
 
     :param path: source folder
-    :type path: str or :class:`~pathlib.Path`
     :return: The Path object
-    :rtype: :class:`~pathlib.Path`
-    :raise PCDFolderNotFound: If the folder is invalid
     :raise PCDInvalidPath: If the file is invalid
     """
     if not isinstance(path, Path):
