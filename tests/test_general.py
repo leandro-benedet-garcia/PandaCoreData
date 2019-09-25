@@ -5,7 +5,6 @@
 '''
 import pprint
 import pytest
-
 from panda_core_data import DataCore, data_core
 from panda_core_data.custom_exceptions import (PCDInvalidPath,
                                                PCDInvalidBaseData, PCDTypeError,
@@ -79,6 +78,7 @@ def test_folders_exceptions(file_structure):
                                          ".py").write(template_content)
 
     mods_dir_path = str(file_structure["mods_dir"].realpath())
+
     with pytest.raises(PCDInvalidPath):
         data_core("invalid")
 
@@ -97,7 +97,8 @@ def test_folders_exceptions(file_structure):
         data_core(mods_dir_path, models_folder="invalid")
 
     with pytest.raises(PCDInvalidPathType):
-        file_structure["models_dir"].join("file.json").write("")
+        file_name = "file.json"
+        file_structure["models_dir"].join(file_name).write("{'here': 1}")
         data_core.recursively_instance_model(file_structure["models_dir"])
 
 def test_exclusions(file_structure):
