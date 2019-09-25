@@ -4,11 +4,10 @@
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 from typing import Callable, Optional
+from .custom_typings import JsonInput
 
-from . import JsonInput
 
-
-class DataTypeGenerator():  #pylint: disable=too-few-public-methods
+class DataTypeGenerator(): #pylint: disable=too-few-public-methods
     def __init__(self, name: str, json_input: JsonInput,
                  decode_callable: Optional[Callable] = None):
         pass

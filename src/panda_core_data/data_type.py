@@ -16,6 +16,7 @@ import panda_core_data
 
 from .custom_exceptions import (PCDDuplicatedTypeName, PCDTypeError,
                                 PCDNeedsToBeInherited)
+from .custom_typings import PathType
 from .storages import (auto_convert_to_pathlib, get_storage_from_extension,
                        get_extension)
 from .utils import check_if_valid_instance
@@ -39,7 +40,7 @@ class DataType(TinyDB):
     data_core: "DataCore"
     wrapper: "GroupWrapper"
 
-    def __new__(cls, *_, db_file: Optional['panda_core_data.PathType'] = None,
+    def __new__(cls, *_, db_file: Optional[PathType] = None,
                 **__):
         """
         Method that handles the instancing of the models and templates, this is
@@ -227,7 +228,7 @@ class DataType(TinyDB):
     def instance_from_raw(cls, raw_file) -> 'DataType':
         return cls(db_file=raw_file)
 
-    def load_db(self, db_file: 'panda_core_data.PathType', *init_args,
+    def load_db(self, db_file: PathType, *init_args,
                 default_table: str = DEFAULT_TABLE, **kwargs):
         """
         Method that load raw files and assign each field to an attribute.

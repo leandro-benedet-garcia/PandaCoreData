@@ -3,6 +3,8 @@
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
 
+from typing import Optional
+
 from .data_type import DataType
 
 
@@ -11,7 +13,7 @@ class Template(DataType):
     Class that will be used to make ModelTemplates
     """
 
-    def __init_subclass__(cls, core_name: str = None, **kwargs):
+    def __init_subclass__(cls, core_name: Optional[str] = None, **kwargs):
         """
         Method that automatically registers class types into data_core. You can
         use the same parameters as
@@ -38,7 +40,7 @@ class ModelIter(type):
 
 
 class Model(DataType, metaclass=ModelIter):
-    def __init_subclass__(cls, core_name: str = None, **kwargs):
+    def __init_subclass__(cls, core_name: Optional[str] = None, **kwargs):
         """
         Method that automatically registers class types into data_core. You can
         use the same parameters as

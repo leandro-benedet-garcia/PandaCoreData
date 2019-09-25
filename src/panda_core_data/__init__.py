@@ -39,7 +39,7 @@ class DataCore(DataModel, DataTemplate):
         DataTemplate.__init__(self)
         super().__init__(*args, **kwargs)
 
-        self.name = name
+        self.name: str = name
 
         # pylint: disable=global-statement
         global data_core
@@ -103,8 +103,8 @@ class DataCore(DataModel, DataTemplate):
         except PCDInvalidPath as invalid_path:
             raise PCDInvalidPath(f"{invalid_path} This path must be absolute.")
 
-        self.excluded_extensions = kwargs.pop(
-            "excluded_extensions", self.excluded_extensions)
+        self.excluded_extensions = kwargs.pop("excluded_extensions",
+                                              self.excluded_extensions)
 
         raw_models_folder = kwargs.pop("raw_models_folder", models_folder)
         raw_templates_folder = kwargs.pop("raw_templates_folder",
@@ -125,8 +125,8 @@ class DataCore(DataModel, DataTemplate):
 
         if templates_folder:
             self.folders["templates"] = join(core_folder, templates_folder)
-            self.folders["raw_templates"] = join(
-                raws_folder, raw_templates_folder)
+            self.folders["raw_templates"] = join(raws_folder,
+                                                 raw_templates_folder)
 
         for param_name, path in self.folders.items():
             try:
@@ -151,7 +151,7 @@ class DataCore(DataModel, DataTemplate):
             if current_instance.has_dependencies:
                 current_instance.add_dependencies()
 
-    def get_folder(self, folder_type):
+    def get_folder(self, folder_type: str):
         try:
             return self.folders[folder_type]
         except KeyError:
