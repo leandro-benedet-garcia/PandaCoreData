@@ -3,11 +3,12 @@
 '''
 from os.path import isdir, join
 from pathlib import Path
-from typing import Union, Mapping, Iterable, Optional
+from typing import Optional
 
 from .__version__ import __version__
 from .custom_exceptions import (PCDDataCoreIsNotUnique, PCDInvalidPathType,
                                 PCDTypeError, PCDInvalidPath)
+from .custom_typings import PathType, Union
 from .data_core_bases import BaseData
 from .data_core_bases import DataModel
 from .data_core_bases import DataTemplate
@@ -16,16 +17,6 @@ from .storages import auto_convert_to_pathlib
 
 #pylint: disable=invalid-name
 data_core = None
-
-
-PathType = Union[Path, str]
-DataDict = List[Dict[str, Any]]
-
-JsonValue = Union[int, str]
-JsonMapping = Mapping[str, JsonValue]
-JsonTypes = Union[JsonMapping, int, str]
-JsonIterable = Iterable[JsonTypes]
-JsonInput = Union[str, JsonMapping, JsonIterable]
 
 
 class DataCore(DataModel, DataTemplate):
@@ -170,6 +161,4 @@ class DataCore(DataModel, DataTemplate):
 
 
 DataCore()
-__all__ = ["data_core", "DataCore", "DataModel", "DataTemplate", "BaseData",
-           "JsonValue", "JsonMapping", "JsonTypes", "JsonIterable", "JsonInput",
-           "PathType"]
+__all__ = ["data_core", "DataCore", "DataModel", "DataTemplate"]
