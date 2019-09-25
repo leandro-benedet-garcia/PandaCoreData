@@ -161,4 +161,3 @@ class DataCore(DataModel, DataTemplate):
 
 
 DataCore()
-__all__ = ["data_core", "DataCore", "DataModel", "DataTemplate"]

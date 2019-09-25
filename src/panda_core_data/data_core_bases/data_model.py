@@ -5,15 +5,15 @@
 from typing import Iterator, Tuple
 
 #pylint: disable=unused-import
-import panda_core_data
-#pylint: disable=unused-import
 import panda_core_data.model
 
 from ..custom_exceptions import PCDInvalidPathType
+from ..custom_typings import PathType
 from ..storages import is_excluded_extension, raw_glob_iterator
 from .base_data import BaseData, Group
 
 
+#pylint: disable=unused-import
 class DataModel(BaseData):
     def __init__(self, *args, **kwargs):
         self.raw_models = []
@@ -40,7 +40,7 @@ class DataModel(BaseData):
                 yield current_instance
 
     def instance_model(self, data_type_name: str,
-                       path: 'panda_core_data.PathType', **kwargs
+                       path: PathType, **kwargs
                        ) -> 'panda_core_data.model.Model':
         return self.instance_data(data_type_name, self.get_model_type,
                                   path, **kwargs)
@@ -49,8 +49,7 @@ class DataModel(BaseData):
                        ) -> 'panda_core_data.model.Model':
         return self.get_data_type(model_name, self.all_model_types, **kwargs)
 
-    def recursively_instance_model(self, path: 'panda_core_data.PathType',
-                                   *args, **kwargs
+    def recursively_instance_model(self, path: PathType, *args, **kwargs
                                    ) -> Iterator['panda_core_data.model.Model']:
         instaced_models = []
         for model_path in self.folder_contents(path):

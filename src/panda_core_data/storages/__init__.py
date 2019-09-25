@@ -1,7 +1,7 @@
 from pathlib import Path
-from typing import List, Dict, Any, Iterator
+from typing import List, Iterator
 
-import panda_core_data
+from ..custom_typings import PathType
 from ..custom_exceptions import PCDInvalidPath, PCDRawFileNotSupported
 
 
@@ -24,7 +24,7 @@ def get_raw_extensions() -> List[str]:
             for ext in ext_dict['extensions']]
 
 
-def get_extension(path: 'panda_core_data.PathType') -> str:
+def get_extension(path: PathType) -> str:
     """
     Get file extension from the path
 
@@ -58,8 +58,8 @@ def get_storage_from_extension(extension: str) -> "tinydb.storages.Storage":
                                  str(get_raw_extensions()))
 
 
-def raw_glob_iterator(path: 'panda_core_data.PathType',
-                      excluded_ext: bool = False) -> Iterator[Path]:
+def raw_glob_iterator(path: PathType, excluded_ext: bool = False
+                      ) -> Iterator[Path]:
     """
     Iterate along the path yielding the raw file.
 
@@ -73,8 +73,7 @@ def raw_glob_iterator(path: 'panda_core_data.PathType',
                 yield file
 
 
-def is_excluded_extension(path: 'panda_core_data.PathType',
-                          exclude_ext: List[str]) -> bool:
+def is_excluded_extension(path: PathType, exclude_ext: List[str]) -> bool:
     """
     Check if the file has an ignored extension
 
@@ -87,7 +86,7 @@ def is_excluded_extension(path: 'panda_core_data.PathType',
     return False
 
 
-def auto_convert_to_pathlib(path: 'panda_core_data.PathType') -> Path:
+def auto_convert_to_pathlib(path: PathType) -> Path:
     """
     Check if the path is valid and automatically convert it into a Path object
 

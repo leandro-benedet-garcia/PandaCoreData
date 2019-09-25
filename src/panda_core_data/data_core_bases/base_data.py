@@ -3,20 +3,17 @@
 
 :author: Leandro (Cerberus1746) Benedet Garcia
 '''
-
 from dataclasses import dataclass
 from glob import iglob
 from importlib import import_module
 from os.path import join
 import sys
 from types import ModuleType
-from typing import Optional, Dict, List, Callable
-
-#pylint: disable=unused-import
-import panda_core_data
+from typing import Optional, Dict, List, Callable, Union
 
 from ..custom_exceptions import (PCDTypeError, PCDInvalidBaseData,
                                  PCDFolderIsEmpty, PCDDuplicatedModuleName)
+from ..custom_typings import PathType
 from ..data_type import DataType
 from ..storages import auto_convert_to_pathlib
 
@@ -58,7 +55,7 @@ IMPORTED_DATA_MODULES: Dict[str, ModuleType] = {}
 
 
 class BaseData():
-    def __init__(self, excluded_extensions=False):
+    def __init__(self, excluded_extensions: Union[bool, str] = False):
         self._raw_extensions = []
         self.excluded_extensions = excluded_extensions
 
@@ -116,7 +113,7 @@ class BaseData():
         return contents
 
     @staticmethod
-    def add_module(path: 'panda_core_data.PathType') -> ModuleType:
+    def add_module(path: PathType) -> ModuleType:
         """
         Automatically import the module from the python file and add it's
         directory to `sys.path` if it wasn't in there before.
@@ -142,8 +139,7 @@ class BaseData():
             raise ModuleNotFoundError(f"{module_error} with the base_path"
                                       f"'{path}' sys.path '{sys.path}'")
 
-    def recursively_add_module(self, path: 'panda_core_data.PathType'
-                               ) -> List[ModuleType]:
+    def recursively_add_module(self, path: PathType) -> List[ModuleType]:
         """
         Recursively add a module with :class:`~panda_core_data.model.DataType`
         from the supplied path.
@@ -180,8 +176,8 @@ class BaseData():
         return data_type
 
     @staticmethod
-    def instance_data(data_name: str, get_data_type: Callable,
-                      path: 'panda_core_data.PathType', **kwargs) -> DataType:
+    def instance_data(data_name: str, get_data_type: Callable, path: PathType,
+                      **kwargs) -> DataType:
         """
         Create a new instance of a :class:`~panda_core_data.model.DataType`
 

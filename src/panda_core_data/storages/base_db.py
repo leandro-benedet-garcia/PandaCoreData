@@ -3,9 +3,7 @@ from typing import Dict, List, Optional, Union, Callable
 
 from tinydb.storages import MemoryStorage, JSONStorage
 
-#pylint: disable=unused-import
-import panda_core_data
-
+from ..custom_typings import DataDict, PathType
 
 class BaseDB(JSONStorage, MemoryStorage):
     """
@@ -38,18 +36,24 @@ class BaseDB(JSONStorage, MemoryStorage):
             "storage": cls,
         })
 
-    def __init__(self, path: str, **kwargs):
+    def __init__(self, path: PathType, **kwargs):
         """
         Create a new instance.
 
         :param str path: Path to file
         """
-        self.path = path
-        MemoryStorage.__init__(self)
-        JSONStorage.__init__(self, path, **kwargs)
+        if(not globals().get("auto_convert_to_pathlib", False) or
+           locals().get("auto_convert_to_pathlib", False)):
+            from . import auto_convert_to_pathlib
 
-    def base_read(self, load_method: Callable,
-                  use_handle: bool) -> 'panda_core_data.DataDict':
+        current_path = auto_convert_to_pathlib(path)
+
+        self.path = current_path
+
+        MemoryStorage.__init__(self)
+        JSONStorage.__init__(self, current_path, **kwargs)
+
+    def base_read(self, load_method: Callable, use_handle: bool) -> DataDict:
         """
         Base method used by children classes to read the file and transforms
         the string into a list of dictionaries, a good example of this method
@@ -109,8 +113,7 @@ class BaseDB(JSONStorage, MemoryStorage):
 
         return self.memory
 
-    def base_write(self, write_method: Callable,
-                   data: "panda_core_data.DataDict",
+    def base_write(self, write_method: Callable, data: DataDict,
                    use_handle: bool):
         """
         Transforms the data dictionary to a raw representation.

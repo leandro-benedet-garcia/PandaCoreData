@@ -5,11 +5,10 @@
 from pathlib import Path
 from typing import Tuple, Iterator, List
 
-#pylint: disable=unused-import
-import panda_core_data
 # pylint: disable=unused-import
 import panda_core_data.model
 
+from ..custom_typings import PathType
 from ..storages import raw_glob_iterator
 from .base_data import BaseData, Group
 
@@ -45,8 +44,7 @@ class DataTemplate(BaseData):
             self.all_key_value_templates,
             **kwargs)
 
-    def instance_template(self, data_type_name: str,
-                          path: 'panda_core_data.PathType', **kwargs
+    def instance_template(self, data_type_name: str, path: PathType, **kwargs
                           ) -> 'panda_core_data.model.Template':
         return self.instance_data(
             data_type_name,
@@ -56,7 +54,7 @@ class DataTemplate(BaseData):
 
     def recursively_instance_template(
             self,
-            path: 'panda_core_data.PathType',
+            path: PathType,
             *args,
             **kwargs) -> List['panda_core_data.model.Template']:
         instanced_data = []
