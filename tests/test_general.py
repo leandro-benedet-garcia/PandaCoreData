@@ -99,7 +99,8 @@ def test_folders_exceptions(file_structure):
     with pytest.raises(PCDInvalidPathType):
         file_name = "file.json"
         file_structure["models_dir"].join(file_name).write("{'here': 1}")
-        data_core.recursively_instance_model(file_structure["models_dir"])
+        data_core.recursively_instance_model(
+            file_structure["models_dir"].realpath())
 
 def test_exclusions(file_structure):
     core_name = "test_exclusions"

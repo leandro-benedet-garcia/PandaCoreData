@@ -13,7 +13,6 @@ from os.path import join
 from argparse import ArgumentParser
 from panda_core_data import __version__
 
-__version__ = __version__
 __date__ = '2019-07-26'
 __updated__ = '2019-07-26'
 

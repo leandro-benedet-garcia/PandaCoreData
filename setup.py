@@ -31,10 +31,11 @@ def stripped_file(file_name):
 
 def find_version():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    version_file = open_file(os.path.join(current_dir, "src", NAME, "__version__.py"))
-    version_match = re.search(r"^__version__\s*=\s*['\"]([^'\"]*)['\"]", version_file)
-    if version_match:
-        return version_match.group(1)
+    version_file = open_file(os.path.join(current_dir, "src", NAME,
+                                          "__version__.py"))
+    version_match = re.search(r"^__version__\s*=\s*['\"]([^'\"]*)['\"]",
+                              version_file)
+    return version_match.group(1)
 
 
 if SPHINX_LOADED:
