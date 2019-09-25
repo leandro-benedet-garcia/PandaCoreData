@@ -3,7 +3,7 @@ from tinydb.database import Document
 import yaml
 
 #pylint: disable=unused-import
-import panda_core_data.storages
+import panda_core_data
 
 from .base_db import BaseDB
 
@@ -22,7 +22,7 @@ class YamlDB(BaseDB):
         yaml.add_representer(Document, lambda dumper, data:
                              dumper.represent_data(dict(data)))
 
-    def read(self) -> 'panda_core_data.storages.DataDict':
+    def read(self) -> 'panda_core_data.DataDict':
         """Method used by TinyDB to read the file"""
         return self.base_read(yaml.safe_load, True)
 

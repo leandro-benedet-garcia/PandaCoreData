@@ -19,6 +19,7 @@ data_core = None
 
 
 PathType = Union[Path, str]
+DataDict = List[Dict[str, Any]]
 
 JsonValue = Union[int, str]
 JsonMapping = Mapping[str, JsonValue]

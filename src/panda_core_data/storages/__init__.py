@@ -14,8 +14,6 @@ except TypeError:  # pragma: no cover
     print("Yaml might be not supported")
 
 
-DataDict = List[Dict[str, Any]]
-
 def get_raw_extensions() -> List[str]:
     """
     Get all available extensions the package supports

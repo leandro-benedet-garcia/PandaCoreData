@@ -4,7 +4,7 @@ from typing import Dict, List, Optional, Union, Callable
 from tinydb.storages import MemoryStorage, JSONStorage
 
 #pylint: disable=unused-import
-import panda_core_data.storages
+import panda_core_data
 
 
 class BaseDB(JSONStorage, MemoryStorage):
@@ -49,7 +49,7 @@ class BaseDB(JSONStorage, MemoryStorage):
         JSONStorage.__init__(self, path, **kwargs)
 
     def base_read(self, load_method: Callable,
-                  use_handle: bool) -> 'panda_core_data.storages.DataDict':
+                  use_handle: bool) -> 'panda_core_data.DataDict':
         """
         Base method used by children classes to read the file and transforms
         the string into a list of dictionaries, a good example of this method
@@ -110,7 +110,7 @@ class BaseDB(JSONStorage, MemoryStorage):
         return self.memory
 
     def base_write(self, write_method: Callable,
-                   data: "panda_core_data.storages.DataDict",
+                   data: "panda_core_data.DataDict",
                    use_handle: bool):
         """
         Transforms the data dictionary to a raw representation.
