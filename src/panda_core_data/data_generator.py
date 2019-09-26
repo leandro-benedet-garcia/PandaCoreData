@@ -1,8 +1,7 @@
 '''
 :created: 2019-09-20
 
-:author: Leandro (Cerberus1746) Benedet Garcia
-'''
+:author: Leandro (Cerberus1746) Benedet Garcia'''
 from typing import Callable, Optional
 from .custom_typings import JsonInput
 

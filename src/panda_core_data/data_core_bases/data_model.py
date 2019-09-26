@@ -30,11 +30,9 @@ class DataModel(BaseData):
 
     @property
     def all_model_instances(self) -> Iterator['panda_core_data.model.Model']:
-        """
-        Gets all the model instances.
+        """Gets all the model instances.
 
-        :yield Model: returns a generator of all instanced templates.
-        """
+        :yield Model: returns a generator of all instanced templates"""
         for current_type in self.all_models:
             for current_instance in current_type.all_instances:
                 yield current_instance

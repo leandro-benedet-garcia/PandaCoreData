@@ -1,8 +1,6 @@
-'''
-:created: 2019-07-22
+''':created: 2019-07-22
 
-:author: Leandro (Cerberus1746) Benedet Garcia
-'''
+:author: Leandro (Cerberus1746) Benedet Garcia'''
 from dataclasses import dataclass
 from glob import iglob
 from importlib import import_module
@@ -20,22 +18,20 @@ from ..storages import auto_convert_to_pathlib
 
 @dataclass(repr=False)
 class Group(dict):
-    """
-    Class that is used to store :class:`~panda_core_data.model.Model` or
-    :class:`~panda_core_data.model.Template` classes
-    """
+    """Class that is used to store :class:`~panda_core_data.model.Model` or
+    :class:`~panda_core_data.model.Template` classes"""
     group_name: str
 
 
 @dataclass(repr=False)
 class GroupInstance(list):
-    """Class that is used to store Instances"""
+    "Class that is used to store Instances"
     data_type: DataType
 
 
 @dataclass(repr=False)
 class GroupWrapper():
-    """Class that is used to store Models or Templates"""
+    "Class that is used to store Models or Templates"
     data_type: DataType
     instances: Optional[GroupInstance] = None
 
@@ -60,11 +56,9 @@ class BaseData():
         self.excluded_extensions = excluded_extensions
 
     def __init_subclass__(cls):
-        """
-        This function checks if a method is lacking inside any class that
+        """This function checks if a method is lacking inside any class that
         inherits this, and also automatically creates docstrings into those
-        methods based on the original method.
-        """
+        methods based on the original method"""
         # The only class that don't go trough the check is DataCore
         if cls.__name__ == "DataCore":
             return
@@ -96,11 +90,9 @@ class BaseData():
 
     @staticmethod
     def all_datas() -> List[DataType]:
-        """
-        Get all :class:`~panda_core_data.model.DataType` types
+        """Get all :class:`~panda_core_data.model.DataType` types
 
-        :return: return a list of data types.
-        """
+        :return: return a list of data types"""
 
     @staticmethod
     def folder_contents(path: 'panda_core_data.PathType'):
@@ -114,13 +106,11 @@ class BaseData():
 
     @staticmethod
     def add_module(path: PathType) -> ModuleType:
-        """
-        Automatically import the module from the python file and add it's
+        """Automatically import the module from the python file and add it's
         directory to `sys.path` if it wasn't in there before.
 
-        :param path: The path to the python file.
-        :return module: Returns the imported module.
-        """
+        :param path: The path to the python file
+        :return module: Returns the imported module"""
         module_full_path = auto_convert_to_pathlib(path)
         module_name = module_full_path.stem
         module_path = str(module_full_path.parent)
@@ -140,12 +130,10 @@ class BaseData():
                                       f"'{path}' sys.path '{sys.path}'")
 
     def recursively_add_module(self, path: PathType) -> List[ModuleType]:
-        """
-        Recursively add a module with :class:`~panda_core_data.model.DataType`
-        from the supplied path.
+        """Recursively add a module with
+        :class:`~panda_core_data.model.DataType` from the supplied path
 
-        :param str path: Path to the data module
-        """
+        :param str path: Path to the data module"""
         added_modules = []
         path = auto_convert_to_pathlib(path)
 
@@ -158,15 +146,13 @@ class BaseData():
     @staticmethod
     def get_data_type(data_name: str, data_dict, default: Optional[bool] = None
                       ) -> DataType:
-        """
-        Get Data type from a list of all
-        :class:`~panda_core_data.model.DataType` types.
+        """Get Data type from a list of all
+        :class:`~panda_core_data.model.DataType` types
 
         :param data_name: The name of the DataType
         :param default: Default value to be returned if the data type
-                             couldn't be found.
-        :return: the :class:`~panda_core_data.model.DataType`
-        """
+                             couldn't be found
+        :return: the :class:`~panda_core_data.model.DataType`"""
         data_type = data_dict.get(data_name, default)
         if not data_type and default is None:
             raise PCDTypeError(
@@ -178,13 +164,11 @@ class BaseData():
     @staticmethod
     def instance_data(data_name: str, get_data_type: Callable, path: PathType,
                       **kwargs) -> DataType:
-        """
-        Create a new instance of a :class:`~panda_core_data.model.DataType`
+        """Create a new instance of a :class:`~panda_core_data.model.DataType`
 
         :param data_type_name: name of the DataType
         :param path: path to the raw file
-        :return: The instanced :class:`~panda_core_data.model.DataType`
-        """
+        :return: The instanced :class:`~panda_core_data.model.DataType`"""
         path = auto_convert_to_pathlib(path)
         data_type = get_data_type(data_name, **kwargs)
 
@@ -195,7 +179,5 @@ class BaseData():
 
     @staticmethod
     def recursively_instance_data() -> List[DataType]:
-        """
-        Instance :class:`~panda_core_data.model.DataType` recursively based on
-        the raws inside the folders.
-        """
+        """Instance :class:`~panda_core_data.model.DataType` recursively based on
+        the raws inside the folders"""

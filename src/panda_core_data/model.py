@@ -1,11 +1,10 @@
 '''
 :created: 2019-04-30
-:author: Leandro (Cerberus1746) Benedet Garcia
-'''
-
+:author: Leandro (Cerberus1746) Benedet Garcia'''
 from typing import Optional
 
 from .data_type import DataType
+
 
 
 class Template(DataType):
@@ -14,11 +13,9 @@ class Template(DataType):
     """
 
     def __init_subclass__(cls, core_name: Optional[str] = None, **kwargs):
-        """
-        Method that automatically registers class types into data_core. You can
+        """Method that automatically registers class types into data_core. You can
         use the same parameters as
-        :meth:`~panda_core_data.data_type.DataType._add_into`
-        """
+        :meth:`~panda_core_data.data_type.DataType._add_into`"""
         current_core = cls._get_core(core_name)
         cls.data_core = current_core
 
@@ -41,11 +38,9 @@ class ModelIter(type):
 
 class Model(DataType, metaclass=ModelIter):
     def __init_subclass__(cls, core_name: Optional[str] = None, **kwargs):
-        """
-        Method that automatically registers class types into data_core. You can
-        use the same parameters as
-        :meth:`~panda_core_data.data_type.DataType._add_into`
-        """
+        """Method that automatically registers class types into data_core. You
+        can use the same parameters as
+        :meth:`~panda_core_data.data_type.DataType._add_into`"""
         current_core = cls._get_core(core_name)
         cls.data_core = current_core
         cls._add_into(cls, current_core.all_model_types, **kwargs)

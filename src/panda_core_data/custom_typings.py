@@ -1,8 +1,7 @@
 '''
-Created on Sep 24, 2019
+:created: 2019-09-24
 
-@author: L_BG_
-'''
+@author: Leandro (cerberus1746) Benedet Garcia'''
 from pathlib import Path
 from typing import Union, Mapping, Iterable, List, Dict, Any
 

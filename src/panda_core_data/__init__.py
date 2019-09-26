@@ -5,14 +5,12 @@ from os.path import isdir, join
 from pathlib import Path
 from typing import Optional
 
-from .__version__ import __version__
 from .custom_exceptions import (PCDDataCoreIsNotUnique, PCDInvalidPathType,
                                 PCDTypeError, PCDInvalidPath)
 from .custom_typings import PathType, Union
 from .data_core_bases import BaseData
 from .data_core_bases import DataModel
 from .data_core_bases import DataTemplate
-from .storages import auto_convert_to_pathlib
 
 
 #pylint: disable=invalid-name
@@ -20,19 +18,20 @@ data_core = None
 
 
 class DataCore(DataModel, DataTemplate):
-    """Class where everything is kept."""
+    "Class where everything is kept."
 
     def __init__(self, *args, name: Optional[str] = None,
                  replace: bool = False, **kwargs):
-        """
-        Start a new instance for the DataCore
+        """Start a new instance for the DataCore
 
         :param str name: name of the core data instance
         :param excluded_extensions: extensions to be ignored
         :param replace: if instances of data_core of the same name should
-                             be replaced
-        :type excluded_extensions: List[str]
-        """
+                        be replaced
+        :type excluded_extensions: List[str]"""
+        from .storages import auto_convert_to_pathlib
+        self.auto_convert_to_pathlib = auto_convert_to_pathlib
+
         self.folders = {}
 
         DataModel.__init__(self)
@@ -78,28 +77,26 @@ class DataCore(DataModel, DataTemplate):
                  models_folder: PathType = "models",
                  templates_folder: PathType = "templates",
                  **kwargs: Union[str, bool]):
-        """
-        Automatically import all data types based on the paths in the params.
+        """Automatically import all data types based on the paths in the params
 
         :param mods_path: Absolute root folder to the root mods folder
-        :param core_mod_folder: Name of the core mod folder. The base mod.
-        :param raws_folder: Name of the raw folder.
-        :param models_folder: Name of the models folder.
-        :param templates_folder: Name of the templates folder.
+        :param core_mod_folder: Name of the core mod folder. The base mod
+        :param raws_folder: Name of the raw folder
+        :param models_folder: Name of the models folder
+        :param templates_folder: Name of the templates folder
         :param raw_models_folder: Name of the raws that are related to the
-                                  models. Default is 'models_folder' param.
+                                  models. Default is 'models_folder' param
         :type raw_models_folder: :class:`~pathlib.Path` or str or bool
         :param raw_templates_folder: Name of the raws that are related to the
                                      templates. Default is the
                                      'templates_folder' param
         :type raw_templates_folder: :class:`~pathlib.Path` or str or bool
-        :raise PCDInvalidPath: If any of the folders are invalid.
-        """
+        :raise PCDInvalidPath: If any of the folders are invalid"""
         #=======================================================================
         # Extract params from kwarg
         #=======================================================================
         try:
-            mods_path = auto_convert_to_pathlib(mods_path)
+            mods_path = self.auto_convert_to_pathlib(mods_path)
         except PCDInvalidPath as invalid_path:
             raise PCDInvalidPath(f"{invalid_path} This path must be absolute.")
 
@@ -117,8 +114,10 @@ class DataCore(DataModel, DataTemplate):
         # Check paths availability
         #=======================================================================
 
-        core_folder = auto_convert_to_pathlib(join(mods_path, core_mod_folder))
-        raws_folder = auto_convert_to_pathlib(join(core_folder, raws_folder))
+        core_folder = self.auto_convert_to_pathlib(join(mods_path,
+                                                        core_mod_folder))
+        raws_folder = self.auto_convert_to_pathlib(join(core_folder,
+                                                        raws_folder))
 
         self.folders["models"] = join(core_folder, models_folder)
         self.folders["raw_models"] = join(raws_folder, raw_models_folder)
@@ -130,7 +129,7 @@ class DataCore(DataModel, DataTemplate):
 
         for param_name, path in self.folders.items():
             try:
-                path = auto_convert_to_pathlib(path)
+                path = self.auto_convert_to_pathlib(path)
                 self.folders[param_name] = path
             except PCDInvalidPath as invalid_path:
                 raise PCDInvalidPath(

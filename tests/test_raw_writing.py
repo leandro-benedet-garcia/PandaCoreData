@@ -6,54 +6,49 @@
 from panda_core_data import DataCore
 from panda_core_data.model import Model
 
+#pylint: disable=unused-argument
+def writing_method_test(file_structure, data_core, raw_file, extension):
+    model_raw = file_structure["model_raw_dir"].join(f"test.{extension}")
+    model_raw.write(raw_file)
 
-class TestGeneral():
-    #pylint: disable=unused-argument
-    @staticmethod
-    def writing_method_test(file_structure, data_core, raw_file,
-                            extension):
-        model_raw = file_structure["model_raw_dir"].join(f"test.{extension}")
-        model_raw.write(raw_file)
+    full_model_path = model_raw.realpath()
 
-        class WriteTest(Model, core_name=data_core.name):
-            name: str
-            description: str
-            value: int
+    class WriteTest(Model, core_name=data_core.name):
+        name: str
+        description: str
+        value: int
 
-        instance = WriteTest.instance_from_raw(model_raw.realpath())
-
+    with WriteTest.instance_from_raw(full_model_path) as instance:
         instance.name = "Iron"
         instance.description = "Basic material"
 
-        instance.save_to_file()
+    instance = WriteTest.instance_from_raw(full_model_path)
 
-        instance = WriteTest.instance_from_raw(model_raw.realpath())
+    assert instance.name == "Iron"
+    assert instance.description == "Basic material"
+    assert instance.value == 1
 
-        assert instance.name == "Iron"
-        assert instance.description == "Basic material"
-        assert instance.value == 1
+def test_json_write(file_structure):
+    data_core = DataCore(name="test_json_write")
 
-    def test_json_write(self, file_structure):
-        data_core = DataCore(name="test_json_write")
+    raw_file = """
+    {"data": [
+        {"name": "Copper"},
+        {"description": "Fragile material"},
+        {"value": 1}
+    ]}
+    """.strip()
 
-        raw_file = """
-        {"data": [
-            {"name": "Copper"},
-            {"description": "Fragile material"},
-            {"value": 1}
-        ]}
-        """.strip()
+    writing_method_test(file_structure, data_core, raw_file, "json")
 
-        self.writing_method_test(file_structure, data_core, raw_file, "json")
+def test_yaml_write(file_structure):
+    data_core = DataCore(name="test_yaml_write")
 
-    def test_yaml_write(self, file_structure):
-        data_core = DataCore(name="test_yaml_write")
+    raw_file = """
+    data:
+    - name: Copper
+    - description: Fragile material
+    - value: 1
+    """.strip()
 
-        raw_file = """
-        data:
-        - name: Copper
-        - description: Fragile material
-        - value: 1
-        """.strip()
-
-        self.writing_method_test(file_structure, data_core, raw_file, "yaml")
+    writing_method_test(file_structure, data_core, raw_file, "yaml")

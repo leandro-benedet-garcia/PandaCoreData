@@ -29,11 +29,9 @@ class DataTemplate(BaseData):
     @property
     def all_template_instances(self
                                ) -> Iterator['panda_core_data.model.Template']:
-        """
-        Gets all the template instances
+        """Gets all the template instances
 
-        :yield Template: returns a generator of all instanced templates.
-        """
+        :yield Template: returns a generator of all instanced templates"""
         for template_type in self.all_templates:
             yield template_type.instanced()
 

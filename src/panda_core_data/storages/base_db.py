@@ -6,8 +6,7 @@ from tinydb.storages import MemoryStorage, JSONStorage
 from ..custom_typings import DataDict, PathType
 
 class BaseDB(JSONStorage, MemoryStorage):
-    """
-    Base storage class that reads which extensions are available to feed the
+    """Base storage class that reads which extensions are available to feed the
     path handling functions
 
     To create a new storage, you will need to inherit this class, create a
@@ -21,15 +20,12 @@ class BaseDB(JSONStorage, MemoryStorage):
     then implement a `read` and `write` method using the methods
     :meth:`~panda_core_data.storages.base_db.BaseDB.base_read` and
     :meth:`~panda_core_data.storages.base_db.BaseDB.base_write` all you need to
-    do is follow the instructions contained in them
-    """
+    do is follow the instructions contained in them"""
     extensions = False
 
     def __init_subclass__(cls):
-        """
-        Automatically generate an extension list containing the available raw
-        extensions available together with their storage.
-        """
+        """Automatically generate an extension list containing the available
+        raw extensions available together with their storage"""
         available_storages.append({
             "name": cls.__name__,
             "extensions": cls.extensions,
@@ -37,11 +33,9 @@ class BaseDB(JSONStorage, MemoryStorage):
         })
 
     def __init__(self, path: PathType, **kwargs):
-        """
-        Create a new instance.
+        """Create a new instance
 
-        :param str path: Path to file
-        """
+        :param str path: Path to file"""
         if(not globals().get("auto_convert_to_pathlib", False) or
            locals().get("auto_convert_to_pathlib", False)):
             from . import auto_convert_to_pathlib
@@ -54,8 +48,7 @@ class BaseDB(JSONStorage, MemoryStorage):
         JSONStorage.__init__(self, current_path, **kwargs)
 
     def base_read(self, load_method: Callable, use_handle: bool) -> DataDict:
-        """
-        Base method used by children classes to read the file and transforms
+        """Base method used by children classes to read the file and transforms
         the string into a list of dictionaries, a good example of this method
         is the built in python :func:`json.load` however, since it needs a
         string as an input (or handler) you would need to set the parameter
@@ -87,17 +80,16 @@ class BaseDB(JSONStorage, MemoryStorage):
             ]}
 
         The dict keys are fields of a :mod:`~dataclasses.dataclass` and the
-        value, well, values.
+        value, well, values
 
         :param load_method: method used to transform the raw file into a list
-                            of dictionaries.
+                            of dictionaries
         :param use_handle: TinyDB offers a handle (More specifically, the
                            handle of the class
                            :class:`~tinydb.storages.JSONStorage`) to load the
                            file and turn into a string automatically if you'd
-                           like to use it, just set this parameter to True.
-        :return: The generated data.
-        """
+                           like to use it, just set this parameter to True
+        :return: The generated data"""
         if not self.memory:
             if use_handle:
                 data = load_method(self._handle.read())
@@ -115,13 +107,11 @@ class BaseDB(JSONStorage, MemoryStorage):
 
     def base_write(self, write_method: Callable, data: DataDict,
                    use_handle: bool):
-        """
-        Transforms the data dictionary to a raw representation.
+        """Transforms the data dictionary to a raw representation
 
         :param write_method: method used to transform the raw file into a list
-                             of dictionaries.
-        :param data: data dictionary.
-        """
+                             of dictionaries
+        :param data: data dictionary"""
         if use_handle:
             self._handle.seek(0)
             serialized = write_method(data, **self.kwargs)
@@ -131,7 +121,6 @@ class BaseDB(JSONStorage, MemoryStorage):
             self._handle.truncate()
         else:
             write_method(self, data, **self.kwargs)
-
 
 #pylint: disable=invalid-name
 available_storages: Optional[List[Dict[str, Union[str, BaseDB]]]] = []
