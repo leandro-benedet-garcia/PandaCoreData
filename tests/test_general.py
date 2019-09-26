@@ -97,8 +97,8 @@ def test_folders_exceptions(file_structure):
         data_core(mods_dir_path, models_folder="invalid")
 
     with pytest.raises(PCDInvalidPathType):
-        file_name = "file.json"
-        file_structure["models_dir"].join(file_name).write("{'here': 1}")
+        file_name = "file.txt"
+        file_structure["models_dir"].join(file_name).write("test")
         data_core.recursively_instance_model(
             file_structure["models_dir"].realpath())
 
